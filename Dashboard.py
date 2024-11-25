@@ -97,6 +97,8 @@ fig.update_layout(
 # Affichage du graphique dans Streamlit
 st.plotly_chart(fig)
 
-# Affichage des données filtrées sous-jacentes (facultatif)
-st.write(df_filtered)
+df_filtered_no_date = df_filtered.drop(columns=['Date de relevé', 'Horodate', 'Mois-Abrege'])
+
+# Affichage des données filtrées sans les colonnes masquées
+st.write(df_filtered_no_date)
 
