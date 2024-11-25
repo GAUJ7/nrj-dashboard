@@ -9,7 +9,7 @@ df = pd.read_excel("GRDF 20241118.xlsx")
 # Sélection et modification des colonnes nécessaires
 df2 = df[['N° PCE', 'Date de relevé', 'Energie consommée (kWh)']].copy()
 df2['Horodate'] = pd.to_datetime(df2['Date de relevé'], format='%d/%m/%Y')
-df2['Horodate'] = df2['Horodate'].dt.date
+
 # Remplacement des identifiants par des noms de sites
 mapping = {
     "GI153881": 'PTWE89',
