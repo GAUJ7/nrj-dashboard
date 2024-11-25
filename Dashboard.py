@@ -105,5 +105,3 @@ df_filtered_no_date = df_filtered_no_date[['Site', 'Année', 'Mois', 'Jour', 'En
 df_filtered_no_date['Mois'] = df_filtered_no_date['Mois'].apply(lambda x: pd.to_datetime(f'2024-{x}-01').strftime('%B'))
 
 st.write(df_filtered_no_date)
-
-
