@@ -19,53 +19,46 @@ mapping = {
 df2['Site'] = df2['N° PCE'].map(mapping)
 df2 = df2.drop(columns=['N° PCE'])
 
-# Calcul de la consommation par période
+# Sélectionner les années et les mois
 df2['Année'] = df2['Horodate'].dt.year
 df2['Mois'] = df2['Horodate'].dt.month
 df2['Jour'] = df2['Horodate'].dt.day
 
-# Mappage des mois en texte
-month_map = {
-    1: 'Janvier', 2: 'Février', 3: 'Mars', 4: 'Avril', 5: 'Mai', 6: 'Juin',
-    7: 'Juillet', 8: 'Août', 9: 'Septembre', 10: 'Octobre', 11: 'Novembre', 12: 'Décembre'
-}
-df2['Mois_texte'] = df2['Mois'].map(month_map)
+# Filtrer les données par mois, jour, ou année
+st.sidebar.title("Filtrage des données")
 
-# Sélection du site via un widget
-site_selection = st.selectbox('Choisissez un site', df2['Site'].unique())
+# Choisir le site
+sites = df2['Site'].unique()
+site_selection = st.sidebar.selectbox('Choisissez un site', sites)
 
-# Sélection des dates de début et de fin via Streamlit
-start_date = st.date_input("Date de début", df2['Horodate'].min())
-end_date = st.date_input("Date de fin", df2['Horodate'].max())
+# Choisir la période (année, mois, jour)
+period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
 
-# Filtrer les données en fonction des dates sélectionnées et du site
-df_filtered = df2[(df2['Horodate'] >= pd.to_datetime(start_date)) & (df2['Horodate'] <= pd.to_datetime(end_date))]
-df_filtered_site = df_filtered[df_filtered['Site'] == site_selection]
+if period_choice == 'Année':
+    start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()))
+    end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()))
+    df_filtered = df2[(df2['Année'] >= start_year) & (df2['Année'] <= end_year) & (df2['Site'] == site_selection)]
 
-# Sélection de la période d'affichage
-periode_selection = st.selectbox('Sélectionnez la période d\'affichage', ['Jour', 'Mois', 'Année'])
+elif period_choice == 'Mois':
+    start_month = st.sidebar.selectbox("Mois de début", range(1, 13))
+    end_month = st.sidebar.selectbox("Mois de fin", range(1, 13))
+    df_filtered = df2[(df2['Mois'] >= start_month) & (df2['Mois'] <= end_month) & (df2['Site'] == site_selection)]
 
-# Agrégation des données selon la période sélectionnée
-if periode_selection == 'Jour':
-    df_agg = df_filtered_site.groupby(['Année', 'Mois_texte', 'Jour', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
-    x_axis = 'Jour'
-    title = f'Consommation quotidienne de {site_selection}'
-elif periode_selection == 'Mois':
-    df_agg = df_filtered_site.groupby(['Année', 'Mois_texte', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
-    x_axis = 'Mois_texte'
-    title = f'Consommation mensuelle de {site_selection}'
-else:  # Année
-    df_agg = df_filtered_site.groupby(['Année', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
-    x_axis = 'Année'
-    title = f'Consommation annuelle de {site_selection}'
+else:  # Filtrage par jour
+    start_day = st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01'))
+    end_day = st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31'))
+    df_filtered = df2[(df2['Horodate'] >= start_day) & (df2['Horodate'] <= end_day) & (df2['Site'] == site_selection)]
 
-# Création du graphique
-fig = px.bar(df_agg, x=x_axis, y='Energie consommée (kWh)',
-             labels={x_axis: x_axis, 'Energie consommée (kWh)': 'Consommation (kWh)'},
-             title=title)
+# Calcul de la consommation mensuelle (en kWh)
+df_grouped = df_filtered.groupby(['Année', 'Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+
+# Création du graphique avec Plotly
+fig = px.bar(df_grouped, x='Mois', y='Energie consommée (kWh)', color='Année',
+             labels={'Mois': 'Mois', 'Energie consommée (kWh)': 'Consommation (kWh)'},
+             title=f'Consommation d\'énergie pour {site_selection}')
 
 # Afficher le graphique dans Streamlit
 st.plotly_chart(fig)
 
-# Afficher les données sous-jacentes (optionnel)
-st.write(df_agg)
+# Affichage des données filtrées sous-jacentes (facultatif)
+st.write(df_filtered)
