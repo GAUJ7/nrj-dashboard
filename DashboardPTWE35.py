@@ -9,8 +9,6 @@ df1['Site'] = df1['Site'].replace({'PTWE42 Andrézieux': 'PTWE42'})
 
 # Sélection des colonnes et conversion
 df2 = df1[['Site', 'Année', 'Mois', 'Date', 'PE(kg)', 'Energie consommée (kWh)', 'KWh/Kg']].copy()
-df2['KWh/Kg'] = pd.to_numeric(df2['KWh/Kg'], errors='coerce').astype('Int64')
-df2['Energie consommée (kWh)'] = pd.to_numeric(df2['Energie consommée (kWh)'], errors='coerce').astype('Int64')
 
 # Assurer que la colonne 'Date' est bien au format datetime
 df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce')
