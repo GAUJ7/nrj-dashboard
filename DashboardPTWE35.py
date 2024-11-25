@@ -82,7 +82,7 @@ for site in df_grouped['Site'].unique():
 
 # Mise à jour des axes et titres
 fig.update_layout(
-    barmode='stack',
+    barmode='group',  # Utilisation de 'group' pour séparer les barres
     title=f'Consommation d\'énergie pour {site_selection}',
     xaxis_title='Période',
     yaxis_title=f'Consommation ({energie_choice})',
@@ -92,12 +92,3 @@ fig.update_layout(
 
 # Affichage du graphique dans Streamlit
 st.plotly_chart(fig)
-
-# Affichage des données filtrées sans les colonnes masquées
-df_filtered_no_date = df_filtered.drop(columns=['Date de relevé', 'Horodate', 'Mois-Abrege', 'Année-Mois'])
-df_filtered_no_date = df_filtered_no_date[['Site', 'Année', 'Mois', 'Jour', energie_choice]]
-
-# Correction du format du mois
-df_filtered_no_date['Mois'] = df_filtered_no_date['Mois'].apply(lambda x: pd.to_datetime(f'2024-{x}-01').strftime('%B'))
-
-st.write(df_filtered_no_date)
