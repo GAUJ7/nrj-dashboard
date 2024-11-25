@@ -33,14 +33,16 @@ site_selection = st.sidebar.selectbox('Choisissez un site', sites)
 # Choisir la période de filtrage
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
 
+months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+
 # Filtrage selon la période choisie
 if period_choice == 'Année':
     start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()))
     end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()))
     df_filtered = df2[(df2['Année'] >= start_year) & (df2['Année'] <= end_year) & (df2['Site'] == site_selection)]
 elif period_choice == 'Mois':
-    start_month = st.sidebar.selectbox("Mois de début", range(1, 13))
-    end_month = st.sidebar.selectbox("Mois de fin", range(1, 13))
+    start_month = st.sidebar.selectbox("Mois de début", months, index=0)
+    end_month = st.sidebar.selectbox("Mois de fin", months, index=13)
     df_filtered = df2[(df2['Mois'] >= start_month) & (df2['Mois'] <= end_month) & (df2['Site'] == site_selection)]
 else:  # Filtrage par jour
     start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
