@@ -20,7 +20,7 @@ df2['Site'] = df2['N° PCE'].map(mapping)
 df2 = df2.drop(columns=['N° PCE'])
 
 # Création de nouvelles colonnes pour l'année, le mois et le jour
-df2['Année'] = pd.to_datetime(df2['Horodate'], format='%Y').dt.year
+df2['Année'] = df2['Horodate'].dt.year
 df2['Mois'] = df2['Horodate'].dt.month
 df2['Jour'] = df2['Horodate'].dt.date  # Conversion pour ne garder que la date
 df2['Mois-Abrege'] = df2['Horodate'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
@@ -104,7 +104,7 @@ df_filtered_no_date = df_filtered.drop(columns=['Date de relevé', 'Horodate', '
 df_filtered_no_date = df_filtered_no_date[['Site', 'Année', 'Mois', 'Jour', 'Energie consommée (kWh)']]
 
 df_filtered_no_date['Mois'] = df_filtered_no_date['Mois'].apply(lambda x: pd.to_datetime(f'2024-{x}-01').strftime('%B'))
-df_filtered_no_date['Année'] = pd.to_datetime(df_filtered_no_date['Année'], format='%Y').dt.year
+
 
 st.write(df_filtered_no_date)
 
