@@ -15,7 +15,7 @@ df2['Horodate'] = pd.to_datetime(df2['Date de relevé'], format='%d/%m/%Y')
 mapping = { 
     "GI153881": 'PTWE89', 
     "GI087131": 'PTWE35', 
-    "GI060319": 'PTWE42 Andrézieux',
+    "GI060319": 'PTWE42',
 }
 df2['Site'] = df2['N° PCE'].map(mapping)
 df2 = df2.drop(columns=['N° PCE'])
