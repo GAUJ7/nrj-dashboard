@@ -5,3 +5,5 @@ torch==2.3.0
 torchvision==0.18.0
 tqdm==4.66.4
 streamlit==1.40.1
+plotly
+openpyxl
