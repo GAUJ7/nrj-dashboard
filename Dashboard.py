@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
@@ -12,9 +11,9 @@ df2 = df[['N° PCE', 'Date de relevé', 'Energie consommée (kWh)']].copy()
 df2['Horodate'] = pd.to_datetime(df2['Date de relevé'], format='%d/%m/%Y')
 
 # Remplacement des identifiants par des noms de sites
-mapping = { 
-    "GI153881": 'PTWE89', 
-    "GI087131": 'PTWE35', 
+mapping = {
+    "GI153881": 'PTWE89',
+    "GI087131": 'PTWE35',
     "GI060319": 'PTWE42 Andrézieux',
 }
 df2['Site'] = df2['N° PCE'].map(mapping)
@@ -48,51 +47,43 @@ else:  # Filtrage par jour
     end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
     df_filtered = df2[(df2['Horodate'] >= start_day) & (df2['Horodate'] <= end_day) & (df2['Site'] == site_selection)]
 
-# Agrégation des données par période choisie
-if period_choice == 'Année':
-    df_grouped = df_filtered.groupby(['Année', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
-elif period_choice == 'Mois':
-    df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
-else:  # Par jour
-    df_grouped = df_filtered.groupby(['Horodate', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+# Agrégation des données par année et mois
+df_grouped = df_filtered.groupby(['Année', 'Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 
 # Création du graphique avec Plotly
 fig = go.Figure()
 
-# Ajout des sous-graphes selon la période
+# Ajout des traces pour comparer les mois d'années différentes
 for site in df_grouped['Site'].unique():
     site_data = df_grouped[df_grouped['Site'] == site]
-    
-    if period_choice == 'Année':
+    for mois in range(1, 13):  # pour chaque mois
+        # Extraire les données pour le mois de l'année courante et de l'année précédente
+        current_year_data = site_data[site_data['Mois'] == mois]
+        previous_year_data = site_data[site_data['Mois'] == mois - 1]
+
+        # Affichage de la consommation du mois actuel et de l'année précédente
         fig.add_trace(go.Bar(
-            x=site_data['Année'],
-            y=site_data['Energie consommée (kWh)'],
-            name=site,
+            x=current_year_data['Année'],
+            y=current_year_data['Energie consommée (kWh)'],
+            name=f'{site} - {mois} (Année actuelle)',
             marker=dict(color='blue')
         ))
-    elif period_choice == 'Mois':
-        fig.add_trace(go.Bar(
-            x=site_data['Année-Mois'],
-            y=site_data['Energie consommée (kWh)'],
-            name=site,
-            marker=dict(color='green')
-        ))
-    else:  # Par jour
-        fig.add_trace(go.Bar(
-            x=site_data['Horodate'],
-            y=site_data['Energie consommée (kWh)'],
-            name=site,
-            marker=dict(color='red')
-        ))
+
+        if not previous_year_data.empty:
+            fig.add_trace(go.Bar(
+                x=previous_year_data['Année'],
+                y=previous_year_data['Energie consommée (kWh)'],
+                name=f'{site} - {mois} (Année précédente)',
+                marker=dict(color='green')
+            ))
 
 # Mise à jour des axes et titres
 fig.update_layout(
-    barmode='stack',
-    title=f'Consommation d\'énergie pour {site_selection}',
-    xaxis_title='Période',
+    barmode='group',
+    title=f'Comparaison de la consommation d\'énergie pour {site_selection} (Mois sur mois)',
+    xaxis_title='Année',
     yaxis_title='Consommation (kWh)',
-    legend_title="Site",
-    xaxis=dict(type='category')
+    legend_title="Mois et Année",
 )
 
 # Affichage du graphique dans Streamlit
