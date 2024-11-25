@@ -60,11 +60,11 @@ if energie_choice == 'Energie consommée (kWh)':
         df_grouped = df_filtered.groupby(['Jour', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 else:  # Si une autre énergie est choisie, comme 'KWh/Kg'
     if period_choice == 'Année':
-        df_grouped = df_filtered.groupby(['Année', 'Site'])['KWh/Kg'].mean().reset_index()
+        df_grouped = df_filtered.groupby(['Année', 'Site'])['KWh/Kg'].median().reset_index()
     elif period_choice == 'Mois':
-        df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['KWh/Kg'].mean().reset_index()
+        df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['KWh/Kg'].median().reset_index()
     else:  # Agrégation par jour
-        df_grouped = df_filtered.groupby(['Jour', 'Site'])['KWh/Kg'].mean().reset_index()
+        df_grouped = df_filtered.groupby(['Jour', 'Site'])['KWh/Kg'].median().reset_index()
 
 # Création du graphique avec Plotly
 fig = go.Figure()
