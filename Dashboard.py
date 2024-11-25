@@ -20,7 +20,7 @@ df2['Site'] = df2['N° PCE'].map(mapping)
 df2 = df2.drop(columns=['N° PCE'])
 
 # Création de nouvelles colonnes pour l'année, le mois et le jour
-df2['Année'] = df2['Horodate'].dt.year  # Correctly format the year
+df2['Année'] = df2['Horodate'].dt.year  # Assurer que l'année soit correctement extraite
 df2['Mois'] = df2['Horodate'].dt.month
 df2['Jour'] = df2['Horodate'].dt.date  # Conversion pour ne garder que la date
 df2['Mois-Abrege'] = df2['Horodate'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
@@ -100,6 +100,10 @@ st.plotly_chart(fig)
 # Affichage des données filtrées sans les colonnes masquées
 df_filtered_no_date = df_filtered.drop(columns=['Date de relevé', 'Horodate', 'Mois-Abrege', 'Année-Mois'])
 df_filtered_no_date = df_filtered_no_date[['Site', 'Année', 'Mois', 'Jour', 'Energie consommée (kWh)']]
+
+# Correction du format du mois
 df_filtered_no_date['Mois'] = df_filtered_no_date['Mois'].apply(lambda x: pd.to_datetime(f'2024-{x}-01').strftime('%B'))
+
 st.write(df_filtered_no_date)
+
 
