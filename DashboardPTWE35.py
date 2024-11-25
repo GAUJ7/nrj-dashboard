@@ -35,6 +35,7 @@ period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois',
 
 # Filtrage des données par site
 df_filtered = df2[df2['Site'] == site_selection]
+df_filtered = df_filtered[['Site', 'Année', 'Mois', 'Date', energie_choice]]
 
 # Filtrage selon la période choisie
 if period_choice == 'Année':
