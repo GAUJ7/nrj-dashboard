@@ -39,18 +39,24 @@ if period_choice == 'Année':
     start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()))
     end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()))
     df_filtered = df2[(df2['Année'] >= start_year) & (df2['Année'] <= end_year) & (df2['Site'] == site_selection)]
+
 elif period_choice == 'Mois':
     start_month = st.sidebar.selectbox("Mois de début", range(1, 13))
     end_month = st.sidebar.selectbox("Mois de fin", range(1, 13))
     df_filtered = df2[(df2['Mois'] >= start_month) & (df2['Mois'] <= end_month) & (df2['Site'] == site_selection)]
+
 else:  # Filtrage par jour
-    start_day = st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01'))
-    end_day = st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31'))
+    # Conversion des dates de début et de fin en datetime64[ns] (en ajoutant une heure par défaut)
+    start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
+    end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
+    
+    # Filtrage en fonction des dates
     df_filtered = df2[(df2['Horodate'] >= start_day) & (df2['Horodate'] <= end_day) & (df2['Site'] == site_selection)]
 
+# Agrégation des données
 df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 
-# Ajouter la colonne 'Année' à df_grouped pour pouvoir l'utiliser comme 'color' dans Plotly
+# Ajouter la colonne 'Année' pour Plotly
 df_grouped['Année'] = df_grouped['Année-Mois'].str[:4].astype(int)
 
 # Création du graphique avec Plotly
