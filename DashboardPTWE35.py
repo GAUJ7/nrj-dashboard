@@ -27,7 +27,9 @@ def remove_outliers(df, column):
     IQR = Q3 - Q1
     lower_bound = Q1 - 1.5 * IQR
     upper_bound = Q3 + 1.5 * IQR
-    return df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
+    # Filtrage des valeurs aberrantes et des valeurs égales à zéro
+    df_filtered = df[(df[column] >= lower_bound) & (df[column] <= upper_bound) & (df[column] != 0)]
+    return df_filtered
 
 # Filtrage des valeurs aberrantes pour les colonnes "Energie consommée (kWh)" et "KWh/Kg"
 df2 = remove_outliers(df2, 'Energie consommée (kWh)')
