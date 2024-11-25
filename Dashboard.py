@@ -24,6 +24,13 @@ df2['Année'] = df2['Horodate'].dt.year
 df2['Mois'] = df2['Horodate'].dt.month
 df2['Jour'] = df2['Horodate'].dt.day
 
+# Mappage des mois en texte
+month_map = {
+    1: 'Janvier', 2: 'Février', 3: 'Mars', 4: 'Avril', 5: 'Mai', 6: 'Juin',
+    7: 'Juillet', 8: 'Août', 9: 'Septembre', 10: 'Octobre', 11: 'Novembre', 12: 'Décembre'
+}
+df2['Mois_texte'] = df2['Mois'].map(month_map)
+
 # Sélection de la période manuellement (choisir une date de début et une date de fin)
 start_date = st.date_input("Date de début", df2['Horodate'].min())
 end_date = st.date_input("Date de fin", df2['Horodate'].max())
@@ -36,12 +43,12 @@ periode_selection = st.selectbox('Sélectionnez la période d\'affichage', ['Jou
 
 # Agrégation en fonction de la période sélectionnée
 if periode_selection == 'Jour':
-    df_agg = df_filtered.groupby(['Année', 'Mois', 'Jour', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+    df_agg = df_filtered.groupby(['Année', 'Mois_texte', 'Jour', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
     x_axis = 'Jour'
     title = f'Consommation quotidienne par site'
 elif periode_selection == 'Mois':
-    df_agg = df_filtered.groupby(['Année', 'Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
-    x_axis = 'Mois'
+    df_agg = df_filtered.groupby(['Année', 'Mois_texte', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+    x_axis = 'Mois_texte'
     title = f'Consommation mensuelle par site'
 else:  # Année
     df_agg = df_filtered.groupby(['Année', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
