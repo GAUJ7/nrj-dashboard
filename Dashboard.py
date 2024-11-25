@@ -12,9 +12,9 @@ df2 = df[['N° PCE', 'Date de relevé', 'Energie consommée (kWh)']].copy()
 df2['Horodate'] = pd.to_datetime(df2['Date de relevé'], format='%d/%m/%Y')
 
 # Remplacement des identifiants par des noms de sites
-mapping = {
-    "GI153881": 'PTWE89',
-    "GI087131": 'PTWE35',
+mapping = { 
+    "GI153881": 'PTWE89', 
+    "GI087131": 'PTWE35', 
     "GI060319": 'PTWE42 Andrézieux',
 }
 df2['Site'] = df2['N° PCE'].map(mapping)
@@ -56,25 +56,20 @@ elif period_choice == 'Mois':
 else:  # Par jour
     df_grouped = df_filtered.groupby(['Horodate', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 
-# Définir une palette de couleurs
-color_map = {year: px.colors.qualitative.Set1[i] for i, year in enumerate(df_grouped['Année'].unique())}
-
 # Création du graphique avec Plotly
 fig = go.Figure()
 
 # Ajout des sous-graphes selon la période
 for site in df_grouped['Site'].unique():
     site_data = df_grouped[df_grouped['Site'] == site]
-
+    
     if period_choice == 'Année':
-        for year in site_data['Année'].unique():
-            year_data = site_data[site_data['Année'] == year]
-            fig.add_trace(go.Bar(
-                x=year_data['Année'],
-                y=year_data['Energie consommée (kWh)'],
-                name=f'{site} - {year}',
-                marker=dict(color=color_map[year])  # Utilisation de la couleur de l'année
-            ))
+        fig.add_trace(go.Bar(
+            x=site_data['Année'],
+            y=site_data['Energie consommée (kWh)'],
+            name=site,
+            marker=dict(color='blue')
+        ))
     elif period_choice == 'Mois':
         fig.add_trace(go.Bar(
             x=site_data['Année-Mois'],
