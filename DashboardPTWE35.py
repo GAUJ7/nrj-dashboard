@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import plotly.graph_objects as go
+import matplotlib.pyplot as plt
 import streamlit as st
 
 # Chargement des données
@@ -18,11 +18,9 @@ df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce')
 # Extraire l'année, le mois et le jour
 df2['Année'] = df2['Date'].dt.year
 df2['Mois'] = df2['Date'].dt.month
-df2['Jour'] = df2['Date'].dt.date
+df2['Jour'] = df2['Date'].dt.day
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # Format Année-Mois (ex: 2024-Jan)
-
-print(df2)
 
 # Filtrage des données dans Streamlit
 st.sidebar.title("Filtrage des données")
@@ -68,43 +66,24 @@ else:  # Si une autre énergie est choisie, comme 'KWh/Kg'
     else:  # Agrégation par jour
         df_grouped = df_filtered.groupby(['Jour', 'Site'])['KWh/Kg'].mean().reset_index()
 
-# Création du graphique avec Plotly
-fig = go.Figure()
+# Création du graphique avec Matplotlib
+fig, ax = plt.subplots(figsize=(10, 6))
 
 # Ajout des sous-graphes selon la période
 for site in df_grouped['Site'].unique():
     site_data = df_grouped[df_grouped['Site'] == site]
     if period_choice == 'Année':
-        fig.add_trace(go.Bar(
-            x=site_data['Année'],
-            y=site_data[energie_choice],
-            name=site,
-            marker=dict(color='blue')
-        ))
+        ax.bar(site_data['Année'], site_data[energie_choice], label=site)
     elif period_choice == 'Mois':
-        fig.add_trace(go.Bar(
-            x=site_data['Année-Mois'],
-            y=site_data[energie_choice],
-            name=site,
-            marker=dict(color='lightblue')
-        ))
+        ax.bar(site_data['Année-Mois'], site_data[energie_choice], label=site)
     else:  # Par jour
-        fig.add_trace(go.Bar(
-            x=site_data['Jour'],
-            y=site_data[energie_choice],
-            name=site,
-            marker=dict(color='darkblue')
-        ))
+        ax.bar(site_data['Jour'], site_data[energie_choice], label=site)
 
 # Mise à jour des axes et titres
-fig.update_layout(
-    barmode='group',  # Utilisation de 'group' pour séparer les barres
-    title=f'Consommation d\'énergie pour {site_selection}',
-    xaxis_title='Période',
-    yaxis_title=f'Consommation ({energie_choice})',
-    legend_title="Site",
-    xaxis=dict(type='category', categoryorder='category ascending')  # Trier l'axe X
-)
+ax.set_title(f'Consommation d\'énergie pour {site_selection}')
+ax.set_xlabel('Période')
+ax.set_ylabel(f'Consommation ({energie_choice})')
+ax.legend(title="Site")
 
 # Affichage du graphique dans Streamlit
-st.plotly_chart(fig)
+st.pyplot(fig)
