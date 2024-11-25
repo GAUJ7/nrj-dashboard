@@ -98,6 +98,10 @@ fig.update_layout(
 st.plotly_chart(fig)
 
 # Affichage des données filtrées sans les colonnes masquées
+
 df_filtered_no_date = df_filtered.drop(columns=['Date de relevé', 'Horodate', 'Mois-Abrege', 'Année-Mois'])
+
+df_filtered_no_date = df_filtered_no_date[['Site', 'Année', 'Mois', 'Jour', 'Energie consommée (kWh)']]
+
 st.write(df_filtered_no_date)
 
