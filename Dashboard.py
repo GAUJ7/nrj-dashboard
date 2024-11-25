@@ -22,10 +22,12 @@ df2 = df2.drop(columns=['N° PCE'])
 
 # Création de nouvelles colonnes pour l'année, le mois et le jour
 df2['Année'] = df2['Horodate'].dt.year
-df2['Mois'] = df2['Horodate'].dt.month
+df2['Mois'] = df2['Horodate'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Jour'] = df2['Horodate'].dt.day
-df2['Mois-Abrege'] = df2['Horodate'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
-df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # Format Année-Mois (ex: 2024-Jan)
+df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois']  # Format Année-Mois (ex: 2024-Jan)
+
+# Suppression de la colonne 'Mois-Abrege' qui n'est plus nécessaire
+df2 = df2.drop(columns=['Mois-Abrege'])
 
 # Filtrage des données
 st.sidebar.title("Filtrage des données")
@@ -41,8 +43,8 @@ if period_choice == 'Année':
     end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()))
     df_filtered = df2[(df2['Année'] >= start_year) & (df2['Année'] <= end_year) & (df2['Site'] == site_selection)]
 elif period_choice == 'Mois':
-    start_month = st.sidebar.selectbox("Mois de début", range(1, 13))
-    end_month = st.sidebar.selectbox("Mois de fin", range(1, 13))
+    start_month = st.sidebar.selectbox("Mois de début", df2['Mois'].unique())
+    end_month = st.sidebar.selectbox("Mois de fin", df2['Mois'].unique())
     df_filtered = df2[(df2['Mois'] >= start_month) & (df2['Mois'] <= end_month) & (df2['Site'] == site_selection)]
 else:  # Filtrage par jour
     start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
@@ -63,7 +65,6 @@ fig = go.Figure()
 # Ajout des sous-graphes selon la période
 for site in df_grouped['Site'].unique():
     site_data = df_grouped[df_grouped['Site'] == site]
-
     if period_choice == 'Année':
         fig.add_trace(go.Bar(
             x=site_data['Année'],
@@ -101,4 +102,3 @@ st.plotly_chart(fig)
 
 # Affichage des données filtrées sous-jacentes (facultatif)
 st.write(df_filtered)
-
