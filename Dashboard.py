@@ -13,8 +13,8 @@ df2['Horodate'] = pd.to_datetime(df2['Date de relevé'], format='%d/%m/%Y')
 
 # Remplacement des identifiants par des noms de sites
 mapping = { 
-    "GI153881": 'PTWE89', 
-    "GI087131": 'PTWE35', 
+    "GI153881": 'PTWE89',
+    "GI087131": 'PTWE35',
     "GI060319": 'PTWE42',
 }
 df2['Site'] = df2['N° PCE'].map(mapping)
@@ -25,6 +25,11 @@ df2['Année'] = df2['Horodate'].dt.year
 df2['Mois'] = df2['Horodate'].dt.month
 df2['Jour'] = df2['Horodate'].dt.day
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois'].astype(str).str.zfill(2)
+
+# Liste des mois en format abrégé
+mois_abrege = ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc']
+df2['Mois_abrege'] = df2['Mois'] - 1  # Pour adapter l'indexation de 1 à 12 à celle de 0 à 11
+df2['Mois_abrege'] = df2['Mois_abrege'].map(lambda x: mois_abrege[x])
 
 # Filtrage des données
 st.sidebar.title("Filtrage des données")
@@ -62,7 +67,7 @@ fig = go.Figure()
 # Ajout des sous-graphes selon la période
 for site in df_grouped['Site'].unique():
     site_data = df_grouped[df_grouped['Site'] == site]
-    
+
     if period_choice == 'Année':
         fig.add_trace(go.Bar(
             x=site_data['Année'],
@@ -82,7 +87,7 @@ for site in df_grouped['Site'].unique():
             x=site_data['Horodate'],
             y=site_data['Energie consommée (kWh)'],
             name=site,
-            marker=dict(color='lightblue')
+            marker=dict(color='darkblue')
         ))
 
 # Mise à jour des axes et titres
