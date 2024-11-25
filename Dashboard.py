@@ -42,7 +42,7 @@ if period_choice == 'Année':
     df_filtered = df2[(df2['Année'] >= start_year) & (df2['Année'] <= end_year) & (df2['Site'] == site_selection)]
 elif period_choice == 'Mois':
     start_month = st.sidebar.selectbox("Mois de début", months, index=0)
-    end_month = st.sidebar.selectbox("Mois de fin", months, index=13)
+    end_month = st.sidebar.selectbox("Mois de fin", months, index=11)  # Index de "Décembre"
     df_filtered = df2[(df2['Mois'] >= start_month) & (df2['Mois'] <= end_month) & (df2['Site'] == site_selection)]
 else:  # Filtrage par jour
     start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
