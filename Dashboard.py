@@ -12,9 +12,9 @@ df2 = df[['N° PCE', 'Date de relevé', 'Energie consommée (kWh)']].copy()
 df2['Horodate'] = pd.to_datetime(df2['Date de relevé'], format='%d/%m/%Y')
 
 # Remplacement des identifiants par des noms de sites
-mapping = { 
-    "GI153881": 'PTWE89', 
-    "GI087131": 'PTWE35', 
+mapping = {
+    "GI153881": 'PTWE89',
+    "GI087131": 'PTWE35',
     "GI060319": 'PTWE42 Andrézieux',
 }
 df2['Site'] = df2['N° PCE'].map(mapping)
@@ -65,7 +65,7 @@ fig = go.Figure()
 # Ajout des sous-graphes selon la période
 for site in df_grouped['Site'].unique():
     site_data = df_grouped[df_grouped['Site'] == site]
-    
+
     if period_choice == 'Année':
         for year in site_data['Année'].unique():
             year_data = site_data[site_data['Année'] == year]
@@ -105,4 +105,3 @@ st.plotly_chart(fig)
 
 # Affichage des données filtrées sous-jacentes (facultatif)
 st.write(df_filtered)
-
