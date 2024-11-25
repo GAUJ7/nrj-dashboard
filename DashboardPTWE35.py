@@ -5,11 +5,12 @@ import streamlit as st
 
 # Chargement des données
 df1 = pd.read_csv("All2_data.csv", sep=";")
-df1['Site'] = df1['Site'].replace({'PTWE42 Andrézieux': 'PTWE42'})
 
 # Sélection des colonnes et conversion
 df2 = df1[['Site', 'Date', 'PE(kg)', 'Energie consommée (kWh)', 'KWh/Kg']].copy()
 df2['Horodate'] = pd.to_datetime(df2['Date'], format='%d/%m/%Y')
+
+df1['Site'] = df1['Site'].replace({'PTWE42 Andrézieux': 'PTWE42'})
 
 # Création de nouvelles colonnes pour l'année, le mois et le jour
 df2['Année'] = df2['Horodate'].dt.year  # Assurer que l'année soit correctement extraite
@@ -18,16 +19,16 @@ df2['Jour'] = df2['Horodate'].dt.date  # Conversion pour ne garder que la date
 df2['Mois-Abrege'] = df2['Horodate'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # Format Année-Mois (ex: 2024-Jan)
 
-# Filtrage des données dans Streamlit
+# Filtrage des données
 st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
 site_selection = st.sidebar.selectbox('Choisissez un site', sites)
 
-# Choisir l'énergie à afficher
-energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Energie consommée (kWh)', 'KWh/Kg'])
-
 # Choisir la période de filtrage
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
+
+# Choisir l'énergie à afficher
+energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Energie consommée (kWh)', 'KWh/Kg'])
 
 # Filtrage selon la période choisie
 if period_choice == 'Année':
