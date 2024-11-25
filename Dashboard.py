@@ -22,8 +22,8 @@ df2 = df2.drop(columns=['N° PCE'])
 df2['Année'] = df2['Horodate'].dt.year
 df2['Mois'] = df2['Horodate'].dt.month
 df2['Jour'] = df2['Horodate'].dt.day
-df2['Mois'] = df2['Horodate'].dt.strftime('%b')  # Mois abrégés
-df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois']  # Format Année-Mois
+df2['Mois-Abrege'] = df2['Horodate'].dt.strftime('%b')  # Mois abrégés
+df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # Format Année-Mois
 
 # Filtrage des données
 st.sidebar.title("Filtrage des données")
@@ -74,7 +74,6 @@ if period_choice == 'Année':
         legend_title="Site"
     )
     st.plotly_chart(fig)
-
 elif period_choice == 'Mois':
     fig = go.Figure()
     for site in df_grouped['Site'].unique():
@@ -93,7 +92,6 @@ elif period_choice == 'Mois':
         legend_title="Site"
     )
     st.plotly_chart(fig)
-
 else:  # Par jour
     fig = go.Figure()
     for site in df_grouped['Site'].unique():
@@ -115,5 +113,3 @@ else:  # Par jour
 
 # Affichage des données filtrées sous-jacentes
 st.write(df_filtered)
-
-
