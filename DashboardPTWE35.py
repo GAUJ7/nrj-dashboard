@@ -24,11 +24,13 @@ st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
 site_selection = st.sidebar.selectbox('Choisissez un site', sites)
 
+# Choisir l'énergie à afficher
+energie_choice = st.sidebar.selectbox("Choisissez l'énergie", ['Energie consommée (kWh)', 'KWh/Kg'])
+
 # Choisir la période de filtrage
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
 
-# Choisir l'énergie à afficher
-energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Energie consommée (kWh)', 'KWh/Kg'])
+
 
 # Filtrage selon la période choisie
 if period_choice == 'Année':
