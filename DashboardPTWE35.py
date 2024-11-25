@@ -34,7 +34,7 @@ elif period_choice == 'Mois':
 else:  # Filtrage par jour
     start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
     end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
-    df_filtered = df2[(df2['Horodate'] >= start_day) & (df2['Horodate'] <= end_day) & (df2['Site'] == site_selection)]
+    df_filtered = df2[(df2['Date'] >= start_day) & (df2['Date'] <= end_day) & (df2['Site'] == site_selection)]
 
 # Agrégation des données par période choisie
 if energie_choice == 'Energie consommée (kWh)':  # Vérification de l'énergie choisie
@@ -61,21 +61,21 @@ for site in df_grouped['Site'].unique():
     if period_choice == 'Année':
         fig.add_trace(go.Bar(
             x=site_data['Année'],
-            y=site_data['Energie consommée (kWh)'],
+            y=site_data[energie_choice],
             name=site,
             marker=dict(color='blue')
         ))
     elif period_choice == 'Mois':
         fig.add_trace(go.Bar(
             x=site_data['Année-Mois'],
-            y=site_data['Energie consommée (kWh)'],
+            y=site_data[energie_choice],
             name=site,
             marker=dict(color='lightblue')
         ))
     else:  # Par jour
         fig.add_trace(go.Bar(
             x=site_data['Jour'],  # Utilisation de la date sans l'heure
-            y=site_data['Energie consommée (kWh)'],
+            y=site_data[energie_choice],
             name=site,
             marker=dict(color='darkblue')
         ))
@@ -85,7 +85,7 @@ fig.update_layout(
     barmode='stack',
     title=f'Consommation d\'énergie pour {site_selection}',
     xaxis_title='Période',
-    yaxis_title='Consommation (kWh)',
+    yaxis_title=f'Consommation ({energie_choice})',
     legend_title="Site",
     xaxis=dict(type='category', categoryorder='category ascending')  # Trier l'axe X
 )
@@ -95,7 +95,7 @@ st.plotly_chart(fig)
 
 # Affichage des données filtrées sans les colonnes masquées
 df_filtered_no_date = df_filtered.drop(columns=['Date de relevé', 'Horodate', 'Mois-Abrege', 'Année-Mois'])
-df_filtered_no_date = df_filtered_no_date[['Site', 'Année', 'Mois', 'Jour', 'Energie consommée (kWh)']]
+df_filtered_no_date = df_filtered_no_date[['Site', 'Année', 'Mois', 'Jour', energie_choice]]
 
 # Correction du format du mois
 df_filtered_no_date['Mois'] = df_filtered_no_date['Mois'].apply(lambda x: pd.to_datetime(f'2024-{x}-01').strftime('%B'))
