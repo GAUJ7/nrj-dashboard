@@ -48,14 +48,16 @@ else:  # Filtrage par jour
     end_day = st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31'))
     df_filtered = df2[(df2['Horodate'] >= start_day) & (df2['Horodate'] <= end_day) & (df2['Site'] == site_selection)]
 
-# Calcul de la consommation mensuelle (en kWh)
 df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+
+# Ajouter la colonne 'Année' à df_grouped pour pouvoir l'utiliser comme 'color' dans Plotly
+df_grouped['Année'] = df_grouped['Année-Mois'].str[:4].astype(int)
 
 # Création du graphique avec Plotly
 fig = px.bar(df_grouped, 
              x='Année-Mois', 
              y='Energie consommée (kWh)', 
-             color='Année', 
+             color='Année',  # Utilisation de la colonne Année
              labels={'Année-Mois': 'Période', 'Energie consommée (kWh)': 'Consommation (kWh)'},
              title=f'Consommation d\'énergie pour {site_selection}')
 fig.update_xaxes(type='category', categoryorder='category ascending')
