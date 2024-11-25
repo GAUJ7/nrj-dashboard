@@ -8,6 +8,14 @@ df1 = pd.read_csv("All2_data.csv", sep=";")
 df1['Site'] = df1['Site'].replace({'PTWE42 Andrézieux': 'PTWE42'})
 df2 = df1[['Site', 'Année', 'Mois', 'Date', 'PE(kg)', 'Energie consommée (kWh)', 'KWh/Kg']].copy()
 
+df2['KWh/Kg'] = pd.to_numeric(df2['KWh/Kg'], errors='coerce').astype('Int64')
+df2['Energie consommée (kWh)'] = pd.to_numeric(df2['Energie consommée (kWh)'], errors='coerce').astype('Int64')
+df2['Année'] = df2['Année'].dt.year  # Assurer que l'année soit correctement extraite
+df2['Mois'] = df2['Mois'].dt.month
+df2['Jour'] = df2['Date'].dt.date  # Conversion pour ne garder que la date
+df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
+df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # Format Année-Mois (ex: 2024-Jan)
+
 # Filtrage des données
 st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
