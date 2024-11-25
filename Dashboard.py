@@ -26,9 +26,6 @@ df2['Mois'] = df2['Horodate'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb,
 df2['Jour'] = df2['Horodate'].dt.day
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois']  # Format Année-Mois (ex: 2024-Jan)
 
-# Suppression de la colonne 'Mois-Abrege' qui n'est plus nécessaire
-df2 = df2.drop(columns=['Mois-Abrege'])
-
 # Filtrage des données
 st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
