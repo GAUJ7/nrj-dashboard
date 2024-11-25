@@ -75,14 +75,14 @@ for site in df_grouped['Site'].unique():
             x=site_data['Année-Mois'],
             y=site_data['Energie consommée (kWh)'],
             name=site,
-            marker=dict(color='green')
+            marker=dict(color='lightblue')
         ))
     else:  # Par jour
         fig.add_trace(go.Bar(
             x=site_data['Horodate'],
             y=site_data['Energie consommée (kWh)'],
             name=site,
-            marker=dict(color='red')
+            marker=dict(color='lightblue')
         ))
 
 # Mise à jour des axes et titres
