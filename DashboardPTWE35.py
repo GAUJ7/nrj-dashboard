@@ -12,9 +12,6 @@ df2 = df1[['Site', 'Année', 'Mois', 'Date', 'PE(kg)', 'Energie consommée (kWh)
 df2['KWh/Kg'] = pd.to_numeric(df2['KWh/Kg'], errors='coerce').astype('Int64')
 df2['Energie consommée (kWh)'] = pd.to_numeric(df2['Energie consommée (kWh)'], errors='coerce').astype('Int64')
 
-# Assurer que la colonne 'Date' est bien au format datetime
-df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce')
-
 # Extraire l'année, le mois et le jour
 df2['Année'] = df2['Date'].dt.year
 df2['Mois'] = df2['Date'].dt.month
