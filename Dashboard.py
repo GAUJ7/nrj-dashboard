@@ -63,9 +63,9 @@ site_selection = st.selectbox('Choisissez un site', sites)
 df_filtered_site = df_agg[df_agg['Site'] == site_selection]
 
 # Créer un graphique avec Plotly
-fig = px.bar(df_filtered_site, x=x_axis, y='Energie consommée (kWh)',
-             color='Année', barmode='group',
-             labels={x_axis: x_axis, 'Energie consommée (kWh)': 'Consommation (kWh)'},
+fig = px.bar(df_filtered_site, x=x_axis, y='Energie consommée (kWh)', 
+             barmode='stack',  # Changer de 'group' à 'stack' ou supprimer la colonne 'color'
+             labels={x_axis: x_axis, 'Energie consommée (kWh)': 'Consommation (kWh)'}, 
              title=title)
 
 # Afficher le graphique interactif dans Streamlit
