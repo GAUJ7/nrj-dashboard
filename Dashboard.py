@@ -31,6 +31,9 @@ month_map = {
 }
 df2['Mois_texte'] = df2['Mois'].map(month_map)
 
+# Création de la colonne Jour-Mois pour afficher sur l'axe X
+df2['Jour-Mois'] = df2['Jour'].astype(str) + ' ' + df2['Mois_texte']
+
 # Sélection de la période manuellement (choisir une date de début et une date de fin)
 start_date = st.date_input("Date de début", df2['Horodate'].min())
 end_date = st.date_input("Date de fin", df2['Horodate'].max())
@@ -44,7 +47,7 @@ periode_selection = st.selectbox('Sélectionnez la période d\'affichage', ['Jou
 # Agrégation en fonction de la période sélectionnée
 if periode_selection == 'Jour':
     df_agg = df_filtered.groupby(['Année', 'Mois_texte', 'Jour', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
-    x_axis = 'Jour'
+    x_axis = 'Jour-Mois'  # Utiliser la nouvelle colonne 'Jour-Mois' pour l'axe X
     title = f'Consommation quotidienne par site'
 elif periode_selection == 'Mois':
     df_agg = df_filtered.groupby(['Année', 'Mois_texte', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
@@ -63,9 +66,9 @@ site_selection = st.selectbox('Choisissez un site', sites)
 df_filtered_site = df_agg[df_agg['Site'] == site_selection]
 
 # Créer un graphique avec Plotly
-fig = px.bar(df_filtered_site, x=x_axis, y='Energie consommée (kWh)', 
-             barmode='stack',  # Changer de 'group' à 'stack' ou supprimer la colonne 'color'
-             labels={x_axis: x_axis, 'Energie consommée (kWh)': 'Consommation (kWh)'}, 
+fig = px.bar(df_filtered_site, x=x_axis, y='Energie consommée (kWh)',
+             barmode='group',  # Changer de 'stack' à 'group' pour éviter l'empilement
+             labels={x_axis: x_axis, 'Energie consommée (kWh)': 'Consommation (kWh)'},
              title=title)
 
 # Afficher le graphique interactif dans Streamlit
