@@ -22,7 +22,7 @@ df2 = df2.drop(columns=['N° PCE'])
 # Création de nouvelles colonnes pour l'année, le mois et le jour
 df2['Année'] = df2['Horodate'].dt.year
 df2['Mois'] = df2['Horodate'].dt.month
-df2['Jour'] = df2['Horodate'].dt.date
+df2['Jour'] = df2['Horodate'].dt.date  # Conversion pour ne garder que la date
 df2['Mois-Abrege'] = df2['Horodate'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # Format Année-Mois (ex: 2024-Jan)
 
@@ -54,7 +54,7 @@ if period_choice == 'Année':
 elif period_choice == 'Mois':
     df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 else:  # Par jour
-    df_grouped = df_filtered.groupby(['Horodate', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+    df_grouped = df_filtered.groupby(['Jour', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 
 # Création du graphique avec Plotly
 fig = go.Figure()
@@ -78,7 +78,7 @@ for site in df_grouped['Site'].unique():
         ))
     else:  # Par jour
         fig.add_trace(go.Bar(
-            x=site_data['Horodate'],
+            x=site_data['Jour'],  # Utilisation de la date sans l'heure
             y=site_data['Energie consommée (kWh)'],
             name=site,
             marker=dict(color='darkblue')
@@ -99,3 +99,4 @@ st.plotly_chart(fig)
 
 # Affichage des données filtrées sous-jacentes (facultatif)
 st.write(df_filtered)
+
