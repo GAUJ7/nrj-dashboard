@@ -8,15 +8,16 @@ df1 = pd.read_csv("All2_data.csv", sep=";")
 df1['Site'] = df1['Site'].replace({'PTWE42 Andrézieux': 'PTWE42'})
 
 # Sélection des colonnes et conversion
-df2 = df1[['Site', 'Année', 'Mois', 'Date', 'PE(kg)', 'Energie consommée (kWh)', 'KWh/Kg']].copy()
+df2 = df1[['Site', 'Date', 'PE(kg)', 'Energie consommée (kWh)', 'KWh/Kg']].copy()
+df2['Horodate'] = pd.to_datetime(df2['Date'], format='%d/%m/%Y')
 df2['KWh/Kg'] = pd.to_numeric(df2['KWh/Kg'], errors='coerce').astype('Int64')
 df2['Energie consommée (kWh)'] = pd.to_numeric(df2['Energie consommée (kWh)'], errors='coerce').astype('Int64')
 
-# Extraire l'année, le mois et le jour
-df2['Année'] = df2['Date'].dt.year
-df2['Mois'] = df2['Date'].dt.month
-df2['Jour'] = df2['Date'].dt.day
-df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
+# Création de nouvelles colonnes pour l'année, le mois et le jour
+df2['Année'] = df2['Horodate'].dt.year  # Assurer que l'année soit correctement extraite
+df2['Mois'] = df2['Horodate'].dt.month
+df2['Jour'] = df2['Horodate'].dt.date  # Conversion pour ne garder que la date
+df2['Mois-Abrege'] = df2['Horodate'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # Format Année-Mois (ex: 2024-Jan)
 
 # Filtrage des données dans Streamlit
