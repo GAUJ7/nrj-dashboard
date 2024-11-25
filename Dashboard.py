@@ -105,7 +105,6 @@ df_filtered_no_date = df_filtered_no_date[['Site', 'Année', 'Mois', 'Jour', 'En
 
 df_filtered_no_date['Mois'] = df_filtered_no_date['Mois'].apply(lambda x: pd.to_datetime(f'2024-{x}-01').strftime('%B'))
 df_filtered_no_date['Année'] = df_filtered_no_date['Année'].astype(int)
-df_filtered_no_date['Jour'] = df_filtered_no_date['Jour'].apply(lambda x: int(x) if isinstance(x, (int, float)) else int(str(x).split()[0]))
 
 st.write(df_filtered_no_date)
 
