@@ -62,11 +62,13 @@ fig = px.bar(df_grouped,
              title=f'Consommation d\'énergie pour {site_selection}')
 fig.update_xaxes(type='category', categoryorder='category ascending')
 
+df_grouped2 = df_filtered.groupby(['Mois-Année', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+
 # Ajouter la colonne 'Mois' à df_grouped pour pouvoir l'utiliser comme 'color' dans Plotly
-df_grouped['Mois'] = df_grouped['Mois-Année'].str[:4].astype(int)
+df_grouped2['Mois'] = df_grouped2['Mois-Année'].str[:4].astype(int)
 
 # Création du graphique avec Plotly
-fig = px.bar(df_grouped, 
+fig = px.bar(df_grouped2, 
              x='Mois-Année', 
              y='Energie consommée (kWh)', 
              color='Mois',  # Utilisation de la colonne Année
