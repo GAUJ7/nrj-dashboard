@@ -27,6 +27,9 @@ df2['Jour'] = df2['Horodate'].dt.day
 # Création de la colonne "Année-Mois"
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois'].astype(str).str.zfill(2)
 
+# Création de la colonne "Mois-Année"
+df2['Mois-Année'] = df2['Mois'].astype(str) + '-' + df2['Jour'].astype(str).str.zfill(2)
+
 # Filtrage des données
 st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
