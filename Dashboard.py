@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
@@ -32,7 +31,7 @@ st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
 site_selection = st.sidebar.selectbox('Choisissez un site', sites)
 
-# Choisir la période de filtrage
+# Filtrage par période
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
 
 # Filtrage selon la période choisie
@@ -57,48 +56,52 @@ elif period_choice == 'Mois':
 else:  # Par jour
     df_grouped = df_filtered.groupby(['Horodate', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 
-# Création du graphique avec Plotly
-fig = go.Figure()
-
-# Ajout des sous-graphes selon la période
+# Création de graphiques distincts pour chaque période
+# 1. Graphique par Année
+fig_annee = go.Figure()
 for site in df_grouped['Site'].unique():
     site_data = df_grouped[df_grouped['Site'] == site]
+    fig_annee.add_trace(go.Bar(x=site_data['Année'], y=site_data['Energie consommée (kWh)'], name=site))
 
-    if period_choice == 'Année':
-        fig.add_trace(go.Bar(
-            x=site_data['Année'],
-            y=site_data['Energie consommée (kWh)'],
-            name=site,
-            marker=dict(color='blue')
-        ))
-    elif period_choice == 'Mois':
-        fig.add_trace(go.Bar(
-            x=site_data['Année-Mois'],
-            y=site_data['Energie consommée (kWh)'],
-            name=site,
-            marker=dict(color='lightblue')
-        ))
-    else:  # Par jour
-        fig.add_trace(go.Bar(
-            x=site_data['Horodate'],
-            y=site_data['Energie consommée (kWh)'],
-            name=site,
-            marker=dict(color='darkblue')
-        ))
-
-# Mise à jour des axes et titres
-fig.update_layout(
-    barmode='stack',
-    title=f'Consommation d\'énergie pour {site_selection}',
-    xaxis_title='Période',
-    yaxis_title='Consommation (kWh)',
-    legend_title="Site",
-    xaxis=dict(type='category', categoryorder='category ascending')  # Trier l'axe X
+fig_annee.update_layout(
+    title="Consommation d'énergie par Année",
+    xaxis_title="Année",
+    yaxis_title="Consommation (kWh)",
+    barmode='stack'
 )
 
-# Affichage du graphique dans Streamlit
-st.plotly_chart(fig)
+# 2. Graphique par Mois
+fig_mois = go.Figure()
+for site in df_grouped['Site'].unique():
+    site_data = df_grouped[df_grouped['Site'] == site]
+    fig_mois.add_trace(go.Bar(x=site_data['Année-Mois'], y=site_data['Energie consommée (kWh)'], name=site))
 
-# Affichage des données filtrées sous-jacentes (facultatif)
+fig_mois.update_layout(
+    title="Consommation d'énergie par Mois",
+    xaxis_title="Mois",
+    yaxis_title="Consommation (kWh)",
+    barmode='stack'
+)
+
+# 3. Graphique par Jour
+fig_jour = go.Figure()
+for site in df_grouped['Site'].unique():
+    site_data = df_grouped[df_grouped['Site'] == site]
+    fig_jour.add_trace(go.Bar(x=site_data['Horodate'], y=site_data['Energie consommée (kWh)'], name=site))
+
+fig_jour.update_layout(
+    title="Consommation d'énergie par Jour",
+    xaxis_title="Jour",
+    yaxis_title="Consommation (kWh)",
+    barmode='stack'
+)
+
+# Affichage des graphiques
+st.plotly_chart(fig_annee)
+st.plotly_chart(fig_mois)
+st.plotly_chart(fig_jour)
+
+# Affichage des données filtrées
 st.write(df_filtered)
+
 
