@@ -93,7 +93,7 @@ fig.update_layout(
     xaxis_title='Période',
     yaxis_title='Consommation (kWh)',
     legend_title="Site",
-    xaxis=dict(type='category')
+    xaxis=dict(type='category', categoryorder='category ascending')  # Trier l'axe X
 )
 
 # Affichage du graphique dans Streamlit
