@@ -11,9 +11,9 @@ df2 = df[['N° PCE', 'Date de relevé', 'Energie consommée (kWh)']].copy()
 df2['Horodate'] = pd.to_datetime(df2['Date de relevé'], format='%d/%m/%Y')
 
 # Remplacement des identifiants par des noms de sites
-mapping = {
-    "GI153881": 'PTWE89',
-    "GI087131": 'PTWE35',
+mapping = { 
+    "GI153881": 'PTWE89', 
+    "GI087131": 'PTWE35', 
     "GI060319": 'PTWE42 Andrézieux',
 }
 df2['Site'] = df2['N° PCE'].map(mapping)
@@ -34,37 +34,38 @@ site_selection = st.sidebar.selectbox('Choisissez un site', sites)
 
 # Choisir la période de filtrage
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
+
 if period_choice == 'Année':
     start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()))
     end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()))
     df_filtered = df2[(df2['Année'] >= start_year) & (df2['Année'] <= end_year) & (df2['Site'] == site_selection)]
+
 elif period_choice == 'Mois':
     start_month = st.sidebar.selectbox("Mois de début", range(1, 13))
     end_month = st.sidebar.selectbox("Mois de fin", range(1, 13))
     df_filtered = df2[(df2['Mois'] >= start_month) & (df2['Mois'] <= end_month) & (df2['Site'] == site_selection)]
+
 else:  # Filtrage par jour
+    # Conversion des dates de début et de fin en datetime64[ns] (en ajoutant une heure par défaut)
     start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
     end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
+    
+    # Filtrage en fonction des dates
     df_filtered = df2[(df2['Horodate'] >= start_day) & (df2['Horodate'] <= end_day) & (df2['Site'] == site_selection)]
 
-# Agrégation des données par jour
-df_grouped = df_filtered.groupby(['Année', 'Mois', 'Jour', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+# Agrégation des données
+df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 
-# Création de la colonne 'Mois-Nom' pour afficher le mois
-df_grouped['Mois-Nom'] = df_grouped['Mois'].apply(lambda x: pd.to_datetime(f"2024-{x:02d}-01").strftime('%B'))
-
-# Créer une colonne combinée "Jour-Mois" pour l'axe x
-df_grouped['Jour-Mois'] = df_grouped['Jour'].astype(str) + '-' + df_grouped['Mois-Nom']
+# Ajouter la colonne 'Année' pour Plotly
+df_grouped['Année'] = df_grouped['Année-Mois'].str[:4].astype(int)
 
 # Création du graphique avec Plotly
-fig = px.bar(df_grouped,
-             x='Jour-Mois',  # Utiliser la colonne combinée "Jour-Mois"
-             y='Energie consommée (kWh)',
-             color='Année',
-             labels={'Jour-Mois': 'Jour-Mois', 'Energie consommée (kWh)': 'Consommation (kWh)', 'Mois-Nom': 'Mois'},
+fig = px.bar(df_grouped, 
+             x='Année-Mois', 
+             y='Energie consommée (kWh)', 
+             color='Année',  # Utilisation de la colonne Année
+             labels={'Année-Mois': 'Période', 'Energie consommée (kWh)': 'Consommation (kWh)'},
              title=f'Consommation d\'énergie pour {site_selection}')
-
-# Mise à jour de l'axe des x pour qu'il soit catégorisé
 fig.update_xaxes(type='category', categoryorder='category ascending')
 
 # Afficher le graphique dans Streamlit
