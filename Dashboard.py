@@ -12,9 +12,9 @@ df2 = df[['N° PCE', 'Date de relevé', 'Energie consommée (kWh)']].copy()
 df2['Horodate'] = pd.to_datetime(df2['Date de relevé'], format='%d/%m/%Y')
 
 # Remplacement des identifiants par des noms de sites
-mapping = {
-    "GI153881": 'PTWE89',
-    "GI087131": 'PTWE35',
+mapping = { 
+    "GI153881": 'PTWE89', 
+    "GI087131": 'PTWE35', 
     "GI060319": 'PTWE42 Andrézieux',
 }
 df2['Site'] = df2['N° PCE'].map(mapping)
@@ -24,7 +24,7 @@ df2 = df2.drop(columns=['N° PCE'])
 df2['Année'] = df2['Horodate'].dt.year
 df2['Mois'] = df2['Horodate'].dt.month
 df2['Jour'] = df2['Horodate'].dt.day
-df2['Année-Mois'] = df2['Horodate'].dt.to_period('M')  # Changer en format "Année-Mois"
+df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois'].astype(str).str.zfill(2)
 
 # Filtrage des données
 st.sidebar.title("Filtrage des données")
@@ -53,7 +53,6 @@ if period_choice == 'Année':
     df_grouped = df_filtered.groupby(['Année', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 elif period_choice == 'Mois':
     df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
-    df_grouped['Année-Mois'] = df_grouped['Année-Mois'].dt.strftime('%Y-%m')  # Pour afficher correctement les mois
 else:  # Par jour
     df_grouped = df_filtered.groupby(['Horodate', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 
@@ -93,7 +92,7 @@ fig.update_layout(
     xaxis_title='Période',
     yaxis_title='Consommation (kWh)',
     legend_title="Site",
-    xaxis=dict(type='category', categoryorder='category ascending')  # Tri des catégories de mois
+    xaxis=dict(type='category')
 )
 
 # Affichage du graphique dans Streamlit
