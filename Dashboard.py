@@ -19,13 +19,16 @@ mapping = {
 df2['Site'] = df2['N° PCE'].map(mapping)
 df2 = df2.drop(columns=['N° PCE'])
 
-# Création de nouvelles colonnes pour l'année, le mois et le jour
+# Création de nouvelles colonnes pour l'année, le mois, le jour
 df2['Année'] = df2['Horodate'].dt.year
 df2['Mois'] = df2['Horodate'].dt.month
 df2['Jour'] = df2['Horodate'].dt.day
 
 # Création de la colonne "Année-Mois"
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois'].astype(str).str.zfill(2)
+
+# Création de la colonne "Jour-Mois"
+df2['Jour-Mois'] = df2['Jour'].astype(str).str.zfill(2) + '-' + df2['Mois'].astype(str).str.zfill(2)
 
 # Filtrage des données
 st.sidebar.title("Filtrage des données")
@@ -48,17 +51,18 @@ else:  # Filtrage par jour
     end_day = st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31'))
     df_filtered = df2[(df2['Horodate'] >= start_day) & (df2['Horodate'] <= end_day) & (df2['Site'] == site_selection)]
 
-df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+# Regroupement des données par "Jour-Mois" et "Site"
+df_grouped = df_filtered.groupby(['Jour-Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 
 # Ajouter la colonne 'Année' à df_grouped pour pouvoir l'utiliser comme 'color' dans Plotly
-df_grouped['Année'] = df_grouped['Année-Mois'].str[:4].astype(int)
+df_grouped['Année'] = df_grouped['Jour-Mois'].str.split('-').str[1].astype(int)  # On extrait l'année du "Jour-Mois"
 
 # Création du graphique avec Plotly
 fig = px.bar(df_grouped, 
-             x='Année-Mois', 
+             x='Jour-Mois', 
              y='Energie consommée (kWh)', 
              color='Année',  # Utilisation de la colonne Année
-             labels={'Année-Mois': 'Période', 'Energie consommée (kWh)': 'Consommation (kWh)'},
+             labels={'Jour-Mois': 'Période', 'Energie consommée (kWh)': 'Consommation (kWh)'},
              title=f'Consommation d\'énergie pour {site_selection}')
 fig.update_xaxes(type='category', categoryorder='category ascending')
 
