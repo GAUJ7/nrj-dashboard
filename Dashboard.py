@@ -11,9 +11,9 @@ df2 = df[['N° PCE', 'Date de relevé', 'Energie consommée (kWh)']].copy()
 df2['Horodate'] = pd.to_datetime(df2['Date de relevé'], format='%d/%m/%Y')
 
 # Remplacement des identifiants par des noms de sites
-mapping = { 
-    "GI153881": 'PTWE89', 
-    "GI087131": 'PTWE35', 
+mapping = {
+    "GI153881": 'PTWE89',
+    "GI087131": 'PTWE35',
     "GI060319": 'PTWE42 Andrézieux',
 }
 df2['Site'] = df2['N° PCE'].map(mapping)
@@ -27,8 +27,8 @@ df2['Jour'] = df2['Horodate'].dt.day
 # Création de la colonne "Année-Mois"
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois'].astype(str).str.zfill(2)
 
-# Création de la colonne "Mois-Année"
-df2['Mois-Année'] = df2['Mois'].astype(str) + '-' + df2['Jour'].astype(str).str.zfill(2)
+# Création de la colonne "Mois-Jour" (au lieu de "Mois-Année")
+df2['Mois-Jour'] = df2['Mois'].astype(str) + '-' + df2['Jour'].astype(str).str.zfill(2)
 
 # Filtrage des données
 st.sidebar.title("Filtrage des données")
@@ -51,36 +51,39 @@ else:  # Filtrage par jour
     end_day = st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31'))
     df_filtered = df2[(df2['Horodate'] >= start_day) & (df2['Horodate'] <= end_day) & (df2['Site'] == site_selection)]
 
+# Regroupement des données par "Année-Mois" et somme de la consommation
 df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 
 # Ajouter la colonne 'Année' à df_grouped pour pouvoir l'utiliser comme 'color' dans Plotly
 df_grouped['Année'] = df_grouped['Année-Mois'].str[:4].astype(int)
 
 # Création du graphique avec Plotly
-fig = px.bar(df_grouped, 
-             x='Année-Mois', 
-             y='Energie consommée (kWh)', 
-             color='Année',  # Utilisation de la colonne Année
-             labels={'Année-Mois': 'Période', 'Energie consommée (kWh)': 'Consommation (kWh)'},
-             title=f'Consommation d\'énergie pour {site_selection}')
+fig = px.bar(df_grouped,
+              x='Année-Mois',
+              y='Energie consommée (kWh)',
+              color='Année',  # Utilisation de la colonne Année
+              labels={'Année-Mois': 'Période', 'Energie consommée (kWh)': 'Consommation (kWh)'},
+              title=f'Consommation d\'énergie pour {site_selection}')
 fig.update_xaxes(type='category', categoryorder='category ascending')
 
-df_grouped2 = df_filtered.groupby(['Mois-Année', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+# Regroupement des données par "Mois-Jour" et somme de la consommation
+df_grouped2 = df_filtered.groupby(['Mois-Jour', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 
-# Ajouter la colonne 'Mois' à df_grouped pour pouvoir l'utiliser comme 'color' dans Plotly
-df_grouped2['Mois'] = df_grouped2['Mois-Année'].str[:4].astype(int)
+# Ajouter la colonne 'Mois' à df_grouped2 pour pouvoir l'utiliser comme 'color' dans Plotly
+df_grouped2['Mois'] = df_grouped2['Mois-Jour'].str[:2].astype(int)
 
-# Création du graphique avec Plotly
-fig = px.bar(df_grouped2, 
-             x='Mois-Année', 
-             y='Energie consommée (kWh)', 
-             color='Mois',  # Utilisation de la colonne Année
-             labels={'Mois-Année': 'Période', 'Energie consommée (kWh)': 'Consommation (kWh)'},
-             title=f'Consommation d\'énergie pour {site_selection}')
-fig.update_xaxes(type='category', categoryorder='category ascending')
+# Création du graphique avec Plotly pour "Mois-Jour"
+fig2 = px.bar(df_grouped2,
+              x='Mois-Jour',
+              y='Energie consommée (kWh)',
+              color='Mois',  # Utilisation de la colonne Mois
+              labels={'Mois-Jour': 'Période', 'Energie consommée (kWh)': 'Consommation (kWh)'},
+              title=f'Consommation d\'énergie pour {site_selection}')
+fig2.update_xaxes(type='category', categoryorder='category ascending')
 
 # Afficher le graphique dans Streamlit
 st.plotly_chart(fig)
+st.plotly_chart(fig2)
 
 # Affichage des données filtrées sous-jacentes (facultatif)
 st.write(df_filtered)
