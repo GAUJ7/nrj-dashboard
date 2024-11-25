@@ -56,6 +56,9 @@ elif period_choice == 'Mois':
 else:  # Par jour
     df_grouped = df_filtered.groupby(['Horodate', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 
+# Définir une palette de couleurs
+color_map = {year: px.colors.qualitative.Set1[i] for i, year in enumerate(df_grouped['Année'].unique())}
+
 # Création du graphique avec Plotly
 fig = go.Figure()
 
@@ -64,12 +67,14 @@ for site in df_grouped['Site'].unique():
     site_data = df_grouped[df_grouped['Site'] == site]
     
     if period_choice == 'Année':
-        fig.add_trace(go.Bar(
-            x=site_data['Année'],
-            y=site_data['Energie consommée (kWh)'],
-            name=site,
-            marker=dict(color='blue')
-        ))
+        for year in site_data['Année'].unique():
+            year_data = site_data[site_data['Année'] == year]
+            fig.add_trace(go.Bar(
+                x=year_data['Année'],
+                y=year_data['Energie consommée (kWh)'],
+                name=f'{site} - {year}',
+                marker=dict(color=color_map[year])  # Utilisation de la couleur de l'année
+            ))
     elif period_choice == 'Mois':
         fig.add_trace(go.Bar(
             x=site_data['Année-Mois'],
@@ -100,3 +105,4 @@ st.plotly_chart(fig)
 
 # Affichage des données filtrées sous-jacentes (facultatif)
 st.write(df_filtered)
+
