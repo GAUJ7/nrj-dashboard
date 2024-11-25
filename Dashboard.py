@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 
 # Chargement des données
@@ -23,8 +24,6 @@ df2 = df2.drop(columns=['N° PCE'])
 df2['Année'] = df2['Horodate'].dt.year
 df2['Mois'] = df2['Horodate'].dt.month
 df2['Jour'] = df2['Horodate'].dt.day
-
-# Création de la colonne "Année-Mois"
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois'].astype(str).str.zfill(2)
 
 # Filtrage des données
@@ -35,40 +34,68 @@ site_selection = st.sidebar.selectbox('Choisissez un site', sites)
 # Choisir la période de filtrage
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
 
+# Filtrage selon la période choisie
 if period_choice == 'Année':
     start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()))
     end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()))
     df_filtered = df2[(df2['Année'] >= start_year) & (df2['Année'] <= end_year) & (df2['Site'] == site_selection)]
-
 elif period_choice == 'Mois':
     start_month = st.sidebar.selectbox("Mois de début", range(1, 13))
     end_month = st.sidebar.selectbox("Mois de fin", range(1, 13))
     df_filtered = df2[(df2['Mois'] >= start_month) & (df2['Mois'] <= end_month) & (df2['Site'] == site_selection)]
-
 else:  # Filtrage par jour
-    # Conversion des dates de début et de fin en datetime64[ns] (en ajoutant une heure par défaut)
     start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
     end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
-    
-    # Filtrage en fonction des dates
     df_filtered = df2[(df2['Horodate'] >= start_day) & (df2['Horodate'] <= end_day) & (df2['Site'] == site_selection)]
 
-# Agrégation des données
-df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
-
-# Ajouter la colonne 'Année' pour Plotly
-df_grouped['Année'] = df_grouped['Année-Mois'].str[:4].astype(int)
+# Agrégation des données par période choisie
+if period_choice == 'Année':
+    df_grouped = df_filtered.groupby(['Année', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+elif period_choice == 'Mois':
+    df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+else:  # Par jour
+    df_grouped = df_filtered.groupby(['Horodate', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
 
 # Création du graphique avec Plotly
-fig = px.bar(df_grouped, 
-             x='Année-Mois', 
-             y='Energie consommée (kWh)', 
-             color='Année',  # Utilisation de la colonne Année
-             labels={'Année-Mois': 'Période', 'Energie consommée (kWh)': 'Consommation (kWh)'},
-             title=f'Consommation d\'énergie pour {site_selection}')
-fig.update_xaxes(type='category', categoryorder='category ascending')
+fig = go.Figure()
 
-# Afficher le graphique dans Streamlit
+# Ajout des sous-graphes selon la période
+for site in df_grouped['Site'].unique():
+    site_data = df_grouped[df_grouped['Site'] == site]
+    
+    if period_choice == 'Année':
+        fig.add_trace(go.Bar(
+            x=site_data['Année'],
+            y=site_data['Energie consommée (kWh)'],
+            name=site,
+            marker=dict(color='blue')
+        ))
+    elif period_choice == 'Mois':
+        fig.add_trace(go.Bar(
+            x=site_data['Année-Mois'],
+            y=site_data['Energie consommée (kWh)'],
+            name=site,
+            marker=dict(color='green')
+        ))
+    else:  # Par jour
+        fig.add_trace(go.Bar(
+            x=site_data['Horodate'],
+            y=site_data['Energie consommée (kWh)'],
+            name=site,
+            marker=dict(color='red')
+        ))
+
+# Mise à jour des axes et titres
+fig.update_layout(
+    barmode='stack',
+    title=f'Consommation d\'énergie pour {site_selection}',
+    xaxis_title='Période',
+    yaxis_title='Consommation (kWh)',
+    legend_title="Site",
+    xaxis=dict(type='category')
+)
+
+# Affichage du graphique dans Streamlit
 st.plotly_chart(fig)
 
 # Affichage des données filtrées sous-jacentes (facultatif)
