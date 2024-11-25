@@ -22,42 +22,82 @@ period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois',
 # Filtrage des données par site
 df_filtered = df2[df2['Site'] == site_selection]
 
-# Filtrage par période
+# Filtrage selon la période choisie
 if period_choice == 'Année':
-    start_year = st.sidebar.selectbox("Année de début", sorted(df_filtered['Année'].unique()))
-    end_year = st.sidebar.selectbox("Année de fin", sorted(df_filtered['Année'].unique()))
-    df_filtered = df_filtered[(df_filtered['Année'] >= start_year) & (df_filtered['Année'] <= end_year)]
+    start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()))
+    end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()))
+    df_filtered = df2[(df2['Année'] >= start_year) & (df2['Année'] <= end_year) & (df2['Site'] == site_selection)]
 elif period_choice == 'Mois':
     start_month = st.sidebar.selectbox("Mois de début", range(1, 13))
     end_month = st.sidebar.selectbox("Mois de fin", range(1, 13))
-    df_filtered = df_filtered[(df_filtered['Mois'] >= start_month) & (df_filtered['Mois'] <= end_month)]
+    df_filtered = df2[(df2['Mois'] >= start_month) & (df2['Mois'] <= end_month) & (df2['Site'] == site_selection)]
 else:  # Filtrage par jour
     start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
     end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
-    df_filtered = df_filtered[(df_filtered['Date'] >= start_day) & (df_filtered['Date'] <= end_day)]
+    df_filtered = df2[(df2['Horodate'] >= start_day) & (df2['Horodate'] <= end_day) & (df2['Site'] == site_selection)]
 
-# Graphique
+# Agrégation des données par période choisie
+if energie_choice == 'Energie consommée (kWh)':  # Vérification de l'énergie choisie
+    if period_choice == 'Année':  # Agrégation par année
+        df_grouped = df_filtered.groupby(['Année', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+    elif period_choice == 'Mois':  # Agrégation par mois
+        df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+    else:  # Agrégation par jour
+        df_grouped = df_filtered.groupby(['Jour', 'Site'])['Energie consommée (kWh)'].sum().reset_index()
+else:  # Si une autre énergie est choisie, comme 'KWh/Kg'
+    if period_choice == 'Année':  # Agrégation par année
+        df_grouped = df_filtered.groupby(['Année', 'Site'])['KWh/Kg'].mean().reset_index()
+    elif period_choice == 'Mois':  # Agrégation par mois
+        df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])['KWh/Kg'].mean().reset_index()
+    else:  # Agrégation par jour
+        df_grouped = df_filtered.groupby(['Jour', 'Site'])['KWh/Kg'].mean().reset_index()
+
+# Création du graphique avec Plotly
 fig = go.Figure()
 
-# Ajout des données au graphique
-fig.add_trace(go.Bar(
-    x=df_filtered['Date'] if period_choice == 'Jour' else df_filtered['Mois'] if period_choice == 'Mois' else df_filtered['Année'],
-    y=df_filtered[energie_choice],
-    name='Consommation d\'énergie',
-    marker=dict(color='blue')
-))
+# Ajout des sous-graphes selon la période
+for site in df_grouped['Site'].unique():
+    site_data = df_grouped[df_grouped['Site'] == site]
+    if period_choice == 'Année':
+        fig.add_trace(go.Bar(
+            x=site_data['Année'],
+            y=site_data['Energie consommée (kWh)'],
+            name=site,
+            marker=dict(color='blue')
+        ))
+    elif period_choice == 'Mois':
+        fig.add_trace(go.Bar(
+            x=site_data['Année-Mois'],
+            y=site_data['Energie consommée (kWh)'],
+            name=site,
+            marker=dict(color='lightblue')
+        ))
+    else:  # Par jour
+        fig.add_trace(go.Bar(
+            x=site_data['Jour'],  # Utilisation de la date sans l'heure
+            y=site_data['Energie consommée (kWh)'],
+            name=site,
+            marker=dict(color='darkblue')
+        ))
 
-# Mise en forme du graphique
+# Mise à jour des axes et titres
 fig.update_layout(
+    barmode='stack',
     title=f'Consommation d\'énergie pour {site_selection}',
     xaxis_title='Période',
-    yaxis_title=f'{energie_choice}',
-    barmode='stack',
-    xaxis=dict(type='category')
+    yaxis_title='Consommation (kWh)',
+    legend_title="Site",
+    xaxis=dict(type='category', categoryorder='category ascending')  # Trier l'axe X
 )
 
-# Affichage du graphique
+# Affichage du graphique dans Streamlit
 st.plotly_chart(fig)
 
-# Affichage des données filtrées
-st.write(df_filtered)
+# Affichage des données filtrées sans les colonnes masquées
+df_filtered_no_date = df_filtered.drop(columns=['Date de relevé', 'Horodate', 'Mois-Abrege', 'Année-Mois'])
+df_filtered_no_date = df_filtered_no_date[['Site', 'Année', 'Mois', 'Jour', 'Energie consommée (kWh)']]
+
+# Correction du format du mois
+df_filtered_no_date['Mois'] = df_filtered_no_date['Mois'].apply(lambda x: pd.to_datetime(f'2024-{x}-01').strftime('%B'))
+
+st.write(df_filtered_no_date)
