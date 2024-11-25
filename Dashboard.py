@@ -103,5 +103,7 @@ df_filtered_no_date = df_filtered.drop(columns=['Date de relevé', 'Horodate', '
 
 df_filtered_no_date = df_filtered_no_date[['Site', 'Année', 'Mois', 'Jour', 'Energie consommée (kWh)']]
 
+df_filtered_no_date['Mois'] = df_filtered_no_date['Mois'].apply(lambda x: pd.to_datetime(f'2024-{x}-01').strftime('%B'))
+
 st.write(df_filtered_no_date)
 
