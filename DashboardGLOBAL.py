@@ -85,40 +85,39 @@ color_palette = px.colors.qualitative.Safe  # Palette de couleurs pré-définie
 # Création du graphique avec Plotly
 fig = go.Figure()
 
-# Ajouter les sous-graphes avec des couleurs différentes pour chaque site
-for idx, site in enumerate(df_grouped['Site'].unique()):
+# Ajout des sous-graphes selon la période
+for site in df_grouped['Site'].unique():
     site_data = df_grouped[df_grouped['Site'] == site]
-    color = color_palette[idx % len(color_palette)]  # Assurer une couleur unique pour chaque site
     if period_choice == 'Année':
         fig.add_trace(go.Bar(
             x=site_data['Année'],
             y=site_data[energie_choice],
             name=site,
-            marker=dict(color=color)
+            marker=dict(color='blue')
         ))
     elif period_choice == 'Mois':
         fig.add_trace(go.Bar(
             x=site_data['Année-Mois'],
             y=site_data[energie_choice],
             name=site,
-            marker=dict(color=color)
+            marker=dict(color='lightblue')
         ))
-    else:
+    else:  # Par jour
         fig.add_trace(go.Bar(
             x=site_data['Jour'],
             y=site_data[energie_choice],
             name=site,
-            marker=dict(color=color)
+            marker=dict(color='darkblue')
         ))
 
 # Mise à jour des axes et titres
 fig.update_layout(
-    barmode='group',
+    barmode='group',  # Utilisation de 'group' pour séparer les barres
     title=f'Consommation d\'énergie pour {site_selection}',
     xaxis_title='Période',
     yaxis_title=f'Consommation ({energie_choice})',
     legend_title="Site",
-    xaxis=dict(type='category', categoryorder='category ascending')
+    xaxis=dict(type='category', categoryorder='category ascending')  # Trier l'axe X
 )
 
 # Affichage du graphique dans Streamlit
