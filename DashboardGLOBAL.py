@@ -29,8 +29,8 @@ def remove_outliers(df, column):
     return df_filtered
 
 # Filtrage des valeurs aberrantes pour les colonnes "Energie consommée (kWh)" et "KWh/Kg"
-df2 = remove_outliers(df2, 'Gaz (kWh/kg)')
-df2 = remove_outliers(df2, 'Electricité (kWh/kg)')
+df2 = remove_outliers(df2, 'Gaz (kWh)')
+df2 = remove_outliers(df2, 'Electricité (kWh)')
 
 # Filtrage des données dans Streamlit
 st.sidebar.title("Filtrage des données")
