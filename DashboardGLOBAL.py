@@ -35,7 +35,7 @@ df2 = remove_outliers(df2, 'Electricité (kWh/kg)')
 # Filtrage des données dans Streamlit
 st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
-site_selection = st.sidebar.selectbox('Choisissez un site', sites)
+site_selection = st.sidebar.selectbox('Choisissez un site', list(sites) + ['Global'])
 
 # Choisir l'énergie à afficher
 energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Gaz (kWh/kg)', 'Electricité (kWh/kg)','Gaz (kWh)','Electricité (kWh)','PE (kg)'])
