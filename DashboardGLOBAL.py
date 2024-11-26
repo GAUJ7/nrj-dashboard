@@ -23,6 +23,9 @@ st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
 site_selection = st.sidebar.selectbox('Choisissez un site', list(sites) + ['Global'])
 
+# Choisir la période de filtrage
+period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
+
 # Filtrage selon la période choisie
 if period_choice == 'Année':
     df_kWh = df2.groupby(['Année', 'Site'])[['PE(kg)', 'Energie consommée (kWh)']].sum().reset_index()
