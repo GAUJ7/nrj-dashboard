@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import streamlit as st
+import plotly.express as px
 
 # Chargement des données
 df2 = pd.read_csv("Global_streamlit.csv", sep=";")
@@ -13,7 +14,7 @@ df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce')
 # Extraire l'année, le mois et le jour
 df2['Année'] = df2['Date'].dt.year
 df2['Mois'] = df2['Date'].dt.month
-df2['Jour'] = df2['Date'].dt.date
+df2['Jour'] = df2['Date'].dt.day
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # Format Année-Mois (ex: 2024-Jan)
 
@@ -23,19 +24,18 @@ sites = df2['Site'].unique()
 site_selection = st.sidebar.selectbox('Choisissez un site', list(sites) + ['Global'])
 
 # Choisir l'énergie à afficher
-energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Gaz (kWh/kg)', 'Electricité (kWh/kg)','Gaz (kWh)','Electricité (kWh)','PE (kg)'])
+energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Gaz (kWh/kg)', 'Electricité (kWh/kg)', 'Gaz (kWh)', 'Electricité (kWh)', 'PE (kg)'])
 
 # Choisir la période de filtrage
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
 
 # Filtrage des données par site
-
-if site_selection == 'Global':
+if site_selection == 'Global':  
     # Si "Global" est sélectionné, utiliser la médiane pour les énergies kWh/kg, sinon utiliser la somme
-    if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':  # Vérifie si l'énergie choisie est 'kWh/kg'
-        df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].median().reset_index()  # Médiane pour 'kWh/kg'
+    if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':  
+        df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].median().reset_index()  
     else:
-        df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()  # Somme pour les autres énergies
+        df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()  
 else:
     df_filtered = df2[df2['Site'] == site_selection]
 
@@ -54,15 +54,15 @@ else:  # Filtrage par jour
     df_filtered = df_filtered[(df_filtered['Date'] >= start_day) & (df_filtered['Date'] <= end_day)]
 
 # Agrégation des données par energie
-if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)': 
-    energie_col = energie_choice  # 'Gaz (kWh/kg)' ou 'Electricité (kWh/kg)'
+if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':     
+    energie_col = energie_choice  
     aggregation_method = 'median'  # Utilisation de la médiane pour ces énergies
-elif energie_choice == 'Gaz (kWh)' or energie_choice == 'Electricité (kWh)':
-    energie_col = energie_choice  # 'Gaz (kWh)' ou 'Electricité (kWh)'
-    aggregation_method = 'sum'  # Utilisation de la somme pour ces énergies
-else:
-    energie_col = energie_choice  # 'PE (kg)'
-    aggregation_method = 'sum'  # Utilisation de la somme pour 'PE (kg)'
+elif energie_choice == 'Gaz (kWh)' or energie_choice == 'Electricité (kWh)':   
+    energie_col = energie_choice  
+    aggregation_method = 'sum'  
+else:   
+    energie_col = energie_choice  
+    aggregation_method = 'sum'  
 
 # Agrégation des données par période choisie
 if period_choice == 'Année':
@@ -84,39 +84,31 @@ else:  # Agrégation par jour
 # Création du graphique avec Plotly
 fig = go.Figure()
 
+# Générer une palette de couleurs pour les sites
+if site_selection == 'Global':
+    colors = px.colors.qualitative.Set1  # Palette de couleurs distinctes
+    color_map = {site: colors[i % len(colors)] for i, site in enumerate(df_grouped['Site'].unique())}
+else:
+    color_map = {'blue': 'blue'}  # Si un seul site est sélectionné
+
 # Ajout des sous-graphes selon la période
 for site in df_grouped['Site'].unique():
     site_data = df_grouped[df_grouped['Site'] == site]
-    if period_choice == 'Année':
-        fig.add_trace(go.Bar(
-            x=site_data['Année'],
-            y=site_data[energie_choice],
-            name=site,
-            marker=dict(color='blue')
-        ))
-    elif period_choice == 'Mois':
-        fig.add_trace(go.Bar(
-            x=site_data['Année-Mois'],
-            y=site_data[energie_choice],
-            name=site,
-            marker=dict(color='lightblue')
-        ))
-    else:  # Par jour
-        fig.add_trace(go.Bar(
-            x=site_data['Jour'],
-            y=site_data[energie_choice],
-            name=site,
-            marker=dict(color='darkblue')
-        ))
+    fig.add_trace(go.Bar(
+        x=site_data[period_choice],
+        y=site_data[energie_choice],
+        name=site,
+        marker=dict(color=color_map[site])  # Applique la couleur spécifique
+    ))
 
 # Mise à jour des axes et titres
 fig.update_layout(
-    barmode='group',  # Utilisation de 'group' pour séparer les barres
+    barmode='group',  
     title=f'Consommation d\'énergie pour {site_selection}',
     xaxis_title='Période',
     yaxis_title=f'Consommation ({energie_choice})',
     legend_title="Site",
-    xaxis=dict(type='category', categoryorder='category ascending')  # Trier l'axe X
+    xaxis=dict(type='category', categoryorder='category ascending')
 )
 
 # Affichage du graphique dans Streamlit
