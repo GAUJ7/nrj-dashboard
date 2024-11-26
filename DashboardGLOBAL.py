@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 # Chargement des données
-df2 = pd.read_csv("Global_streamlit2.csv", sep=";")
+df2 = pd.read_csv("Global_streamlit.csv", sep=";")
 df2['Site'] = df2['Site'].replace({'PTWE42 Andrézieux': 'PTWE42'})
 
 # Assurer que la colonne 'Date' est bien au format datetime
