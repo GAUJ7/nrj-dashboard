@@ -32,9 +32,15 @@ period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois',
 # Filtrage des données par site
 if site_selection == 'Global':
     if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
-        df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].median().reset_index()
+        # Créez une nouvelle colonne de la division
+        df2['Gaz/PE'] = df2['Gaz (kWh)'] / df2['PE (kg)']
+        # Appliquez la médiane sur cette nouvelle colonne
+        df_filtered = df2.groupby([period_choice, 'Site'])['Gaz/PE'].median().reset_index()
     else:
-        df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()
+        # Créez une nouvelle colonne de la division
+        df2['Elec/PE'] = df2['Electricité (kWh)'] / df2['PE (kg)']
+        # Appliquez la médiane sur cette nouvelle colonne
+        df_filtered = df2.groupby([period_choice, 'Site'])['Elec/PE'].median().reset_index()
 else:
     df_filtered = df2[df2['Site'] == site_selection]
 
