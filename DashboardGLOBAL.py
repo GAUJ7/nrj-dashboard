@@ -19,12 +19,6 @@ df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # For
 
 # Fonction pour détecter et exclure les valeurs aberrantes
 def remove_outliers(df, column):
-    Q1 = df[column].quantile(0.01)
-    Q3 = df[column].quantile(0.99)
-    IQR = Q3 - Q1
-    lower_bound = Q1 - 1.5 * IQR
-    upper_bound = Q3 + 1.5 * IQR
-    # Filtrage des valeurs aberrantes et des valeurs égales à zéro
     df_filtered = df[(df[column] >= lower_bound) & (df[column] <= upper_bound) & (df[column] != 0) & (df[column] >= 0)]
     return df_filtered
 
