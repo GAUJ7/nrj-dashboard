@@ -7,6 +7,9 @@ import streamlit as st
 df2 = pd.read_csv("Global_streamlit.csv", sep=";")
 df2['Site'] = df2['Site'].replace({'PTWE42 Andrézieux': 'PTWE42'})
 
+# Assurer que la colonne 'Date' est bien au format datetime
+df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce')
+
 # Extraire l'année, le mois et le jour
 df2['Année'] = df2['Date'].dt.year
 df2['Mois'] = df2['Date'].dt.month
