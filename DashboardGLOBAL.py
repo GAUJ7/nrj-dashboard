@@ -105,7 +105,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
         ))
     else:
         fig.add_trace(go.Bar(
-            x=site_data['Date'],
+            x=site_data['Jour'],
             y=site_data[energie_choice],
             name=site,
             marker=dict(color=color)
