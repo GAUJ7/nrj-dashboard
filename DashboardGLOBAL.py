@@ -89,7 +89,6 @@ fig = go.Figure()
 for idx, site in enumerate(df_grouped['Site'].unique()):
     site_data = df_grouped[df_grouped['Site'] == site]
     color = color_palette[idx % len(color_palette)]  # Assurer une couleur unique pour chaque site
-    
     if period_choice == 'Année':
         fig.add_trace(go.Bar(
             x=site_data['Année'],
@@ -105,9 +104,8 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             marker=dict(color=color)
         ))
     else:
-        # Affichage par jour avec un format de date lisible
         fig.add_trace(go.Bar(
-            x=site_data['Jour'].apply(lambda x: pd.to_datetime(f'2024-01-{x:02d}').strftime('%Y-%m-%d')),  # Format de date
+            x=site_data['Jour'],
             y=site_data[energie_choice],
             name=site,
             marker=dict(color=color)
@@ -117,7 +115,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
 fig.update_layout(
     barmode='group',
     title=f'Consommation d\'énergie pour {site_selection}',
-    xaxis_title='Jour',
+    xaxis_title='Période',
     yaxis_title=f'Consommation ({energie_choice})',
     legend_title="Site",
     xaxis=dict(type='category', categoryorder='category ascending')
