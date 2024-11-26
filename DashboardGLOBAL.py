@@ -44,7 +44,15 @@ energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Gaz (kWh/kg)', 'Ele
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
 
 # Filtrage des données par site
-df_filtered = df2[df2['Site'] == site_selection]
+
+if site_selection == 'Global':
+    # Si "Global" est sélectionné, utiliser la médiane pour les énergies kWh/kg, sinon utiliser la somme
+    if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':  # Vérifie si l'énergie choisie est 'kWh/kg'
+        df_filtered = df2.groupby([period_choice, 'Site'])[energie_col].median().reset_index()  # Médiane pour 'kWh/kg'
+    else:
+        df_filtered = df2.groupby([period_choice, 'Site'])[energie_col].sum().reset_index()  # Somme pour les autres énergies
+else:
+    df_filtered = df2[df2['Site'] == site_selection]
 
 # Filtrage selon la période choisie
 if period_choice == 'Année':
