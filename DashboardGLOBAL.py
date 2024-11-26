@@ -17,8 +17,6 @@ df2['Jour'] = df2['Date'].dt.date
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # Format Année-Mois (ex: 2024-Jan)
 
-
-
 # Filtrage des données dans Streamlit
 st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
