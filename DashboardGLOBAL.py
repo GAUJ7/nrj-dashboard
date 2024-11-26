@@ -33,11 +33,9 @@ period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois',
 if site_selection == 'Global':
     # Calcul de Gaz (kWh/kg) ou Electricité (kWh/kg)
     if energie_choice == 'Gaz (kWh/kg)': 
-        df2['Gaz (kWh/kg)'] = df2['Gaz (kWh)'] / df2['PE (kg)']
-        df_filtered = df2.groupby([period_choice, 'Site'])['Gaz (kWh/kg)'].median().reset_index()
+        df_filtered = df2.groupby([period_choice, 'Site'])(['Gaz (kWh)'] / df2['PE (kg)']).median().reset_index()
     elif energie_choice == 'Electricité (kWh/kg)':
-        df2['Electricité (kWh/kg)'] = df2['Electricité (kWh)'] / df2['PE (kg)']
-        df_filtered = df2.groupby([period_choice, 'Site'])['Electricité (kWh/kg)'].median().reset_index()
+        df_filtered = df2.groupby([period_choice, 'Site'])(['Electricité (kWh)'] / df2['PE (kg)']).median().reset_index()
     else:
         df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()
 else:
