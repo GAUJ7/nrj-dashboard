@@ -19,7 +19,7 @@ df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # For
 
 # Fonction pour détecter et exclure les valeurs aberrantes
 def remove_outliers(df, column):
-    df_filtered = df[(df[column] != 0) & (df[column] >= 0)]
+    df_filtered = df[(df[column] != 0)]
     return df_filtered
 
 # Filtrage des valeurs aberrantes pour les colonnes "Energie consommée (kWh)" et "KWh/Kg"
