@@ -31,8 +31,13 @@ period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois',
 
 # Filtrage des données par site
 if site_selection == 'Global':
-    if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
-        df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].median().reset_index()
+    # Calcul de Gaz (kWh/kg) ou Electricité (kWh/kg)
+    if energie_choice == 'Gaz (kWh/kg)': 
+        df2['Gaz (kWh/kg)'] = df2['Gaz (kWh)'] / df2['PE (kg)']
+        df_filtered = df2.groupby([period_choice, 'Site'])['Gaz (kWh/kg)'].median().reset_index()
+    elif energie_choice == 'Electricité (kWh/kg)':
+        df2['Electricité (kWh/kg)'] = df2['Electricité (kWh)'] / df2['PE (kg)']
+        df_filtered = df2.groupby([period_choice, 'Site'])['Electricité (kWh/kg)'].median().reset_index()
     else:
         df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()
 else:
@@ -53,10 +58,7 @@ else:
     df_filtered = df_filtered[(df_filtered['Date'] >= start_day) & (df_filtered['Date'] <= end_day)]
 
 # Agrégation des données
-if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
-    energie_col = energie_choice
-    aggregation_method = 'median'
-elif energie_choice == 'Gaz (kWh)' or energie_choice == 'Electricité (kWh)':
+if energie_choice == 'Gaz (kWh)' or energie_choice == 'Electricité (kWh)':
     energie_col = energie_choice
     aggregation_method = 'sum'
 else:
