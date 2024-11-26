@@ -23,29 +23,18 @@ st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
 site_selection = st.sidebar.selectbox('Choisissez un site', list(sites) + ['Global'])
 
+# Choisir l'énergie à afficher
+energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Gaz (kWh/kg)', 'Electricité (kWh/kg)', 'Gaz (kWh)', 'Electricité (kWh)', 'PE (kg)'])
+
 # Choisir la période de filtrage
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
 
-# Filtrage selon la période choisie
-if period_choice == 'Année':
-    df_kWh = df2.groupby(['Année', 'Site'])[['PE(kg)', 'Energie consommée (kWh)']].sum().reset_index()
-elif period_choice == 'Mois':
-    df_kWh = df2.groupby(['Année', 'Mois', 'Site'])[['PE(kg)', 'Energie consommée (kWh)']].sum().reset_index()
-else:  # Filtrage par jour
-    df_kWh = df2.groupby(['Jour', 'Site'])[['PE(kg)', 'Energie consommée (kWh)']].sum().reset_index()
-
-# Calcul de l'énergie consommée par PE selon le choix de l'énergie
+# Filtrage des données par site
 if site_selection == 'Global':
-    if energie_choice == 'Gaz (kWh/kg)':
-        df_kWh['KWh/Kg'] = df_kWh.apply(
-            lambda row: row['Energie consommée (kWh)'] / row['PE(kg)'] if row['PE(kg)'] != 0 else 0,
-            axis=1
-        )
-    elif energie_choice == 'Electricité (kWh/kg)':
-        df_kWh['KWh/Kg'] = df_kWh.apply(
-            lambda row: row['Energie consommée (kWh)'] / row['PE(kg)'] if row['PE(kg)'] != 0 else 0,
-            axis=1
-        )
+    if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
+        df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].median().reset_index()
+    else:
+        df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()
 else:
     df_filtered = df2[df2['Site'] == site_selection]
 
