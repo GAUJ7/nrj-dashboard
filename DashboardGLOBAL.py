@@ -17,17 +17,6 @@ df2['Jour'] = df2['Date'].dt.date
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # Format Année-Mois (ex: 2024-Jan)
 
-# Fonction pour détecter et exclure les valeurs aberrantes
-def remove_outliers(df, column):
-    Q1 = df[column].quantile(0.1)
-    Q3 = df[column].quantile(0.9)
-    IQR = Q3 - Q1
-    lower_bound = Q1 - 1.5 * IQR
-    upper_bound = Q3 + 1.5 * IQR
-    # Filtrage des valeurs aberrantes et des valeurs égales à zéro
-    df_filtered = df[(df[column] >= lower_bound) & (df[column] <= upper_bound) & (df[column] != 0) & (df[column] >= 0.1)]
-    return df_filtered
-
 # Filtrage des valeurs aberrantes pour les colonnes "Energie consommée (kWh)" et "KWh/Kg"
 df2 = remove_outliers(df2, 'Gaz (kWh/kg)')
 df2 = remove_outliers(df2, 'Electricité (kWh/kg)')
