@@ -17,14 +17,7 @@ df2['Jour'] = df2['Date'].dt.date
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # Format Année-Mois (ex: 2024-Jan)
 
-# Fonction pour détecter et exclure les valeurs aberrantes
-def remove_outliers(df, column):
-    df_filtered = df[(df[column] != 0)]
-    return df_filtered
 
-# Filtrage des valeurs aberrantes pour les colonnes "Energie consommée (kWh)" et "KWh/Kg"
-df2 = remove_outliers(df2, 'Gaz (kWh)')
-df2 = remove_outliers(df2, 'Electricité (kWh)')
 
 # Filtrage des données dans Streamlit
 st.sidebar.title("Filtrage des données")
