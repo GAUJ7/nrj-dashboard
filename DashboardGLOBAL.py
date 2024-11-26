@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import plotly.graph_objects as go
 import streamlit as st
 import plotly.express as px  # Pour accéder à des palettes de couleurs
@@ -118,7 +117,7 @@ fig.update_layout(
     xaxis_title='Période',
     yaxis_title=f'Consommation ({energie_choice})',
     legend_title="Site",
-    xaxis=dict(type='category', categoryorder='category ascending')
+    xaxis=dict(type='category', categoryorder='category ascending')  # Assure l'ordre croissant des jours
 )
 
 # Affichage du graphique dans Streamlit
