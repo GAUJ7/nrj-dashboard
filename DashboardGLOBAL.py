@@ -101,7 +101,7 @@ elif period_choice == 'Mois':
     if aggregation_method == 'median':
         df_grouped = df_filtered
     else:
-        df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])[energie_col].sum().reset_index()
+        df_grouped = df_filtered.groupby(['Mois', 'Site'])[energie_col].sum().reset_index()
 else:
     if aggregation_method == 'median':
         df_grouped = df_filtered
@@ -127,7 +127,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
         ))
     elif period_choice == 'Mois':
         fig.add_trace(go.Bar(
-            x=site_data['Année-Mois'],
+            x=site_data['Mois'],
             y=site_data[energie_choice],
             name=site,
             marker=dict(color=color)
