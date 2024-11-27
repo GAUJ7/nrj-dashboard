@@ -30,18 +30,23 @@ energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Gaz (kWh/kg)', 'Ele
 # Choisir la période de filtrage
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
 
-# Calcul de la somme de Gaz et Electricité selon la période choisie
+# Calcul des sommes de Gaz et Electricité selon la période choisie
 df_gaz = df2.groupby([period_choice, 'Site'])['Gaz (kWh)'].sum().reset_index()
 df_electricite = df2.groupby([period_choice, 'Site'])['Electricité (kWh)'].sum().reset_index()
+
+# Calcul de la somme de PE (kg) par période et site
+df_pe = df2.groupby([period_choice, 'Site'])['PE (kg)'].sum().reset_index()
 
 # Fusionner les deux DataFrames (Gaz et Electricité)
 df_merged = pd.merge(df_gaz, df_electricite, on=[period_choice, 'Site'], suffixes=('_gaz', '_elec'))
 
-# Calcul du ratio Gaz/Électricité
-df_merged['Gaz_Electricité_ratio'] = df_merged['Gaz (kWh)'] / df_merged['Electricité (kWh)']
-
-# Affichage du résultat final avec le ratio
-df_final = df_merged[[period_choice, 'Site', 'Gaz_Electricité_ratio']]
+# Appliquer la condition selon le choix d'énergie
+if energy_choice == "Gaz (kWh/kg)":
+    df_merged['Gaz (kWh/kg)'] = df_merged['Gaz (kWh)'] / df_merged['PE (kg)']
+    df_final = df_merged[[period_choice, 'Site', 'Gaz (kWh/kg)']]
+elif energy_choice == "Electricité (kWh/kg)":
+    df_merged['Electricité (kWh/kg)'] = df_merged['Electricité (kWh)'] / df_merged['PE (kg)']
+    df_final = df_merged[[period_choice, 'Site', 'Electricité (kWh/kg)']]
 
 # Filtrage des données par site
 if site_selection == 'Global':
