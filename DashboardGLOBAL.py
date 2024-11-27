@@ -76,9 +76,7 @@ elif period_choice == 'Année-Mois':
     start_year_month = st.sidebar.selectbox("Sélectionner le mois de début", sorted(df2['Année-Mois'].unique()))
     end_year_month = st.sidebar.selectbox("Sélectionner le mois de fin", sorted(df2['Année-Mois'].unique()))
     # Convertir les mois sélectionnés en format entier (ex : 202401 pour janvier 2024)
-    start_month_int = int(str(start_year_month))
-    end_month_int = int(str(end_year_month))
-    df_filtered = df_filtered[(df_filtered['Année-Mois'] >= start_month_int) & (df_filtered['Année-Mois'] <= end_month_int)]
+    df_filtered = df_filtered[(df_filtered['Année-Mois'] >= start_year_month) & (df_filtered['Année-Mois'] <= end_year_month)]
 else:
     start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
     end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
