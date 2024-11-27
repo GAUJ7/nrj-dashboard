@@ -86,8 +86,8 @@ elif period_choice == 'Mois':
     start_year_month = st.sidebar.selectbox("Sélectionner le mois de début", sorted(df2['Mois_Formate'].unique()))
     end_year_month = st.sidebar.selectbox("Sélectionner le mois de fin", sorted(df2['Mois_Formate'].unique()))
     # Convertir la valeur sélectionnée en format d'origine (YYYYMM)
-    start_year_month_raw = int(start_year_month.apply(lambda x: x.split('-')[1] + x.split('-')[0]))
-    end_year_month_raw = int(end_year_month.apply(lambda x: x.split('-')[1] + x.split('-')[0]))
+    start_year_month_raw = start_year_month.apply(lambda x: int(x.replace('-', '')[4:] + x.replace('-', '')[:4]))
+    end_year_month_raw = end_year_month.apply(lambda x: int(x.replace('-', '')[4:] + x.replace('-', '')[:4]))
     df_filtered = df_filtered[(df_filtered['Mois'] >= start_year_month_raw) & (df_filtered['Mois'] <= end_year_month_raw)]
 elif period_choice == 'Semaine':
     start_week = st.sidebar.selectbox("Sélectionner la semaine de début", sorted(df2['Semaine'].unique()))
