@@ -118,6 +118,10 @@ fig = go.Figure()
 # Ajouter les sous-graphes avec des couleurs différentes pour chaque site
 for idx, site in enumerate(df_grouped['Site'].unique()):
     site_data = df_grouped[df_grouped['Site'] == site]
+    # Convertir la colonne 'Année-Mois' en format date
+    site_data['Année-Mois'] = pd.to_datetime(site_data['Année-Mois'].astype(str), format='%Y%m')
+    # Formater la colonne pour afficher le mois en abrégé (ex: "2024 - Jan")
+    site_data['Année-Mois'] = site_data['Année-Mois'].dt.strftime('%Y - %b')
     color = color_palette[idx % len(color_palette)]  # Assurer une couleur unique pour chaque site
     if period_choice == 'Année':
         fig.add_trace(go.Bar(
