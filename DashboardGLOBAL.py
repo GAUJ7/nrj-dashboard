@@ -100,7 +100,7 @@ elif period_choice == 'Année-Mois':
     if aggregation_method == 'median':
         df_grouped = df_filtered
     else:
-        df_grouped = df_filtered.groupby(['Mois', 'Site'])[energie_col].sum().reset_index()
+        df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])[energie_col].sum().reset_index()
 else:
     if aggregation_method == 'median':
         df_grouped = df_filtered
