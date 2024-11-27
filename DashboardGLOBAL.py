@@ -72,7 +72,7 @@ if period_choice == 'Année':
     start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()))
     end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()))
     df_filtered = df_filtered[(df_filtered['Année'] >= start_year) & (df_filtered['Année'] <= end_year)]
-elif period_choice == 'Mois':
+elif period_choice == 'Année-Mois':
     start_month = st.sidebar.selectbox("Mois de début", range(1, 13))
     end_month = st.sidebar.selectbox("Mois de fin", range(1, 13))
     df_filtered = df_filtered[(df_filtered['Mois'] >= start_month) & (df_filtered['Mois'] <= end_month)]
