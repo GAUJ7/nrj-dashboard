@@ -16,7 +16,7 @@ df2['Année'] = df2['Date'].dt.year
 df2['Mois'] = df2['Date'].dt.month
 df2['Jour'] = df2['Date'].dt.date
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
-df2['Année-Mois'] = df2['Année'] * 100 + df2['Mois']
+df2['Mois'] = df2['Année'] * 100 + df2['Mois']
 df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
 
 df2 = df2[df2['Année'].isin([2023, 2024])]
@@ -30,7 +30,7 @@ site_selection = st.sidebar.selectbox('Choisissez un site', ['Global'] + list(si
 energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Gaz (kWh/kg)', 'Electricité (kWh/kg)', 'Gaz (kWh)', 'Electricité (kWh)', 'PE (kg)'])
 
 # Choisir la période de filtrage
-period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Année-Mois','Semaine','Date', ))
+period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois','Semaine','Date', ))
 
 # Calcul des sommes de Gaz et Electricité selon la période choisie
 df_gaz = df2.groupby([period_choice, 'Site'])['Gaz (kWh)'].sum().reset_index()
@@ -74,11 +74,11 @@ if period_choice == 'Année':
     start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()))
     end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()))
     df_filtered = df_filtered[(df_filtered['Année'] >= start_year) & (df_filtered['Année'] <= end_year)]
-elif period_choice == 'Année-Mois':
+elif period_choice == 'Mois':
     # Choisir l'année et le mois de début et de fin
-    start_year_month = st.sidebar.selectbox("Sélectionner le mois de début", sorted(df2['Année-Mois'].unique()))
-    end_year_month = st.sidebar.selectbox("Sélectionner le mois de fin", sorted(df2['Année-Mois'].unique()))
-    df_filtered = df_filtered[(df_filtered['Année-Mois'] >= start_year_month) & (df_filtered['Année-Mois'] <= end_year_month)]
+    start_year_month = st.sidebar.selectbox("Sélectionner le mois de début", sorted(df2['Mois'].unique()))
+    end_year_month = st.sidebar.selectbox("Sélectionner le mois de fin", sorted(df2['Mois'].unique()))
+    df_filtered = df_filtered[(df_filtered['Mois'] >= start_year_month) & (df_filtered['Mois'] <= end_year_month)]
 elif period_choice == 'Semaine':
     start_week = st.sidebar.selectbox("Sélectionner la semaine de début", sorted(df2['Semaine'].unique()))
     end_week = st.sidebar.selectbox("Sélectionner la semaine de fin", sorted(df2['Semaine'].unique()))
@@ -104,11 +104,11 @@ if period_choice == 'Année':
         df_grouped = df_filtered
     else:
         df_grouped = df_filtered.groupby(['Année', 'Site'])[energie_col].sum().reset_index()
-elif period_choice == 'Année-Mois':
+elif period_choice == 'Mois':
     if aggregation_method == 'median':
         df_grouped = df_filtered
     else:
-        df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])[energie_col].sum().reset_index()
+        df_grouped = df_filtered.groupby(['Mois', 'Site'])[energie_col].sum().reset_index()
 else:
     if aggregation_method == 'median':
         df_grouped = df_filtered
@@ -134,9 +134,9 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             name=site,
             marker=dict(color=color)
         ))
-    elif period_choice == 'Année-Mois':
+    elif period_choice == 'Mois':
         fig.add_trace(go.Bar(
-            x=site_data['Année-Mois'],
+            x=site_data['Mois'],
             y=site_data[energie_choice],
             name=site,
             marker=dict(color=color)
