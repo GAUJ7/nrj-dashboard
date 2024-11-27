@@ -51,17 +51,17 @@ elif energie_choice == "Electricité (kWh/kg)":
     df_merged['Electricité (kWh/kg)'] = df_merged['Electricité (kWh)'] / df_merged['PE (kg)']
     df_final = df_merged[[period_choice, 'Site', 'Electricité (kWh/kg)']]
 
-# Fusion des données filtrées après avoir déterminé les choix d'énergie et de site
+# Filtrage des données par site
 if site_selection == 'Global':
     if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
-        df_filtered = df_final  # df_final étant la version complète avec toutes les énergies
+        df_filtered = df_final
     else:
         df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()
 else:
     df_filtered = df2[df2['Site'] == site_selection]
-    df_filtered2 = df_final[df_final['Site'] == site_selection]  # Assurez-vous que df_filtered2 existe
-
-# Appliquez les filtres en fonction de la période choisie
+    df_filtered2 = df_final[df_final['Site'] == site_selection]
+ 
+# Filtrage selon la période choisie
 if period_choice == 'Année':
     start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()))
     end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()))
@@ -101,7 +101,7 @@ elif period_choice == 'Mois':
         df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])[energie_col].sum().reset_index()
 else:
     if aggregation_method == 'median':
-        df_grouped = df_filtered2
+        df_grouped = df_final
     else:
         df_grouped = df_filtered.groupby(['Jour', 'Site'])[energie_col].sum().reset_index()
 
