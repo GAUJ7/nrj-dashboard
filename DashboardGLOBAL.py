@@ -41,10 +41,10 @@ df_pe = df2.groupby([period_choice, 'Site'])['PE (kg)'].sum().reset_index()
 df_merged = pd.merge(df_gaz, df_electricite, on=[period_choice, 'Site'], suffixes=('_gaz', '_elec'))
 
 # Appliquer la condition selon le choix d'énergie
-if energy_choice == "Gaz (kWh/kg)":
+if energie_choice == "Gaz (kWh/kg)":
     df_merged['Gaz (kWh/kg)'] = df_merged['Gaz (kWh)'] / df_merged['PE (kg)']
     df_final = df_merged[[period_choice, 'Site', 'Gaz (kWh/kg)']]
-elif energy_choice == "Electricité (kWh/kg)":
+elif energie_choice == "Electricité (kWh/kg)":
     df_merged['Electricité (kWh/kg)'] = df_merged['Electricité (kWh)'] / df_merged['PE (kg)']
     df_final = df_merged[[period_choice, 'Site', 'Electricité (kWh/kg)']]
 
