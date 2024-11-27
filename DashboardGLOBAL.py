@@ -152,8 +152,8 @@ fig.update_layout(
     yaxis_title=f'Consommation ({energie_choice})',
     legend_title="Site",
     xaxis=dict(type='category', categoryorder='category ascending'),
-    width=1000,  # Largeur du graphique
-    height=1200,  # Hauteur du graphique
+    width=2000,  # Largeur du graphique
+    height=700,  # Hauteur du graphique
 )
 
 # Affichage du graphique dans Streamlit
