@@ -17,7 +17,7 @@ df2['Mois'] = df2['Date'].dt.month
 df2['Jour'] = df2['Date'].dt.date
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Année-Mois'] = df2['Année'].astype(str) + '-' + df2['Mois-Abrege']  # Format Année-Mois (ex: 2024-Jan)
-
+df2['Année-Mois'] = pd.to_datetime(df2['Année-Mois'], format='%Y-%m').dt.year * 100 + pd.to_datetime(df2['Année-Mois'], format='%Y-%m').dt.month
 
 # Filtrage des données dans Streamlit
 st.sidebar.title("Filtrage des données")
@@ -73,9 +73,9 @@ if period_choice == 'Année':
     end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()))
     df_filtered = df_filtered[(df_filtered['Année'] >= start_year) & (df_filtered['Année'] <= end_year)]
 elif period_choice == 'Année-Mois':
-    start_month = st.sidebar.selectbox("Mois de début", range(1, 13))
-    end_month = st.sidebar.selectbox("Mois de fin", range(1, 13))
-    df_filtered = df_filtered[(df_filtered['Année-Mois'] >= start_month) & (df_filtered['Année-Mois'] <= end_month)]
+    start_month_int = start_month[0] * 100 + start_month[1]  # Si start_month est une liste ou un tuple [année, mois]
+    end_month_int = end_month[0] * 100 + end_month[1]  # Idem pour end_month
+    df_filtered = df_filtered[(df_filtered['Année-Mois'] >= start_month_int) & (df_filtered['Année-Mois'] <= end_month_int)]
 else:
     start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
     end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
