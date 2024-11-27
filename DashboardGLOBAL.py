@@ -17,6 +17,7 @@ df2['Mois'] = df2['Date'].dt.month
 df2['Jour'] = df2['Date'].dt.date
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Année-Mois'] = df2['Année'] * 100 + df2['Mois']
+df2['Semaine'] = df2['Date'].dt.isocalendar().week
 
 df2 = df2[df2['Année'].isin([2023, 2024])]
 
@@ -29,7 +30,7 @@ site_selection = st.sidebar.selectbox('Choisissez un site', ['Global'] + list(si
 energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Gaz (kWh/kg)', 'Electricité (kWh/kg)', 'Gaz (kWh)', 'Electricité (kWh)', 'PE (kg)'])
 
 # Choisir la période de filtrage
-period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Année-Mois', 'Date'))
+period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Année-Mois','Semaine','Date', ))
 
 # Calcul des sommes de Gaz et Electricité selon la période choisie
 df_gaz = df2.groupby([period_choice, 'Site'])['Gaz (kWh)'].sum().reset_index()
@@ -78,6 +79,10 @@ elif period_choice == 'Année-Mois':
     start_year_month = st.sidebar.selectbox("Sélectionner le mois de début", sorted(df2['Année-Mois'].unique()))
     end_year_month = st.sidebar.selectbox("Sélectionner le mois de fin", sorted(df2['Année-Mois'].unique()))
     df_filtered = df_filtered[(df_filtered['Année-Mois'] >= start_year_month) & (df_filtered['Année-Mois'] <= end_year_month)]
+elif period_choice == 'Semaine':
+    start_week = st.sidebar.selectbox("Sélectionner la semaine de début", sorted(df2['Semaine'].unique()))
+    end_week = st.sidebar.selectbox("Sélectionner la semaine de fin", sorted(df2['Semaine'].unique()))
+    df_filtered = df_filtered[(df_filtered['Semaine'] >= start_week) & (df_filtered['Semaine'] <= end_week)]
 else:
     start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
     end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
@@ -132,6 +137,13 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
     elif period_choice == 'Année-Mois':
         fig.add_trace(go.Bar(
             x=site_data['Année-Mois'],
+            y=site_data[energie_choice],
+            name=site,
+            marker=dict(color=color)
+        ))
+    elif period_choice == 'Semaine':
+        fig.add_trace(go.Bar(
+            x=site_data['Semaine'],
             y=site_data[energie_choice],
             name=site,
             marker=dict(color=color)
