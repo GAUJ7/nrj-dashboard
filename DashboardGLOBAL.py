@@ -31,10 +31,8 @@ energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Gaz (kWh/kg)', 'Ele
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
 
 # Filtrage des données par site
-if site_selection == 'Global':
-    if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
-        df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].median().reset_index()
-    else:
+if site_selection == 'Global':  
+    if energie_choice == 'Gaz (kWh)' or energie_choice == 'Electricité (kWh)':
         df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()
 else:
     df_filtered = df2[df2['Site'] == site_selection]
@@ -53,61 +51,41 @@ else:
     end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
     df_filtered = df_filtered[(df_filtered['Date'] >= start_day) & (df_filtered['Date'] <= end_day)]
 
-# Agrégation des données
-if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
-    energie_col = energie_choice
-    aggregation_method = 'median'
-elif energie_choice == 'Gaz (kWh)' or energie_choice == 'Electricité (kWh)':
-    energie_col = energie_choice
-    aggregation_method = 'sum'
-else:
-    energie_col = energie_choice
-    aggregation_method = 'sum'
+# Calculer la somme de "Gaz (kWh)" et de "Electricité (kWh)" pour chaque période et chaque site
+df_sum = df_filtered.groupby([period_choice, 'Site'])[['Gaz (kWh)', 'Electricité (kWh)']].sum().reset_index()
 
-if period_choice == 'Année':
-    if aggregation_method == 'median':
-        df_grouped = df_filtered.groupby(['Année', 'Site'])[energie_col].median().reset_index()
-    else:
-        df_grouped = df_filtered.groupby(['Année', 'Site'])[energie_col].sum().reset_index()
-elif period_choice == 'Mois':
-    if aggregation_method == 'median':
-        df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])[energie_col].median().reset_index()
-    else:
-        df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])[energie_col].sum().reset_index()
-else:
-    if aggregation_method == 'median':
-        df_grouped = df_filtered.groupby(['Jour', 'Site'])[energie_col].median().reset_index()
-    else:
-        df_grouped = df_filtered.groupby(['Jour', 'Site'])[energie_col].sum().reset_index()
+# Ajouter une nouvelle colonne avec la division des sommes
+df_sum['Gaz/Electricité (kWh)'] = df_sum['Gaz (kWh)'] / df_sum['Electricité (kWh)']
 
-# Créer une palette de couleurs distinctes
-color_palette = px.colors.qualitative.Safe  # Palette de couleurs pré-définie
+# Affichage du tableau des résultats
+st.write(df_sum)
 
 # Création du graphique avec Plotly
 fig = go.Figure()
 
 # Ajouter les sous-graphes avec des couleurs différentes pour chaque site
-for idx, site in enumerate(df_grouped['Site'].unique()):
-    site_data = df_grouped[df_grouped['Site'] == site]
+color_palette = px.colors.qualitative.Safe  # Palette de couleurs pré-définie
+for idx, site in enumerate(df_sum['Site'].unique()):
+    site_data = df_sum[df_sum['Site'] == site]
     color = color_palette[idx % len(color_palette)]  # Assurer une couleur unique pour chaque site
     if period_choice == 'Année':
         fig.add_trace(go.Bar(
             x=site_data['Année'],
-            y=site_data[energie_choice],
+            y=site_data['Gaz/Electricité (kWh)'],
             name=site,
             marker=dict(color=color)
         ))
     elif period_choice == 'Mois':
         fig.add_trace(go.Bar(
             x=site_data['Année-Mois'],
-            y=site_data[energie_choice],
+            y=site_data['Gaz/Electricité (kWh)'],
             name=site,
             marker=dict(color=color)
         ))
     else:
         fig.add_trace(go.Bar(
             x=site_data['Jour'],
-            y=site_data[energie_choice],
+            y=site_data['Gaz/Electricité (kWh)'],
             name=site,
             marker=dict(color=color)
         ))
@@ -115,13 +93,12 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
 # Mise à jour des axes et titres
 fig.update_layout(
     barmode='group',
-    title=f'Consommation d\'énergie pour {site_selection}',
+    title=f'Ratio Gaz/Electricité pour {site_selection}',
     xaxis_title='Période',
-    yaxis_title=f'Consommation ({energie_choice})',
+    yaxis_title='Gaz/Electricité (kWh)',
     legend_title="Site",
     xaxis=dict(type='category', categoryorder='category ascending')
 )
 
 # Affichage du graphique dans Streamlit
 st.plotly_chart(fig)
-st.write(df_grouped)
