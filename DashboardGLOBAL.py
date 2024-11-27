@@ -87,17 +87,17 @@ else:
 
 if period_choice == 'Année':
     if aggregation_method == 'median':
-        df_grouped = df_final
+        df_grouped = df_merged[[period_choice, 'Site', energie_choice]]
     else:
         df_grouped = df_filtered.groupby(['Année', 'Site'])[energie_col].sum().reset_index()
 elif period_choice == 'Mois':
     if aggregation_method == 'median':
-        df_grouped = df_final
+        df_grouped = df_merged[[period_choice, 'Site', energie_choice]]
     else:
         df_grouped = df_filtered.groupby(['Année-Mois', 'Site'])[energie_col].sum().reset_index()
 else:
     if aggregation_method == 'median':
-        df_grouped = df_final
+        df_grouped = df_merged[[period_choice, 'Site', energie_choice]]
     else:
         df_grouped = df_filtered.groupby(['Jour', 'Site'])[energie_col].sum().reset_index()
 
