@@ -113,6 +113,8 @@ color_palette = px.colors.qualitative.Safe  # Palette de couleurs pré-définie
 # Création du graphique avec Plotly
 fig = go.Figure()
 
+site_data['Année-Mois'] = site_data['Année-Mois'].astype(str).str[:4] + ' - ' + site_data['Année-Mois'].astype(str).str[4:].str.zfill(2)
+
 # Ajouter les sous-graphes avec des couleurs différentes pour chaque site
 for idx, site in enumerate(df_grouped['Site'].unique()):
     site_data = df_grouped[df_grouped['Site'] == site]
