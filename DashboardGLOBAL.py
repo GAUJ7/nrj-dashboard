@@ -59,7 +59,8 @@ if site_selection == 'Global':
         df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()
 else:
     df_filtered = df2[df2['Site'] == site_selection]
-
+    df_final = df_merged[[period_choice, site_selection, 'Electricité (kWh/kg)']]
+ 
 # Filtrage selon la période choisie
 if period_choice == 'Année':
     start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()))
