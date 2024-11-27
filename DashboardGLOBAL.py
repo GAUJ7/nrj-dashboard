@@ -75,7 +75,7 @@ if period_choice == 'Année':
 elif period_choice == 'Année-Mois':
     start_month = st.sidebar.selectbox("Mois de début", range(1, 13))
     end_month = st.sidebar.selectbox("Mois de fin", range(1, 13))
-    df_filtered = df_filtered[(df_filtered['Mois'] >= start_month) & (df_filtered['Mois'] <= end_month)]
+    df_filtered = df_filtered[(df_filtered['Année-Mois'] >= start_month) & (df_filtered['Année-Mois'] <= end_month)]
 else:
     start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
     end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
