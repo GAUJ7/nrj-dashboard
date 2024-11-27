@@ -106,7 +106,7 @@ else:
     if aggregation_method == 'median':
         df_grouped = df_filtered
     else:
-        df_grouped = df_filtered.groupby(['Jour', 'Site'])[energie_col].sum().reset_index()
+        df_grouped = df_filtered.groupby(['Date', 'Site'])[energie_col].sum().reset_index()
 
 # Créer une palette de couleurs distinctes
 color_palette = px.colors.qualitative.Safe  # Palette de couleurs pré-définie
