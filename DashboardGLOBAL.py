@@ -153,7 +153,7 @@ fig.update_layout(
     legend_title="Site",
     xaxis=dict(type='category', categoryorder='category ascending'),
     height=700,  # Hauteur du graphique
-    width=2000,  # Largeur du graphique
+    width=1200,  # Largeur du graphique
 )
 
 # Affichage du graphique dans Streamlit
