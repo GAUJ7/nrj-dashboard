@@ -28,7 +28,7 @@ site_selection = st.sidebar.selectbox('Choisissez un site', list(sites) + ['Glob
 energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Gaz (kWh/kg)', 'Electricité (kWh/kg)', 'Gaz (kWh)', 'Electricité (kWh)', 'PE (kg)'])
 
 # Choisir la période de filtrage
-period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
+period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Date'))
 
 # Calcul des sommes de Gaz et Electricité selon la période choisie
 df_gaz = df2.groupby([period_choice, 'Site'])['Gaz (kWh)'].sum().reset_index()
@@ -134,7 +134,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
         ))
     else:
         fig.add_trace(go.Bar(
-            x=site_data['Jour'],
+            x=site_data['Date'],
             y=site_data[energie_choice],
             name=site,
             marker=dict(color=color)
