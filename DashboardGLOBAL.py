@@ -31,8 +31,8 @@ energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Gaz (kWh/kg)', 'Ele
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Jour'))
 
 # Calcul de la somme de Gaz et Electricité selon la période choisie
-df_gaz = df_filtered.groupby([period_choice, 'Site'])['Gaz (kWh)'].sum().reset_index()
-df_electricite = df_filtered.groupby([period_choice, 'Site'])['Electricité (kWh)'].sum().reset_index()
+df_gaz = df2.groupby([period_choice, 'Site'])['Gaz (kWh)'].sum().reset_index()
+df_electricite = df2.groupby([period_choice, 'Site'])['Electricité (kWh)'].sum().reset_index()
 
 # Fusionner les deux DataFrames (Gaz et Electricité)
 df_merged = pd.merge(df_gaz, df_electricite, on=[period_choice, 'Site'], suffixes=('_gaz', '_elec'))
