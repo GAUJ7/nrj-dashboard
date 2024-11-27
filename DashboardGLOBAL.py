@@ -68,7 +68,7 @@ else:
 
 # Agrégation des données
 if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
-    energie_col = energie_choice
+    energie_col = df_final
     aggregation_method = 'median'
 elif energie_choice == 'Gaz (kWh)' or energie_choice == 'Electricité (kWh)':
     energie_col = energie_choice
