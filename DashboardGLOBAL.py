@@ -37,8 +37,11 @@ df_electricite = df2.groupby([period_choice, 'Site'])['Electricité (kWh)'].sum(
 # Calcul de la somme de PE (kg) par période et site
 df_pe = df2.groupby([period_choice, 'Site'])['PE (kg)'].sum().reset_index()
 
-# Fusionner les deux DataFrames (Gaz et Electricité)
-df_merged = pd.merge(df_gaz, df_electricite, df_pe on=[period_choice, 'Site'], suffixes=('_gaz', '_elec', '_pe'))
+# Fusionner df_gaz et df_electricite
+df_merged_gaz_elec = pd.merge(df_gaz, df_electricite, on=[period_choice, 'Site'], suffixes=('_gaz', '_elec'))
+
+# Fusionner le résultat avec df_pe
+df_merged = pd.merge(df_merged_gaz_elec, df_pe, on=[period_choice, 'Site'], suffixes=('_gaz_elec', '_pe'))
 
 # Appliquer la condition selon le choix d'énergie
 if energie_choice == "Gaz (kWh/kg)":
