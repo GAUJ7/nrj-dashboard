@@ -18,7 +18,13 @@ df2['Jour'] = df2['Date'].dt.date
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Mois'] = df2['Année'] * 100 + df2['Mois']
 df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
-df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
+mois_abreges = {
+    '01': 'Jan', '02': 'Feb', '03': 'Mar', '04': 'Apr', '05': 'May', '06': 'Jun',
+    '07': 'Jul', '08': 'Aug', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec'
+}
+
+# Appliquer la transformation pour obtenir le format 'Mois abrégé - Année'
+df2['Mois_Formate'] = df2['Mois'].astype(str).str[4:].map(mois_abreges) + '-' + df2['Mois'].astype(str).str[:4]
 
 df2 = df2[df2['Année'].isin([2023, 2024])]
 
