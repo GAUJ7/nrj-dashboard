@@ -56,7 +56,7 @@ if site_selection == 'Global':
     if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
         df_filtered = df_final
     else:
-        df_filtered = df_final
+        df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()
 else:
     df_filtered = df2[df2['Site'] == site_selection]
 
