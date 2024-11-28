@@ -175,11 +175,17 @@ fig.update_layout(
     barmode='group',
     title=f'Consommation d\'énergie pour {site_selection}',
     xaxis_title='Période',
-    xaxis_color='white',
+    xaxis=dict(
+        color='white',  # Change la couleur des axes X en blanc
+        title='Période',
+        type='category',
+        categoryorder='category ascending'
+    ),
     yaxis_title=f'Consommation ({energie_choice})',
-    yaxis_color='white',
+    yaxis=dict(
+        color='white',  # Change la couleur des axes Y en blanc
+    ),
     legend_title="Site",
-    xaxis=dict(type='category', categoryorder='category ascending'),
     height=500,  # Hauteur du graphique
     width=2000,  # Largeur du graphique
 )
