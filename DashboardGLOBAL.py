@@ -196,6 +196,6 @@ fig.update_layout(
 )
 
 # Affichage du graphique dans Streamlit
-st.write(f"{nombre:,.2f}".replace(',', ''))  # Format avec 2 décimales, sans virgule pour les milliers
+
 st.plotly_chart(fig)
-st.write(df_grouped)
+st.write(df_grouped, f"{nombre:,.2f}".replace(',', ''))
