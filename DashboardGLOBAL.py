@@ -155,7 +155,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if len(str(x)) == 6 else x
         )
         fig.add_trace(go.Bar(
-            x=site_data['Mois'],
+            x=site_data['Semaine'],
             y=site_data[energie_choice],
             name=site,
             marker=dict(color=color)
@@ -201,9 +201,9 @@ fig.update_layout(
 )
 
 # Affichage du graphique dans Streamlit
-if period_choice != 'Semaine' and period_choice in df_grouped.columns:
+if period_choice != 'Jour' and period_choice in df_grouped.columns:
     df_grouped[period_choice] = df_grouped[period_choice].apply(
-        lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if period_choice == 6 else x
+        lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if len(str(x)) == 6 else x
     )
 
 if energie_choice in df_grouped.columns:
