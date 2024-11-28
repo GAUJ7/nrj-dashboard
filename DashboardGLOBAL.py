@@ -152,12 +152,6 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
     elif period_choice == 'Mois':
         # Mise en forme de la semaine pour afficher mois et année (ex : 202301 -> Janvier 2023)
 
-        # Conversion des valeurs de la colonne 'Mois' au format datetime
-        site_data['Mois'] = pd.to_datetime(site_data['Mois'], format='%Y%m')
-
-        # Tri des données par Mois en ordre croissant (chronologique)
-        site_data = site_data.sort_values(by='Mois', ascending=True)
-
         site_data['Mois'] = site_data['Mois'].apply(
             lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if period_choice == 'Mois' else x
         )
