@@ -200,7 +200,18 @@ fig.update_layout(
     width=2000,  # Largeur du graphique
 )
 
+# Affichage du graphique dans Streamlit
+if period_choice != 'Jour' and period_choice in df_grouped.columns:
+    df_grouped[period_choice] = df_grouped[period_choice].apply(
+        lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if len(str(x)) == 6 else x
+    )
 
+if energie_choice in df_grouped.columns:
+    df_grouped[energie_choice] = df_grouped[energie_choice].apply(
+        lambda x: "" if (x <= 0 or pd.isna(x) or x == float('inf') or x == float('-inf'))
+                  else f"{x:,.0f}".replace(',', '') if energie_choice in ['Gaz (kWh)', 'Electricité (kWh)', 'PE (kg)'] 
+                  else f"{x:,.2f}".replace(',', '')
+    )
 st.plotly_chart(fig)
 st.write(df_grouped)
 
