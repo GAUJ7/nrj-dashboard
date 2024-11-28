@@ -185,7 +185,7 @@ fig.update_layout(
         tickfont=dict(size=14)  # Taille des labels des ticks de l'axe X
     ),
     yaxis_title=f'Consommation ({energie_choice})',
-    yaxis_title_font=dict(size=18),  # Taille du titre de l'axe Y
+    yaxis_title_font=dict(size=20),  # Taille du titre de l'axe Y
     yaxis=dict(
         color='white',  # Change la couleur des axes Y en blanc
         tickfont=dict(size=14)  # Taille des labels des ticks de l'axe Y
