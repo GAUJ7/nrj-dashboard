@@ -184,7 +184,6 @@ fig.update_layout(
     xaxis_title_font=dict(size=18),  # Taille du titre de l'axe X
     xaxis=dict(
         color='white',  # Change la couleur des axes X en blanc
-        title='Période',
         type='category',
         categoryorder='category ascending',
         tickfont=dict(size=14)  # Taille des labels des ticks de l'axe X
