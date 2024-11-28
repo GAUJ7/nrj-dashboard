@@ -172,7 +172,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             marker=dict(color=color)
         ))
     else:
-        if energie_choice == 'Gaz (kWh/kg)':
+        if energie_choice == 'Gaz (kWh/kg)' or 'Electricité (kWh/kg)':
             site_data = site_data[site_data[energie_choice] < 100]
 
         site_data['Jour'] = site_data['Jour'].apply(
