@@ -196,13 +196,6 @@ fig.update_layout(
     width=2000,  # Largeur du graphique
 )
 
-# Affichage du graphique dans Streamlit
-if period_choice != 'Jour' in df_grouped.columns:
-    df_grouped[period_choice] = df_grouped[period_choice].apply(lambda x: f"{x:,.0f}".replace(',', ''))
-
-if energie_choice in df_grouped.columns:
-    df_grouped[energie_choice] = df_grouped[energie_choice].apply(lambda x: f"{x:,.2f}".replace(',', ''))
-
 st.plotly_chart(fig)
 st.write(df_grouped)
 
