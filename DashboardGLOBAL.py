@@ -30,7 +30,7 @@ from PIL import Image
 img = Image.open(image)
 
 # Redimensionner l'image (par exemple à 300x300 pixels)
-img_resized = img.resize((100, 100))
+img_resized = img.resize((500, 500))
 
 # Créer deux colonnes : une pour l'image et l'autre pour le contenu
 col1, col2 = st.columns([1, 3])  
