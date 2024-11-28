@@ -136,7 +136,8 @@ color_palette = px.colors.qualitative.Safe  # Palette de couleurs pré-définie
 # Création du graphique avec Plotly
 fig = go.Figure()
 
-
+# Liste des mois dans l'ordre chronologique
+Mois_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
 # Ajouter les sous-graphes avec des couleurs différentes pour chaque site
 for idx, site in enumerate(df_grouped['Site'].unique()):
@@ -150,8 +151,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             marker=dict(color=color)
         ))
     elif period_choice == 'Mois':
-            # Liste des mois dans l'ordre chronologique
-        Mois_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
         # Mise en forme de la semaine pour afficher mois et année (ex : 202301 -> Janvier 2023)
 
         site_data['Mois'] = site_data['Mois'].apply(
