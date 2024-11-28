@@ -25,7 +25,7 @@ df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
 df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
 df2 = df2[df2['Année'].isin([2023, 2024])]
 
-st.image(image)
+st.image(PT.jpg)
 
 # Filtrage des données dans Streamlit
 st.sidebar.title("Filtrage des données")
