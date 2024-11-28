@@ -196,6 +196,6 @@ fig.update_layout(
 )
 
 # Affichage du graphique dans Streamlit
-df_grouped['Année'] = df_grouped['Année'].apply(lambda x: f"{x:,.2f}".replace(',', ''))
+df_grouped['Année'] = df_grouped['Année'].apply(lambda x: f"{x:,.0f}".replace(',', ''))
 st.plotly_chart(fig)
 st.write(df_grouped)
