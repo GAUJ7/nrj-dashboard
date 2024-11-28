@@ -171,7 +171,6 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             marker=dict(color=color)
         ))
 
-
 # Mise à jour des axes et titres
 fig.update_layout(
     barmode='group',
