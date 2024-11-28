@@ -7,3 +7,4 @@ tqdm==4.66.4
 streamlit==1.40.1
 plotly
 openpyxl
+toml
