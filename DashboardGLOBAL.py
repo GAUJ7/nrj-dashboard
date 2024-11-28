@@ -113,6 +113,11 @@ elif period_choice == 'Mois':
         df_grouped = df_filtered
     else:
         df_grouped = df_filtered.groupby(['Mois', 'Site'])[energie_col].sum().reset_index()
+elif period_choice == 'Semaine':  # Ajout de la condition pour la semaine
+    if aggregation_method == 'median':
+        df_grouped = df_filtered
+    else:
+        df_grouped = df_filtered.groupby(['Semaine', 'Site'])[energie_col].sum().reset_index()
 else:
     if aggregation_method == 'median':
         df_grouped = df_filtered
