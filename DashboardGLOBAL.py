@@ -185,3 +185,4 @@ fig.update_layout(
 # Affichage du graphique dans Streamlit
 st.plotly_chart(fig)
 st.write(df_grouped)
+streamlit config show
