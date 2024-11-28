@@ -171,6 +171,9 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             marker=dict(color=color)
         ))
 
+if period_choice == 'Jour' in df_grouped.columns :
+    df_grouped['formatted_date'] = df_grouped['Jour'].dt.strftime('%d-%b')
+
 # Mise à jour des axes et titres
 fig.update_layout(
     barmode='group',
@@ -190,6 +193,8 @@ fig.update_layout(
     yaxis=dict(
         color='white',  # Change la couleur des axes Y en blanc
         tickfont=dict(size=16)  # Taille des labels des ticks de l'axe Y
+        tickvals=df_grouped['Jour'],  # Utilisez les valeurs d'origine
+        ticktext=df_grouped['formatted_date']  # Affichez les dates formatées
     ),
     legend_title="Site",
     height=500,  # Hauteur du graphique
