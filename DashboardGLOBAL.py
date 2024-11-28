@@ -172,6 +172,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             marker=dict(color=color)
         ))
     else:
+        site_data = site_data[site_data['Gaz (kWh)'] <= 100]
         site_data['Jour'] = site_data['Jour'].apply(
             lambda x: f"{str(x)[:10]}" if period_choice == 'Jour' else x
         )
