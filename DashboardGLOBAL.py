@@ -171,8 +171,6 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             marker=dict(color=color)
         ))
 
-if period_choice == 'Jour' in df_grouped.columns :
-    df_grouped['formatted_date'] = df_grouped['Jour'].dt.strftime('%d-%b')
 
 # Mise à jour des axes et titres
 fig.update_layout(
