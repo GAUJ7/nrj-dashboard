@@ -203,7 +203,7 @@ fig.update_layout(
 # Affichage du graphique dans Streamlit
 if period_choice != 'Jour' and period_choice in df_grouped.columns:
     df_grouped[period_choice] = df_grouped[period_choice].apply(
-        lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if period_choice == 'Mois'
+        lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if period_choice == 'Mois' else x
     )
 
 if energie_choice in df_grouped.columns:
