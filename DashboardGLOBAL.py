@@ -190,7 +190,7 @@ fig.update_layout(
     yaxis_title_font=dict(size=18),  # Taille du titre de l'axe Y
     yaxis=dict(
         color='white',  # Change la couleur des axes Y en blanc
-        tickfont=dict(size=16),  # Taille des labels des ticks de l'axe Y
+        tickfont=dict(size=16)  # Taille des labels des ticks de l'axe Y
     ),
     legend_title="Site",
     height=500,  # Hauteur du graphique
