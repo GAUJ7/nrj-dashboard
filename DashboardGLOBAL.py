@@ -196,7 +196,11 @@ fig.update_layout(
 )
 
 # Affichage du graphique dans Streamlit
-df_grouped['Année'] = df_grouped['Année'].apply(lambda x: f"{x:,.0f}".replace(',', ''))
+if 'Année' in df_grouped.columns:
+    df_grouped['Année'] = df_grouped['Année'].apply(lambda x: f"{x:,.0f}".replace(',', ''))
+else:
+    print("La colonne 'Année' n'existe pas dans le DataFrame")
 df_grouped['Gaz (kWh/kg)'] = df_grouped['Gaz (kWh/kg)'].apply(lambda x: f"{x:,.2f}".replace(',', ''))
 st.plotly_chart(fig)
 st.write(df_grouped)
+
