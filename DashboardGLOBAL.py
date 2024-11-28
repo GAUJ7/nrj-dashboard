@@ -175,7 +175,9 @@ fig.update_layout(
     barmode='group',
     title=f'Consommation d\'énergie pour {site_selection}',
     xaxis_title='Période',
+    xaxis_color='white',
     yaxis_title=f'Consommation ({energie_choice})',
+    yaxis_color='white',
     legend_title="Site",
     xaxis=dict(type='category', categoryorder='category ascending'),
     height=500,  # Hauteur du graphique
