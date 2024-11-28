@@ -201,7 +201,9 @@ if period_choice != 'Jour' and period_choice in df_grouped.columns:
     df_grouped[period_choice] = df_grouped[period_choice].apply(lambda x: f"{x:,.0f}".replace(',', ''))
 
 if energie_choice in df_grouped.columns:
-    df_grouped[energie_choice] = df_grouped[energie_choice].apply(lambda x: f"{x:,.2f}".replace(',', ''))
+    df_grouped[energie_choice] = df_grouped[energie_choice].apply(
+        lambda x: "" if (x <= 0 or pd.isna(x) or x == float('inf') or x == float('-inf')) else f"{x:,.2f}".replace(',', '')
+    )
 
 st.plotly_chart(fig)
 st.write(df_grouped)
