@@ -5,6 +5,9 @@ import streamlit as st
 import plotly.express as px  # Pour accéder à des palettes de couleurs
 import toml
 
+# Active le mode large par défaut
+st.set_page_config(layout="wide")
+
 # Chargement des données
 df2 = pd.read_csv("20241127 Global_streamlit.csv", sep=";")
 
