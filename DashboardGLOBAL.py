@@ -152,7 +152,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
     elif period_choice == 'Mois':
         # Mise en forme de la semaine pour afficher mois et année (ex : 202301 -> Janvier 2023)
         site_data['Mois'] = site_data['Mois'].apply(
-            lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if len(str(x)) == 6 else x
+            lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if period_choice == 'Mois' else x
         )
         fig.add_trace(go.Bar(
             x=site_data['Mois'],
@@ -171,6 +171,9 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             marker=dict(color=color)
         ))
     else:
+        site_data['Jour'] = site_data['Jour'].apply(
+            lambda x: f"{str(x)[:10]}" if period_choice == 'Jour' else x
+        )
         fig.add_trace(go.Bar(
             x=site_data['Jour'],
             y=site_data[energie_choice],
