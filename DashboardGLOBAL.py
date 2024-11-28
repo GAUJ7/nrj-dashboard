@@ -17,6 +17,7 @@ df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
 df2['Année'] = df2['Date'].dt.year
 df2['Mois'] = df2['Date'].dt.month
 df2['Jour'] = df2['Date'].dt.date
+df2['Jour'] = pd.to_datetime(df2['Jour'], errors='coerce', dayfirst=True)
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Mois'] = df2['Année'] * 100 + df2['Mois']
 df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
@@ -195,7 +196,12 @@ fig.update_layout(
     width=2000,  # Largeur du graphique
 )
 
+# Affichage du graphique dans Streamlit
+if period_choice != 'Jour' in df_grouped.columns:
+    df_grouped[period_choice] = df_grouped[period_choice].apply(lambda x: f"{x:,.0f}".replace(',', ''))
 
+if energie_choice in df_grouped.columns:
+    df_grouped[energie_choice] = df_grouped[energie_choice].apply(lambda x: f"{x:,.2f}".replace(',', ''))
 
 st.plotly_chart(fig)
 st.write(df_grouped)
