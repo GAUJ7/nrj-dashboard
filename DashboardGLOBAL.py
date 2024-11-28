@@ -9,7 +9,7 @@ df2 = pd.read_csv("20241127 Global_streamlit.csv", sep=";")
 df2['Site'] = df2['Site'].replace({'PTWE42 Andrézieux': 'PTWE42'})
 
 # Assurer que la colonne 'Date' est bien au format datetime
-df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce')
+df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
 
 # Extraire l'année, le mois et le jour
 df2['Année'] = df2['Date'].dt.year
