@@ -23,21 +23,12 @@ df2 = df2[df2['Année'].isin([2023, 2024])]
 # Charger l'image et afficher en haut à gauche
 image = "PT.jpg"  # Remplacez ce chemin par le chemin réel de votre image
 
-# Réduire la taille de l'image avant de l'afficher
-from PIL import Image
-
-# Ouvrir l'image
-img = Image.open(image)
-
-# Redimensionner l'image (par exemple à 300x300 pixels)
-img_resized = img.resize((500, 500))
-
 # Créer deux colonnes : une pour l'image et l'autre pour le contenu
 col1, col2 = st.columns([1, 3])  
 
 with col1:
-    # Afficher l'image redimensionnée dans la première colonne
-    st.image(img_resized, use_column_width=True)
+    # Afficher l'image et l'adapter à la largeur de la colonne
+    st.image(image, use_column_width=True)
 
 # Filtrage des données dans Streamlit
 st.sidebar.title("Filtrage des données")
