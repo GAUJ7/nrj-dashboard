@@ -28,7 +28,7 @@ col1, col2 = st.columns([1, 3])
 
 with col1:
     # Afficher l'image et l'adapter à la largeur de la colonne
-    st.image(image, use_column_width=True)
+    st.image(image)
 
 # Filtrage des données dans Streamlit
 st.sidebar.title("Filtrage des données")
