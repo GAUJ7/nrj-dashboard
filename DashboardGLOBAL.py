@@ -25,15 +25,7 @@ df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
 df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
 df2 = df2[df2['Année'].isin([2023, 2024])]
 
-# Charger l'image et afficher en haut à gauche
-image = "PT.jpg"  # Remplacez ce chemin par le chemin réel de votre image
-
-# Créer deux colonnes : une pour l'image et l'autre pour le contenu
-col1, col2 = st.columns([5, 1])  
-
-with col2:
-    # Afficher l'image et l'adapter à la largeur de la colonne
-    st.image(image)
+st.image(image)
 
 # Filtrage des données dans Streamlit
 st.sidebar.title("Filtrage des données")
