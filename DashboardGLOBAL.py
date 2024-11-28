@@ -6,7 +6,7 @@ import plotly.express as px  # Pour accéder à des palettes de couleurs
 
 # Chargement des données
 df2 = pd.read_csv("20241127 Global_streamlit.csv", sep=";")
-df2['Site'] = df2['Site'].replace({'PTWE42 Andrézieux': 'PTWE42'})
+
 
 # Assurer que la colonne 'Date' est bien au format datetime
 df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
