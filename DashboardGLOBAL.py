@@ -7,7 +7,7 @@ import plotly.express as px  # Pour accéder à des palettes de couleurs
 # Chargement des données
 df2 = pd.read_csv("20241127 Global_streamlit.csv", sep=";")
 
-st.markdown('<div style="text-align: left;">' + '<img src="PT.jpg" width="100%" />' + '</div>', unsafe_allow_html=True)
+st.image("PT.jpg", use_column_width=True)
 
 # Assurer que la colonne 'Date' est bien au format datetime
 df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
