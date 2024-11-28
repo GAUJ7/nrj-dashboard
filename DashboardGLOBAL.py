@@ -204,12 +204,12 @@ fig.update_layout(
 )
 
 # Affichage du graphique dans Streamlit
-if period_choice and period_choice in df_grouped.columns:
+if period_choice in df_grouped.columns:
     df_grouped[period_choice] = df_grouped[period_choice].apply(
         lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if period_choice == 'Mois' else
                   f"{x:,.0f}".replace(',', '') if period_choice == 'Année' else
                   f"S{int(str(x)[-2:]):02d} {str(x)[:4]}" if period_choice == 'Semaine' else
-                  f"{int(str(x)[:2]):02d} {int(str(x)[2:4]):02d} {str(x)[-4:]}" if period_choice == 'Jour' else x
+                  f"{int(str(x)[-9:]):02d} {str(x)[:1]}" if period_choice == 'Jour' else x
                   
 
 )
