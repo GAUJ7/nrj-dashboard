@@ -178,7 +178,7 @@ fig.update_layout(
     yaxis_title=f'Consommation ({energie_choice})',
     legend_title="Site",
     xaxis=dict(type='category', categoryorder='category ascending'),
-    height=700,  # Hauteur du graphique
+    height=500,  # Hauteur du graphique
     width=1200,  # Largeur du graphique
 )
 
