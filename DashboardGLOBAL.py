@@ -4,10 +4,10 @@ import plotly.graph_objects as go
 import streamlit as st
 import plotly.express as px  # Pour accéder à des palettes de couleurs
 
+#Theme
 backgroundColor="#034194"
 secondaryBackgroundColor="#00214d"
 textColor="#f7f8fd"
-
 
 # Chargement des données
 df2 = pd.read_csv("20241127 Global_streamlit.csv", sep=";")
@@ -31,7 +31,7 @@ image = "PT.jpg"  # Remplacez ce chemin par le chemin réel de votre image
 # Créer deux colonnes : une pour l'image et l'autre pour le contenu
 col1, col2 = st.columns([1, 4])  
 
-with col2:
+with col1:
     # Afficher l'image et l'adapter à la largeur de la colonne
     st.image(image)
 
