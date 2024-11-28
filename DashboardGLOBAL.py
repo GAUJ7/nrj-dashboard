@@ -204,7 +204,8 @@ fig.update_layout(
 if period_choice != 'Jour' and period_choice in df_grouped.columns:
     df_grouped[period_choice] = df_grouped[period_choice].apply(
         lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if len(str(x)) == 'Mois' else
-                  f"{x:,.0f}".replace(',', '') if period_choice == 'Année' else x
+                  f"{x:,.0f}".replace(',', '') if period_choice == 'Année' else
+                  f"S{int(str(x)[-2:]):02d} {str(x)[:4]}" if len(str(x)) == 'Semaine' else x
 
 )
 if energie_choice in df_grouped.columns:
