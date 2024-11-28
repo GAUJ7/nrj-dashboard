@@ -18,14 +18,13 @@ df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, F
 df2['Mois'] = df2['Année'] * 100 + df2['Mois']
 df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
 df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
+df2 = df2[df2['Année'].isin([2023, 2024])]
 
 # Charger l'image et afficher en haut à gauche
-image = "PT.jpg"  # Remplacez ce chemin par le chemin réel de votre image
+image = "path_to_image.jpg"  # Remplacez ce chemin par le chemin réel de votre image
 col1, col2 = st.columns([1, 3])  # Créer deux colonnes, la première pour l'image, l'autre pour le contenu
 with col1:
     st.image(image, use_column_width=True)  # Affiche l'image dans la première colonne
-
-df2 = df2[df2['Année'].isin([2023, 2024])]
 
 # Filtrage des données dans Streamlit
 st.sidebar.title("Filtrage des données")
