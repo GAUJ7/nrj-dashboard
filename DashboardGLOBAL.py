@@ -24,7 +24,7 @@ df2 = df2[df2['Année'].isin([2023, 2024])]
 image = "PT.jpg"  # Remplacez ce chemin par le chemin réel de votre image
 
 # Créer deux colonnes : une pour l'image et l'autre pour le contenu
-col1, col2 = st.columns([1, 3])  
+col1, col2 = st.columns([3, 1])  
 
 with col1:
     # Afficher l'image et l'adapter à la largeur de la colonne
