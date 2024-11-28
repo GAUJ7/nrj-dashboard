@@ -150,12 +150,17 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             marker=dict(color=color)
         ))
     elif period_choice == 'Mois':
+            # Liste des mois dans l'ordre chronologique
+        mois_order = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin','Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
         # Mise en forme de la semaine pour afficher mois et année (ex : 202301 -> Janvier 2023)
 
         site_data['Mois'] = site_data['Mois'].apply(
             lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if period_choice == 'Mois' else x
         )
 
+        # Trier selon la colonne 'Mois_order'
+        site_data = site_data.sort_values(by='Mois_order', ascending=True)
+        
         fig.add_trace(go.Bar(
             x=site_data['Mois'],
             y=site_data[energie_choice],
