@@ -151,7 +151,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
         ))
     elif period_choice == 'Mois':
             # Liste des mois dans l'ordre chronologique
-        mois_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        Mois_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
         # Mise en forme de la semaine pour afficher mois et année (ex : 202301 -> Janvier 2023)
 
         site_data['Mois'] = site_data['Mois'].apply(
