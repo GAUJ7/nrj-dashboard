@@ -187,11 +187,9 @@ fig.update_layout(
     barmode='group',
     title=f'Consommation d\'énergie pour {site_selection}',
     title_font=dict(size=24),  # Taille du titre
-    xaxis_title='Période',
     xaxis_title_font=dict(size=18),  # Taille du titre de l'axe X
     xaxis=dict(
         color='white',  # Change la couleur des axes X en blanc
-        title='Période',
         type='category',
         categoryorder='category ascending',
         tickfont=dict(size=14)  # Taille des labels des ticks de l'axe X
