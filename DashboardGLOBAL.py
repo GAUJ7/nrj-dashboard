@@ -193,8 +193,6 @@ fig.update_layout(
     yaxis=dict(
         color='white',  # Change la couleur des axes Y en blanc
         tickfont=dict(size=16),  # Taille des labels des ticks de l'axe Y
-        tickvals=df_grouped['Jour'],  # Utilisez les valeurs d'origine
-        ticktext=df_grouped['formatted_date']  # Affichez les dates formatées
     ),
     legend_title="Site",
     height=500,  # Hauteur du graphique
