@@ -203,7 +203,8 @@ fig.update_layout(
         color='white',  # Change la couleur des axes X en blanc
         type='category',
         categoryorder='category ascending',
-        tickfont=dict(size=16)  # Taille des labels des ticks de l'axe X
+        tickfont=dict(size=16),  # Taille des labels des ticks de l'axe X
+        zerolinecolor='white'  # Change la couleur de la ligne zéro
         
     ),
     yaxis_title=f'Consommation ({energie_choice})',
