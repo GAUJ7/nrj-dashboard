@@ -203,9 +203,7 @@ fig.update_layout(
         color='white',  # Change la couleur des axes X en blanc
         type='category',
         categoryorder='category ascending',
-        tickfont=dict(size=16),  # Taille des labels des ticks de l'axe X
-        showgrid=True,  # Afficher la grille
-        gridcolor='white'  # Change la couleur de la grille en blan
+        tickfont=dict(size=16)  # Taille des labels des ticks de l'axe X
         
     ),
     yaxis_title=f'Consommation ({energie_choice})',
@@ -213,6 +211,8 @@ fig.update_layout(
     yaxis=dict(
         color='white',  # Change la couleur des axes Y en blanc
         tickfont=dict(size=16)  # Taille des labels des ticks de l'axe Y
+        showgrid=True,  # Afficher la grille
+        gridcolor='white'  # Change la couleur de la grille en blan
     ),
     legend_title="Site",
     height=500,  # Hauteur du graphique
