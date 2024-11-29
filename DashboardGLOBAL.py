@@ -247,5 +247,4 @@ df_grouped_reset = df_grouped.reset_index(drop=True)
 
 # Afficher sans l'index
 st.write(df_grouped_reset)
-st.write(df_grouped)
 
