@@ -204,6 +204,8 @@ fig.update_layout(
         type='category',
         categoryorder='category ascending',
         tickfont=dict(size=16)  # Taille des labels des ticks de l'axe X
+        showgrid=True,  # Afficher la grille
+        gridcolor='white'  # Change la couleur de la grille en blan
         
     ),
     yaxis_title=f'Consommation ({energie_choice})',
@@ -215,8 +217,7 @@ fig.update_layout(
     legend_title="Site",
     height=500,  # Hauteur du graphique
     width=2000,  # Largeur du graphique
-    showgrid=True,  # Afficher la grille
-    gridcolor='white'  # Change la couleur de la grille en blan
+
 )
 
 # Affichage du graphique dans Streamlit
