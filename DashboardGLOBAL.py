@@ -207,7 +207,7 @@ fig.update_layout(
     xaxis=dict(
         color='white',  # Change la couleur des axes X en blanc
         type='category',
-        categoryorder='category ascending',
+
         tickfont=dict(size=16),  # Taille des labels des ticks de l'axe X     
         
     ),
