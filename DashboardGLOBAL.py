@@ -84,8 +84,8 @@ if period_choice == 'Année':
     df_filtered = df_filtered[(df_filtered['Année'] >= start_year) & (df_filtered['Année'] <= end_year)]
 elif period_choice == 'Mois':
     # Choisir l'année et le mois de début et de fin
-    start_year_month = st.sidebar.selectbox("Sélectionner le mois de début", sorted(df2['Mois_Formate'].unique()))
-    end_year_month = st.sidebar.selectbox("Sélectionner le mois de fin", sorted(df2['Mois_Formate'].unique()))
+    start_year_month = st.sidebar.selectbox("Sélectionner le mois de début", sorted(df2['Mois_Formate'].unique()),index=11)
+    end_year_month = st.sidebar.selectbox("Sélectionner le mois de fin", sorted(df2['Mois_Formate'].unique()),index=20)
     # Convertir la valeur sélectionnée en format d'origine (YYYYMM)
     start_year_month_raw = int(start_year_month.replace('-', ''))
     end_year_month_raw = int(end_year_month.replace('-', ''))
