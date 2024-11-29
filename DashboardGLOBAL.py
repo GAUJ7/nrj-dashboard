@@ -21,6 +21,7 @@ df2['Jour'] = pd.to_datetime(df2['Jour'], errors='coerce', dayfirst=True)
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Mois'] = df2['Année'] * 100 + df2['Mois']
 df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
+
 df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
 df2 = df2[df2['Année'].isin([2023, 2024])]
 
@@ -86,8 +87,7 @@ elif period_choice == 'Mois':
     start_year_month = st.sidebar.selectbox("Sélectionner le mois de début", sorted(df2['Mois_Formate'].unique()))
     end_year_month = st.sidebar.selectbox("Sélectionner le mois de fin", sorted(df2['Mois_Formate'].unique()))
     # Convertir la valeur sélectionnée en format d'origine (YYYYMM)
-    start_year_month_raw = int(start_year_month.replace('-', ''))
-    end_year_month_raw = int(end_year_month.replace('-', ''))
+
     df_filtered = df_filtered[(df_filtered['Mois'] >= start_year_month_raw) & (df_filtered['Mois'] <= end_year_month_raw)]
 elif period_choice == 'Semaine':
     start_week = st.sidebar.selectbox("Sélectionner la semaine de début", sorted(df2['Semaine'].unique()))
