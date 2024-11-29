@@ -215,6 +215,7 @@ fig.update_layout(
     legend_title="Site",
     height=500,  # Hauteur du graphique
     width=2000,  # Largeur du graphique
+    showgrid=True,  # Afficher la grille
     gridcolor='white'  # Change la couleur de la grille en blan
 )
 
