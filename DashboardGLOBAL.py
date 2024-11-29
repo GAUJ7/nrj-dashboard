@@ -214,7 +214,6 @@ fig.update_layout(
         tickfont=dict(size=16),  # Taille des labels des ticks de l'axe Y
         showgrid=True,  # Afficher la grille
         gridcolor='white',  # Change la couleur de la grille en blan
-        zerolinecolor='white',  # Change la couleur de la ligne zéro
         linecolor='white'  # Change la couleur de l'axe Y en blanc
     ),
     legend_title="Site",
