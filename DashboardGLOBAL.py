@@ -166,7 +166,9 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             marker=dict(color=color)
         ))
     elif period_choice == 'Semaine':
-        site_data['Semaine'] = df2['Semaine_Formate']
+        site_data['Semaine'] = site_data['Semaine_Formate'].apply(
+            lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}" if period_choice == 'Semaine' else x
+        )
         fig.add_trace(go.Bar(
             x=site_data['Semaine'],
             y=site_data[energie_choice],
