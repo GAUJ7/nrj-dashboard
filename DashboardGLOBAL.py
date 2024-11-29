@@ -241,5 +241,11 @@ if energie_choice in df_grouped.columns:
                   else f"{x:,.2f}".replace(',', '')
     )
 st.plotly_chart(fig)
+
+# Réinitialiser l'index et ne pas l'afficher
+df_grouped_reset = df_grouped.reset_index(drop=True)
+
+# Afficher sans l'index
+st.write(df_grouped_reset)
 st.write(df_grouped)
 
