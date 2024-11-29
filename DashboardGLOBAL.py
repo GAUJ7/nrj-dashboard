@@ -169,14 +169,6 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
         site_data['Semaine'] = site_data['Semaine'].apply(
             lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}" if period_choice == 'Semaine' else x
         )
-                # Trier les semaines dans l'ordre défini par 'Semaine_Formate' de df2
-        sorted_weeks = sorted(df2['Semaine_Formate'].unique(), key=lambda x: (int(x.split()[1]), int(x.split()[0][1:])))
-
-        # Appliquer l'ordre trié sur 'site_data['Semaine']'
-        site_data['Semaine'] = pd.Categorical(site_data['Semaine'], categories=sorted_weeks, ordered=True)
-
-        # Maintenant, vous pouvez trier 'site_data' en utilisant l'ordre défini
-        site_data = site_data.sort_values(by='Semaine')
         
         fig.add_trace(go.Bar(
             x=site_data['Semaine'],
