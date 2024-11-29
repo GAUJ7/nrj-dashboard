@@ -91,8 +91,8 @@ elif period_choice == 'Mois':
     end_year_month_raw = int(end_year_month.replace('-', ''))
     df_filtered = df_filtered[(df_filtered['Mois'] >= start_year_month_raw) & (df_filtered['Mois'] <= end_year_month_raw)]
 elif period_choice == 'Semaine':
-    start_week = st.sidebar.selectbox("Sélectionner la semaine de début", sorted(df2['Semaine_Formate'].unique(), key=lambda x: (int(x.split()[1]), int(x.split()[0][1:]))))
-    end_week = st.sidebar.selectbox("Sélectionner la semaine de fin", sorted(df2['Semaine_Formate'].unique(), key=lambda x: (int(x.split()[1]), int(x.split()[0][1:]))))
+    start_week = st.sidebar.selectbox("Sélectionner la semaine de début", sorted(df2['Semaine_Formate'].unique(), key=lambda x: (int(x.split()[1]), int(x.split()[0][1:]))),index=0)
+    end_week = st.sidebar.selectbox("Sélectionner la semaine de fin", sorted(df2['Semaine_Formate'].unique(), key=lambda x: (int(x.split()[1]), int(x.split()[0][1:]))), index=2)
     start_week_raw = int(start_week.split()[1]) * 100 + int(start_week.split()[0][1:])
     end_week_raw = int(end_week.split()[1]) * 100 + int(end_week.split()[0][1:])
 
