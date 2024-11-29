@@ -186,7 +186,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             site_data = site_data[site_data[energie_choice] < 15]
 
         if energie_choice == 'Electricité (kWh/kg)':
-            site_data = site_data[site_data[energie_choice] < 15]
+            site_data = site_data[site_data[energie_choice] < 10]
 
         site_data['Jour'] = site_data['Jour'].apply(
             lambda x: f"{str(x)[:10]}" if period_choice == 'Jour' else x
