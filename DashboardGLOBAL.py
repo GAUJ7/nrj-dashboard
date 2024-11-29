@@ -183,7 +183,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
         ))
     else:
         if energie_choice == 'Gaz (kWh/kg)':
-            site_data = site_data[site_data[energie_choice] < 100]
+            site_data = site_data[site_data[energie_choice] < 15]
 
         if energie_choice == 'Electricité (kWh/kg)':
             site_data = site_data[site_data[energie_choice] < 7]
