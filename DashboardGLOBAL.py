@@ -21,7 +21,7 @@ df2['Jour'] = pd.to_datetime(df2['Jour'], errors='coerce', dayfirst=True)
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Mois'] = df2['Année'] * 100 + df2['Mois']
 df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
-
+df2['Semaine_Formate'] = df2['Semaine'].apply(lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}")
 df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
 df2 = df2[df2['Année'].isin([2023, 2024])]
 
@@ -91,9 +91,12 @@ elif period_choice == 'Mois':
     end_year_month_raw = int(end_year_month.replace('-', ''))
     df_filtered = df_filtered[(df_filtered['Mois'] >= start_year_month_raw) & (df_filtered['Mois'] <= end_year_month_raw)]
 elif period_choice == 'Semaine':
-    start_week = st.sidebar.selectbox("Sélectionner la semaine de début", sorted(df2['Semaine'].unique()))
-    end_week = st.sidebar.selectbox("Sélectionner la semaine de fin", sorted(df2['Semaine'].unique()))
-    df_filtered = df_filtered[(df_filtered['Semaine'] >= start_week) & (df_filtered['Semaine'] <= end_week)]
+    start_week = st.sidebar.selectbox("Sélectionner la semaine de début", sorted(df2['Semaine_Formate'].unique()))
+    end_week = st.sidebar.selectbox("Sélectionner la semaine de fin", sorted(df2['Semaine_Formate'].unique()))
+    start_week_raw = start_week.apply(lambda x: int(x.split()[1]) * 100 + int(x.split()[0][1:]))
+    end_week_raw = end_week.apply(lambda x: int(x.split()[1]) * 100 + int(x.split()[0][1:]))
+
+    df_filtered = df_filtered[(df_filtered['Semaine'] >= start_week_raw) & (df_filtered['Semaine'] <= end_week_raw)]
 else:
     start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
     end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
