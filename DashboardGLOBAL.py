@@ -35,7 +35,7 @@ sites = df2['Site'].unique()
 site_selection = st.sidebar.selectbox('Choisissez un site', ['Global'] + list(sites))
 
 # Choisir l'énergie à afficher
-energie_choice = st.sidebar.radio("Choisissez l'énergie", ['Gaz (kWh/kg)', 'Electricité (kWh/kg)', 'Gaz (kWh)', 'Electricité (kWh)', 'PE (kg)'])
+energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)', 'Electricité (kWh/kg)', 'Gaz (kWh)', 'Electricité (kWh)', 'PE (kg)'])
 
 # Choisir la période de filtrage
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois','Semaine','Jour', ))
