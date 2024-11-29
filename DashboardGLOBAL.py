@@ -79,8 +79,8 @@ else:
  
 # Filtrage selon la période choisie
 if period_choice == 'Année':
-    start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()))
-    end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()))
+    start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()),index=0)
+    end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()),index=1)
     df_filtered = df_filtered[(df_filtered['Année'] >= start_year) & (df_filtered['Année'] <= end_year)]
 elif period_choice == 'Mois':
     # Choisir l'année et le mois de début et de fin
@@ -207,9 +207,7 @@ fig.update_layout(
     xaxis=dict(
         color='white',  # Change la couleur des axes X en blanc
         type='category',
-
-        tickfont=dict(size=16),  # Taille des labels des ticks de l'axe X     
-        
+        tickfont=dict(size=16),  # Taille des labels des ticks de l'axe X            
     ),
     yaxis_title=f'Consommation ({energie_choice})',
     yaxis_title_font=dict(size=18),  # Taille du titre de l'axe Y
