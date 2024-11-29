@@ -159,11 +159,16 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if period_choice == 'Mois' else x
         )
 
+        # Trier les données par mois (dans l'ordre croissant des dates)
+        site_data['Mois'] = pd.to_datetime(site_data['Mois'], format='%B %Y')
+        site_data = site_data.sort_values(by='Mois')
+
+        # Ajout des traces pour le graphique
         fig.add_trace(go.Bar(
-            x=site_data['Mois'],
-            y=site_data[energie_choice],
-            name=site,
-            marker=dict(color=color)
+        x=site_data['Mois'].dt.strftime('%B %Y'),  # Reformater le mois pour l'affichage
+        y=site_data[energie_choice],
+        name=site,
+        marker=dict(color=color)
         ))
     elif period_choice == 'Semaine':
         site_data['Semaine'] = site_data['Semaine'].apply(
