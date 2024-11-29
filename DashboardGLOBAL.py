@@ -204,6 +204,7 @@ fig.update_layout(
         type='category',
         categoryorder='category ascending',
         tickfont=dict(size=16)  # Taille des labels des ticks de l'axe X
+        gridcolor='white'  # Change la couleur de la grille en blanc
     ),
     yaxis_title=f'Consommation ({energie_choice})',
     yaxis_title_font=dict(size=18),  # Taille du titre de l'axe Y
@@ -214,8 +215,7 @@ fig.update_layout(
     legend_title="Site",
     height=500,  # Hauteur du graphique
     width=2000,  # Largeur du graphique
-    plot_bgcolor='white',  # Définir la couleur de fond du graphique à blanc
-    paper_bgcolor='white'  # Définir la couleur de fond global du graphique à blanc
+
 
 )
 
