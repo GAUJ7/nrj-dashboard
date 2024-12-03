@@ -50,7 +50,7 @@ if site_selection == 'Global':
     df_filtered = df2.groupby([period_choice, 'Machine'])[energie_choice].sum().reset_index()
 else:
     # Sinon, filtrer df2 selon le site sélectionné
-    df_filtered = df2[df2['Machine'] == site_selection]
+    df_filtered = df2[df2['Machine'] == machine_selection]
  
 # Filtrage selon la période choisie
 if period_choice == 'Année':
