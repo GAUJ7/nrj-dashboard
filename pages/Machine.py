@@ -34,7 +34,7 @@ site_selection = st.sidebar.selectbox('Choisissez un site', ['Global'] + list(si
 # Filtrer les machines selon le site sélectionné
 if site_selection != "Global":
     machines_site = df2[df2['Site'] == site_selection]['Machine'].unique()
-    machine_selection = st.sidebar.selectbox('Choisissez une Machine', ['All'] + list(machines_site))
+    machine_selection = st.sidebar.selectbox('Choisissez une Machine', ['Global'] + list(machines_site))
 else:
     machine_selection = "Global"  # Ou aucune sélection de machine si le site est global
 
@@ -50,9 +50,10 @@ if site_selection == 'Global':
     df_filtered = df2.groupby([period_choice, 'Machine'])[energie_choice].sum().reset_index()
 else:
     # Sinon, on filtre les données selon le site sélectionné
-    if machine_selection == 'All':
+    if machine_selection == 'Global':
         # Si l'option 'Global' est choisie pour la machine, on groupe par période, site, et machine
-        df_filtered = df2.groupby([period_choice,site_selection, 'Machine'])[energie_choice].sum().reset_index()
+        df2[df2['Site'] == site_selection]['Machine'].unique()
+        df_filtered = df2.groupby([period_choice, 'Machine'])[energie_choice].sum().reset_index()
     else:
         # Si une machine spécifique est choisie, on filtre les données pour cette machine
         df_filtered = df2[(df2['Site'] == site_selection) & (df2['Machine'] == machine_selection)]
