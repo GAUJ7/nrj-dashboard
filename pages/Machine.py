@@ -17,7 +17,7 @@ df2 = pd.read_csv("20241127 Machine_streamlit2.csv", sep=";")
 #df2['Jour'] = pd.to_datetime(df2['Jour'], errors='coerce', dayfirst=True)
 df2['Mois-Abrege'] = pd.to_datetime(df2['Mois'], format='%m').dt.strftime('%b')
 df2['Mois'] = df2['Année'] * 100 + df2['Mois']
-df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
+df2['Semaine'] = df2['Année'] * 100 + df2['Semaine']
 df2['Semaine_Formate'] = df2['Semaine'].apply(lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}")
 df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
 df2 = df2[df2['Année'].isin([2023, 2024])]
