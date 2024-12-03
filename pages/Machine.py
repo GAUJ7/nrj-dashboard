@@ -80,7 +80,7 @@ else:
             # Si l'option 'Global' est choisie pour la machine, on groupe par période, site, et machine
     else:
         if energie_choice == 'Gaz (kWh/kg)':
-            df_final = df_final[(df_final['Site'] == site_selection) & (df_final['Machine'] == machine_selection)]
+            df_filtered = df_final[(df_final['Site'] == site_selection) & (df_final['Machine'] == machine_selection)]
         else:
             # Si une machine spécifique est choisie, on filtre les données pour cette machine
             df_filtered = df2[(df2['Site'] == site_selection) & (df2['Machine'] == machine_selection)]
