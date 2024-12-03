@@ -53,7 +53,7 @@ else:
     if machine_selection == 'Global':
         # Si l'option 'Global' est choisie pour la machine, on groupe par période, site, et machine
         df2[df2['Site'] == site_selection]['Machine'].unique()
-        df_filtered = df2.groupby([period_choice, 'Machine'])[energie_choice].sum().reset_index()
+        df_filtered = df2.groupby([period_choice, site_selection, 'Machine'])[energie_choice].sum().reset_index()
     else:
         # Si une machine spécifique est choisie, on filtre les données pour cette machine
         df_filtered = df2[(df2['Site'] == site_selection) & (df2['Machine'] == machine_selection)]
