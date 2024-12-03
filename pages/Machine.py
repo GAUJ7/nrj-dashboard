@@ -47,6 +47,7 @@ energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)','PE
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Semaine'))
 
 # Calcul des sommes de Gaz et Electricité selon la période choisie
+df_gaz = df2.dropna(subset=['Gaz (kWh)'])
 df_gaz = df2.groupby([period_choice,'Machine', 'Site'])['Gaz (kWh)'].sum().reset_index()
 #df_electricite = df2.groupby([period_choice, 'Site'])['Electricité (kWh)'].sum().reset_index()
 
@@ -59,7 +60,6 @@ df_pe = df2.groupby([period_choice,'Machine', 'Site'])['PE (kg)'].sum().reset_in
 # Fusionner le résultat avec df_pe
 df_merged = pd.merge(df_gaz, df_pe, on=[period_choice,'Machine', 'Site'], suffixes=('_gaz_elec', '_pe'))
 df_merged['Gaz (kWh/kg)'] = df_merged['Gaz (kWh)'] / df_merged['PE (kg)']
-df_merged = df_merged.dropna(subset=['Gaz (kWh/kg)'])
 df_final = df_merged[[period_choice, 'Site','Machine', 'Gaz (kWh/kg)']]
 
 
