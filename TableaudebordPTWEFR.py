@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import streamlit as st
 import plotly.express as px  # Pour accéder à des palettes de couleurs
 
-st.set_page_config(page_title="Tableau de bord PTWEFR", layout="wide")
+st.set_page_config(page_title="Tableau", layout="wide")
 
 # Chargement des données
 df2 = pd.read_csv("20241127 Global_streamlit.csv", sep=";")
