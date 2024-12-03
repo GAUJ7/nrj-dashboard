@@ -31,6 +31,10 @@ st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
 site_selection = st.sidebar.selectbox('Choisissez un site', ['Global'] + list(sites))
 
+# Filtrage des données dans Streamlit
+Machine = df2['Machine'].unique()
+site_selection = st.sidebar.selectbox('Choisissez une Machine', ['Global'] + list(Machine))
+
 # Choisir l'énergie à afficher
 energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['PE (kg)'])
 
