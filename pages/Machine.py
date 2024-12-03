@@ -8,7 +8,7 @@ import plotly.express as px  # Pour accéder à des palettes de couleurs
 df2 = pd.read_csv("20241127 Machine_streamlit2.csv", sep=";")
 
 # Assurer que la colonne 'Date' est bien au format datetime
-df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
+#df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
 
 # Extraire l'année, le mois et le jour
 df2['Année'] = df2['Date'].dt.year
