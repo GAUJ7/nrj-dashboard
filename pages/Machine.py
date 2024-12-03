@@ -175,7 +175,7 @@ for idx, machine_selection in enumerate(df_grouped['Machine'].unique()):
         fig.add_trace(go.Bar(
             x=site_data['Jour'],
             y=site_data[energie_choice],
-            name=site,
+            name=machine_selection,
             marker=dict(color=color)
         ))
 
