@@ -148,7 +148,7 @@ for idx, machine_selection in enumerate(df_grouped['Machine'].unique()):
         fig.add_trace(go.Bar(
         x=site_data['Mois'].dt.strftime('%B %Y'),  # Reformater le mois pour l'affichage
         y=site_data[energie_choice],
-        name=site,
+        name=machine_selection,
         marker=dict(color=color)
         ))
     elif period_choice == 'Semaine':
@@ -159,7 +159,7 @@ for idx, machine_selection in enumerate(df_grouped['Machine'].unique()):
         fig.add_trace(go.Bar(
             x=site_data['Semaine'],
             y=site_data[energie_choice],
-            name=site,
+            name=machine_selection,
             marker=dict(color=color)
         ))
     else:
