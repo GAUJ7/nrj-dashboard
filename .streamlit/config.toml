@@ -3,3 +3,5 @@ backgroundColor="#043981"
 secondaryBackgroundColor="#00214d"
 textColor="#fbfbfd"
 
+[layout]
+wide = true
