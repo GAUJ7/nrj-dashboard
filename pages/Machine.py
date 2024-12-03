@@ -11,8 +11,9 @@ df2 = pd.read_csv("20241127 Machine_streamlit2.csv", sep=";")
 #df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
 
 # Extraire l'année, le mois et le jour
-#df2['Année'] = df2['Date'].dt.year
-#df2['Mois'] = df2['Date'].dt.month
+df2['Année'] = df2['Année'].dt.year
+df2['Mois'] = df2['Mois'].dt.month
+df2['Semaine'] = df2['Semaine'].dt.isocalendar().week
 #df2['Jour'] = df2['Date'].dt.date
 #df2['Jour'] = pd.to_datetime(df2['Jour'], errors='coerce', dayfirst=True)
 df2['Mois-Abrege'] = pd.to_datetime(df2['Mois'], format='%m').dt.strftime('%b')
