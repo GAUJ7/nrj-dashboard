@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import streamlit as st
 import plotly.express as px  # Pour accéder à des palettes de couleurs
 
-st.set_page_config(page_title="Tableau de PTWEFR", page_icon="🌟")
+st.set_page_config(page_title="Tableau de PTWEFR")
 
 # Active le mode large par défaut
 st.set_page_config(layout="wide")
