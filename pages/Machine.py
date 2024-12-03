@@ -47,13 +47,13 @@ energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)','PE
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Semaine'))
 
 # Calcul des sommes de Gaz et Electricité selon la période choisie
-df_gaz = df2.groupby([period_choice, 'Machine', 'Site'])['Gaz (kWh)'].sum().reset_index()
+df_gaz = df2.groupby([period_choice, machine_selection, 'Site'])['Gaz (kWh)'].sum().reset_index()
 
 # Calcul de la somme de PE (kg) par période et site
-df_pe = df2.groupby([period_choice, 'Machine', 'Site'])['PE (kg)'].sum().reset_index()
+df_pe = df2.groupby([period_choice, machine_selection, 'Site'])['PE (kg)'].sum().reset_index()
 
 # Fusionner le résultat avec df_pe
-df_merged = pd.merge(df_gaz, df_pe, on=[period_choice, 'Machine', 'Site'], suffixes=('_gaz_elec', '_pe'))
+df_merged = pd.merge(df_gaz, df_pe, on=[period_choice, machine_selection, 'Site'], suffixes=('_gaz_elec', '_pe'))
 
 # Appliquer la condition selon le choix d'énergie
 if energie_choice == "Gaz (kWh/kg)":
