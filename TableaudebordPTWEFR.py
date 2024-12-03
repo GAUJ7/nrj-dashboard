@@ -238,8 +238,7 @@ if energie_choice in df_grouped.columns:
                   else f"{x:,.2f}".replace(',', '')
     )
 
-st.set_page_config(page_title="Tableau de bord PTWEFR")
-st.set_page_config(layout="wide")
+st.set_page_config(page_title="Tableau de bord PTWEFR", layout="wide")
 st.plotly_chart(fig)
 
 # Réinitialiser l'index et ne pas l'afficher
