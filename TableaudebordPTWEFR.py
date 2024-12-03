@@ -5,12 +5,7 @@ import streamlit as st
 import plotly.express as px  # Pour accéder à des palettes de couleurs
 
 st.set_page_config(page_title="Tableau de bord PTWEFR")
-
 # Définir la configuration de la page en premier
-st.set_page_config(layout="wide")
-
-
-# Active le mode large par défaut
 st.set_page_config(layout="wide")
 
 # Chargement des données
