@@ -11,11 +11,11 @@ df2 = pd.read_csv("20241127 Machine_streamlit2.csv", sep=";")
 #df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
 
 # Extraire l'année, le mois et le jour
-df2['Année'] = df2['Date'].dt.year
-df2['Mois'] = df2['Date'].dt.month
+#df2['Année'] = df2['Date'].dt.year
+#df2['Mois'] = df2['Date'].dt.month
 #df2['Jour'] = df2['Date'].dt.date
 #df2['Jour'] = pd.to_datetime(df2['Jour'], errors='coerce', dayfirst=True)
-df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
+df2['Mois-Abrege'] = df2['Mois'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Mois'] = df2['Année'] * 100 + df2['Mois']
 df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
 df2['Semaine_Formate'] = df2['Semaine'].apply(lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}")
