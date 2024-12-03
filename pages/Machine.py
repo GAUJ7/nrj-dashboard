@@ -5,7 +5,7 @@ import streamlit as st
 import plotly.express as px  # Pour accéder à des palettes de couleurs
 
 # Chargement des données
-df2 = pd.read_csv("pages/20241127 Machine_streamlit2.csv", sep=";")
+df2 = pd.read_csv("20241127 Machine_streamlit2.csv", sep=";")
 
 # Assurer que la colonne 'Date' est bien au format datetime
 df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
