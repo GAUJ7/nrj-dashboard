@@ -92,22 +92,22 @@ if period_choice == 'Année':
     if aggregation_method == 'median':
         df_grouped = df_filtered
     else:
-        df_grouped = df_filtered.groupby(['Année', 'Site'])[energie_col].sum().reset_index()
+        df_grouped = df_filtered.groupby(['Année', 'Machine'])[energie_col].sum().reset_index()
 elif period_choice == 'Mois':
     if aggregation_method == 'median':
         df_grouped = df_filtered
     else:
-        df_grouped = df_filtered.groupby(['Mois', 'Site'])[energie_col].sum().reset_index()
+        df_grouped = df_filtered.groupby(['Mois', 'Machine'])[energie_col].sum().reset_index()
 elif period_choice == 'Semaine':  # Ajout de la condition pour la semaine
     if aggregation_method == 'median':
         df_grouped = df_filtered
     else:
-        df_grouped = df_filtered.groupby(['Semaine', 'Site'])[energie_col].sum().reset_index()
+        df_grouped = df_filtered.groupby(['Semaine', 'Machine'])[energie_col].sum().reset_index()
 else:
     if aggregation_method == 'median':
         df_grouped = df_filtered
     else:
-        df_grouped = df_filtered.groupby(['Jour', 'Site'])[energie_col].sum().reset_index()
+        df_grouped = df_filtered.groupby(['Jour', 'Machine'])[energie_col].sum().reset_index()
 
 # Créer une palette de couleurs distinctes
 color_palette = px.colors.qualitative.Safe  # Palette de couleurs pré-définie
@@ -116,8 +116,8 @@ color_palette = px.colors.qualitative.Safe  # Palette de couleurs pré-définie
 fig = go.Figure()
 
 # Ajouter les sous-graphes avec des couleurs différentes pour chaque site
-for idx, site in enumerate(df_grouped['Site'].unique()):
-    site_data = df_grouped[df_grouped['Site'] == site]
+for idx, site in enumerate(df_grouped['Machine'].unique()):
+    site_data = df_grouped[df_grouped['Machine'] == machine_selection]
     color = color_palette[idx % len(color_palette)]  # Assurer une couleur unique pour chaque site
     if period_choice == 'Année':
         fig.add_trace(go.Bar(
