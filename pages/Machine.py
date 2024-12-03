@@ -16,6 +16,7 @@ df2 = pd.read_csv("20241127 Machine_streamlit2.csv", sep=";")
 #df2['Semaine'] = df2['Semaine'].dt.isocalendar().week
 #df2['Jour'] = df2['Date'].dt.date
 #df2['Jour'] = pd.to_datetime(df2['Jour'], errors='coerce', dayfirst=True)
+df2['Année'] = df2['Année'].astype(int)
 df2['Mois-Abrege'] = pd.to_datetime(df2['Mois'], format='%m').dt.strftime('%b')
 df2['Mois'] = df2['Année'] * 100 + df2['Mois']
 df2['Semaine'] = df2['Année'] * 100 + df2['Semaine']
