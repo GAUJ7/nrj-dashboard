@@ -51,7 +51,7 @@ if site_selection == 'Global':
 elif site_selection == 'PTWE35':
     # Sinon, on filtre les données selon le site sélectionné
     if machine_selection == 'Global':
-        df_filtered = df2.groupby([period_choice,'Site', 'Machine'])[energie_choice].sum().reset_index()
+        df_filtered = df2.groupby([period_choice,site_selection, 'Machine'])[energie_choice].sum().reset_index()
         # Si l'option 'Global' est choisie pour la machine, on groupe par période, site, et machine
     else:
         # Si une machine spécifique est choisie, on filtre les données pour cette machine
