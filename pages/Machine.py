@@ -42,7 +42,7 @@ else:
 energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['PE (kg)'])
 
 # Choisir la période de filtrage
-period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois','Semaine','Jour', ))
+period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Semaine', 'Jour'))
 
 # Filtrage des données par site
 if site_selection == 'Global':
