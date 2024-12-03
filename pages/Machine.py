@@ -116,7 +116,7 @@ color_palette = px.colors.qualitative.Safe  # Palette de couleurs pré-définie
 fig = go.Figure()
 
 # Ajouter les sous-graphes avec des couleurs différentes pour chaque site
-for idx, site in enumerate(df_grouped['Machine'].unique()):
+for idx, machine_selection in enumerate(df_grouped['Machine'].unique()):
     site_data = df_grouped[df_grouped['Machine'] == machine_selection]
     color = color_palette[idx % len(color_palette)]  # Assurer une couleur unique pour chaque site
     if period_choice == 'Année':
