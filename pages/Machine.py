@@ -58,7 +58,7 @@ df_pe = df2.groupby([period_choice,'Machine', 'Site'])['PE (kg)'].sum().reset_in
 
 # Fusionner le résultat avec df_pe
 df_merged = pd.merge(df_gaz, df_pe, on=[period_choice,'Machine', 'Site'], suffixes=('_gaz_elec', '_pe'))
-
+df_merged = df_merged.dropna(subset=['Gaz (kWh/kg)'])
 df_merged['Gaz (kWh/kg)'] = df_merged['Gaz (kWh)'] / df_merged['PE (kg)']
 df_final = df_merged[[period_choice, 'Site','Machine', 'Gaz (kWh/kg)']]
 
