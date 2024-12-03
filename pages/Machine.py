@@ -47,13 +47,14 @@ period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois',
 # Filtrage des données par site
 if site_selection == 'Global':
     # Sinon, grouper df2 par période et site, et sommer selon l'énergie choisie
-    df_filtered = df2.groupby([period_choice,'Site', 'Machine'])[energie_choice].sum().reset_index()
+    df_filtered = df2.groupby([period_choice, 'Machine'])[energie_choice].sum().reset_index()
     # Sinon, filtrer df2 selon le site sélectionné
 else:    
     # Sinon, on filtre les données selon le site sélectionné
     if machine_selection == 'Global':        
         # Si l'option 'Global' est choisie pour la machine, on groupe par période, site, et machine
-        df_filtered = df2.groupby([site_selection, period_choice, 'Machine'])[energie_choice].sum().reset_index() 
+        df_filtered = df2.groupby([site_selection, 'Machine'])[energie_choice].sum().reset_index() 
+        df_filtered = df2.groupby([period_choice, 'Machine'])[energie_choice].sum().reset_index() 
     else:
         # Si une machine spécifique est choisie, on filtre les données pour cette machine
         df_filtered = df2[df2['Machine'] == machine_selection]
