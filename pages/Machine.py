@@ -13,8 +13,8 @@ df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
 # Extraire l'année, le mois et le jour
 df2['Année'] = df2['Date'].dt.year
 df2['Mois'] = df2['Date'].dt.month
-df2['Jour'] = df2['Date'].dt.date
-df2['Jour'] = pd.to_datetime(df2['Jour'], errors='coerce', dayfirst=True)
+#df2['Jour'] = df2['Date'].dt.date
+#df2['Jour'] = pd.to_datetime(df2['Jour'], errors='coerce', dayfirst=True)
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Mois'] = df2['Année'] * 100 + df2['Mois']
 df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
@@ -42,7 +42,7 @@ else:
 energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['PE (kg)'])
 
 # Choisir la période de filtrage
-period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Semaine', 'Jour'))
+period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Semaine'))
 
 # Filtrage des données par site
 if site_selection == 'Global':
@@ -78,10 +78,10 @@ elif period_choice == 'Semaine':
     end_week_raw = int(end_week.split()[1]) * 100 + int(end_week.split()[0][1:])
 
     df_filtered = df_filtered[(df_filtered['Semaine'] >= start_week_raw) & (df_filtered['Semaine'] <= end_week_raw)]
-else:
-    start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
-    end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
-    df_filtered = df_filtered[(df_filtered['Jour'] >= start_day) & (df_filtered['Jour'] <= end_day)]
+#else:
+#    start_day = pd.to_datetime(st.sidebar.date_input("Jour de début", pd.to_datetime('2024-01-01')))
+#    end_day = pd.to_datetime(st.sidebar.date_input("Jour de fin", pd.to_datetime('2024-12-31')))
+#    df_filtered = df_filtered[(df_filtered['Jour'] >= start_day) & (df_filtered['Jour'] <= end_day)]
 
 # Agrégation des données
 if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
@@ -112,8 +112,8 @@ elif period_choice == 'Semaine':  # Ajout de la condition pour la semaine
 else:
     if aggregation_method == 'median':
         df_grouped = df_filtered
-    else:
-        df_grouped = df_filtered.groupby(['Jour', 'Machine'])[energie_col].sum().reset_index()
+#    else:
+#        df_grouped = df_filtered.groupby(['Jour', 'Machine'])[energie_col].sum().reset_index()
 
 # Créer une palette de couleurs distinctes
 color_palette = px.colors.qualitative.Safe  # Palette de couleurs pré-définie
@@ -169,15 +169,15 @@ for idx, machine_selection in enumerate(df_grouped['Machine'].unique()):
         if energie_choice == 'Electricité (kWh/kg)':
             site_data = site_data[site_data[energie_choice] < 7]
 
-        site_data['Jour'] = site_data['Jour'].apply(
-            lambda x: f"{str(x)[:10]}" if period_choice == 'Jour' else x
-        )
-        fig.add_trace(go.Bar(
-            x=site_data['Jour'],
-            y=site_data[energie_choice],
-            name=machine_selection,
-            marker=dict(color=color)
-        ))
+#        site_data['Jour'] = site_data['Jour'].apply(
+#            lambda x: f"{str(x)[:10]}" if period_choice == 'Jour' else x
+#        )
+#        fig.add_trace(go.Bar(
+#            x=site_data['Jour'],
+#            y=site_data[energie_choice],
+#            name=machine_selection,
+#            marker=dict(color=color)
+#        ))
 
 # Mise à jour des axes et titres
 fig.update_layout(
@@ -211,7 +211,7 @@ if period_choice in df_grouped.columns:
         lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if period_choice == 'Mois' else
                   f"{x:,.0f}".replace(',', '') if period_choice == 'Année' else
                   f"S{int(str(x)[-2:]):02d} {str(x)[:4]}" if period_choice == 'Semaine' else
-                  f"{str(x)[:10]}" if period_choice == 'Jour' else x
+#                  f"{str(x)[:10]}" if period_choice == 'Jour' else x
                   
 
 )
