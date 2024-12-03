@@ -47,7 +47,6 @@ energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)','PE
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Semaine'))
 
 # Calcul des sommes de Gaz et Electricité selon la période choisie
-df_gaz = df2.dropna(subset=['Gaz (kWh)'])
 df_gaz = df2.groupby([period_choice,'Machine', 'Site'])['Gaz (kWh)'].sum().reset_index()
 #df_electricite = df2.groupby([period_choice, 'Site'])['Electricité (kWh)'].sum().reset_index()
 
@@ -73,9 +72,12 @@ if site_selection == 'Global':
 else:
     # Sinon, on filtre les données selon le site sélectionné
     if machine_selection == 'Global':
-        df_filtered = df2[df2['Site'] == site_selection]
-        df_filtered = df_filtered.groupby([period_choice, 'Machine'])[energie_choice].sum().reset_index()
-        # Si l'option 'Global' est choisie pour la machine, on groupe par période, site, et machine
+        if energie_choice == 'Gaz (kWh/kg)':
+            df_filtered = df_final[df_final['Site'] == site_selection]
+        else:
+            df_filtered = df2[df2['Site'] == site_selection]
+            df_filtered = df_filtered.groupby([period_choice, 'Machine'])[energie_choice].sum().reset_index()
+            # Si l'option 'Global' est choisie pour la machine, on groupe par période, site, et machine
     else:
         # Si une machine spécifique est choisie, on filtre les données pour cette machine
         df_filtered = df2[(df2['Site'] == site_selection) & (df2['Machine'] == machine_selection)]
