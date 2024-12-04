@@ -49,7 +49,7 @@ period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois',
 
 # Calcul des sommes de Gaz et Electricité selon la période choisie
 df_gaz = df2[df_gaz['PE (kg)'] > 0]
-df_gaz = df2.groupby([period_choice,'Machine', 'Site'])['Gaz (kWh)'].sum().reset_index()
+df_gaz = df_gaz.groupby([period_choice,'Machine', 'Site'])['Gaz (kWh)'].sum().reset_index()
 #df_electricite = df2.groupby([period_choice, 'Site'])['Electricité (kWh)'].sum().reset_index()
 
 
