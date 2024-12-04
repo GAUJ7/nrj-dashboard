@@ -149,7 +149,7 @@ else:
         df_grouped = df_filtered.groupby(['Jour', 'Machine'])[energie_col].sum().reset_index()
 
 # Créer une palette de couleurs distinctes
-color_palette = px.colors.qualitative.plotly  # Palette de couleurs pré-définie
+color_palette = px.colors.qualitative.Set1  # Palette de couleurs pré-définie
 
 # Création du graphique avec Plotly
 fig = go.Figure()
