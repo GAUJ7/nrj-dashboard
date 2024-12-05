@@ -139,11 +139,24 @@ color_palette = px.colors.qualitative.Light24  # Palette de couleurs pré-défin
 # Création du graphique avec Plotly
 fig = go.Figure()
 
-# Ajouter les sous-graphes avec des couleurs différentes pour chaque site
+# Vérifier si un seul site est sélectionné
+if site_selection != 'Global' and len(df_grouped['Site'].unique()) == 1:
+    # Si un seul site est sélectionné, affecter la couleur bleue
+    color = 'blue'
+else:
+    # Sinon, utiliser la palette de couleurs
+    color_palette = px.colors.qualitative.Light24  # Palette de couleurs pré-définie
 
+# Ajouter les sous-graphes avec des couleurs différentes pour chaque site
 for idx, site in enumerate(df_grouped['Site'].unique()):
     site_data = df_grouped[df_grouped['Site'] == site]
-    color = color_palette[idx % len(color_palette)]  # Assurer une couleur unique pour chaque site
+    
+    # Si un seul site est sélectionné, appliquer la couleur bleue
+    if site_selection != 'Global' and len(df_grouped['Site'].unique()) == 1:
+        color = 'blue'
+    else:
+        color = color_palette[idx % len(color_palette)]  # Assurer une couleur unique pour chaque site
+
     if period_choice == 'Année':
         fig.add_trace(go.Bar(
             x=site_data['Année'],
@@ -152,29 +165,24 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             marker=dict(color=color)
         ))
     elif period_choice == 'Mois':
-
         # Mise en forme de la semaine pour afficher mois et année (ex : 202301 -> Janvier 2023)
-
         site_data['Mois'] = site_data['Mois'].apply(
             lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if period_choice == 'Mois' else x
         )
-
         # Trier les données par mois (dans l'ordre croissant des dates)
         site_data['Mois'] = pd.to_datetime(site_data['Mois'], format='%B %Y')
         site_data = site_data.sort_values(by='Mois')
-
         # Ajout des traces pour le graphique
         fig.add_trace(go.Bar(
-        x=site_data['Mois'].dt.strftime('%B %Y'),  # Reformater le mois pour l'affichage
-        y=site_data[energie_choice],
-        name=site,
-        marker=dict(color=color)
+            x=site_data['Mois'].dt.strftime('%B %Y'),  # Reformater le mois pour l'affichage
+            y=site_data[energie_choice],
+            name=site,
+            marker=dict(color=color)
         ))
     elif period_choice == 'Semaine':
         site_data['Semaine'] = site_data['Semaine'].apply(
             lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}" if period_choice == 'Semaine' else x
         )
-        
         fig.add_trace(go.Bar(
             x=site_data['Semaine'],
             y=site_data[energie_choice],
@@ -184,10 +192,8 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
     else:
         if energie_choice == 'Gaz (kWh/kg)':
             site_data = site_data[site_data[energie_choice] < 15]
-
         if energie_choice == 'Electricité (kWh/kg)':
             site_data = site_data[site_data[energie_choice] < 7]
-
         site_data['Jour'] = site_data['Jour'].apply(
             lambda x: f"{str(x)[:10]}" if period_choice == 'Jour' else x
         )
@@ -207,7 +213,7 @@ fig.update_layout(
     xaxis=dict(
         color='white',  # Change la couleur des axes X en blanc
         type='category',
-        tickfont=dict(size=16),  # Taille des labels des ticks de l'axe X            
+        tickfont=dict(size=16),  # Taille des labels des ticks de l'axe X
     ),
     yaxis_title=f'Consommation ({energie_choice})',
     yaxis_title_font=dict(size=18),  # Taille du titre de l'axe Y
@@ -215,13 +221,12 @@ fig.update_layout(
         color='white',  # Change la couleur des axes Y en blanc
         tickfont=dict(size=16),  # Taille des labels des ticks de l'axe Y
         showgrid=True,  # Afficher la grille
-        gridcolor='white',  # Change la couleur de la grille en blan
+        gridcolor='white',  # Change la couleur de la grille en blanc
         zerolinecolor='white',  # Change la couleur de la ligne zéro
     ),
     legend_title="Site",
     height=500,  # Hauteur du graphique
     width=2000,  # Largeur du graphique
-
 )
 
 # Affichage du graphique dans Streamlit
