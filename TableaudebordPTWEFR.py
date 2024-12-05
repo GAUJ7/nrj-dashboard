@@ -142,7 +142,7 @@ fig = go.Figure()
 # Vérifier si un seul site est sélectionné
 if site_selection != 'Global' and len(df_grouped['Site'].unique()) == 1:
     # Si un seul site est sélectionné, affecter la couleur bleue
-    color = 'green'
+    color = 'blue'
 else:
     # Sinon, utiliser la palette de couleurs
     color_palette = px.colors.qualitative.Light24  # Palette de couleurs pré-définie
@@ -153,7 +153,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
     
     # Si un seul site est sélectionné, appliquer la couleur bleue
     if site_selection != 'Global' and len(df_grouped['Site'].unique()) == 1:
-        color = 'blue'
+        color = 'Lightblue'
     else:
         color = color_palette[idx % len(color_palette)]  # Assurer une couleur unique pour chaque site
 
