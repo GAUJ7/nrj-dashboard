@@ -158,6 +158,12 @@ fig = go.Figure()
 for idx, machine_selection in enumerate(df_grouped['Machine'].unique()):
     site_data = df_grouped[df_grouped['Machine'] == machine_selection]
     color = color_palette[idx % len(color_palette)]  # Assurer une couleur unique pour chaque site
+        # Si un seul site est sélectionné, appliquer la couleur bleue
+    if site_selection != 'Global' and len(df_grouped['Machine'].unique()) == 1:
+        color = 'Lightblue'
+    else:
+        color = color_palette[idx % len(color_palette)]  # Assurer une couleur unique pour chaque site
+
     if period_choice == 'Année':
         fig.add_trace(go.Bar(
             x=site_data['Année'],
