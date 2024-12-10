@@ -72,7 +72,7 @@ st.image(image)
 # Filtrage des données dans Streamlit
 st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
-site_selection = st.sidebar.selectbox('Choisissez un site', ['Global','Total'] + list(sites))
+site_selection = st.sidebar.selectbox('Choisissez un site', ['Global'] + list(sites) + ['Total'])
 
 # Choisir l'énergie à afficher
 energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)','Empreinte carbone (tCO2)', 'Electricité (kWh/kg)', 'Gaz (kWh)', 'Electricité (kWh)', 'PE (kg)'])
