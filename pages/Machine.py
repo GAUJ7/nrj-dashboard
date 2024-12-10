@@ -3,6 +3,12 @@ import numpy as np
 import plotly.graph_objects as go
 import streamlit as st
 import plotly.express as px  # Pour accéder à des palettes de couleurs
+import streamlit_authenticator as stauth
+from auth import authenticator
+
+if not authenticator.authentication_status:
+    st.warning("Veuillez vous connecter pour accéder à cette page.")
+    st.stop()
 
 # Chargement des données
 df2 = pd.read_csv("20241209 Machine_streamlit.csv", sep=";")
