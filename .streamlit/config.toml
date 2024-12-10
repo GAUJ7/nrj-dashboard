@@ -5,3 +5,7 @@ textColor="#fbfbfd"
 
 [layout]
 wide = true
+
+[auth]
+username = "admin"
+password = "admin_password"
