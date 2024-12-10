@@ -95,8 +95,8 @@ df_merged = pd.merge(df_merged_gaz_elec, df_pe, on=[period_choice, 'Site'], suff
 
 # Appliquer la condition selon le choix d'énergie
 if energie_choice == "Empreinte carbone (tCO2)":
-    df_merged['Empreinte carbone (tCO2)'] = (df_merged['Gaz (kWh)'] / 1000 * 0.181) + (df_merged['Electricité (kWh)'] / 1000 * 0.0338)
-    df_final = df_merged[[period_choice, 'Site', 'Empreinte carbone (tCO2)']]
+    df2['Empreinte carbone (tCO2)'] = (df2['Gaz (kWh)'] / 1000 * 0.181) + (df2['Electricité (kWh)'] / 1000 * 0.0338)
+    df2 = df2[[period_choice, 'Site', 'Empreinte carbone (tCO2)']]
 
 # Appliquer la condition selon le choix d'énergie
 
@@ -118,7 +118,7 @@ if site_selection == 'Global':
         
 elif site_selection == 'Total' :
 
-    if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)' or energie_choice == 'Empreinte carbone (tCO2)':
+    if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
         # Si l'énergie choisie est 'Gaz (kWh/kg)' ou 'Electricité (kWh/kg)', filtrer df_final selon le site sélectionné
         df_filtered = df_final
     else:
