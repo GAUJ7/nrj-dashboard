@@ -8,28 +8,34 @@ import streamlit_authenticator as stauth
 
 #st.set_page_config(page_title="Tableau", layout="wide")
 
+# Fonction pour charger les informations d'authentification
+def load_config():
+    config = toml.load('.streamlit/config.toml')
+    return config['auth']['username'], config['auth']['password']
+
 # Fonction de vérification du mot de passe
-def check_password():
+def check_password(correct_username, correct_password):
     username = st.text_input("Nom d'utilisateur")
     password = st.text_input("Mot de passe", type="password")
-    correct_username = "admin"
-    correct_password = "password123"
     
     if username == correct_username and password == correct_password:
         return True
-    else:
-        return False
-
-def main():
-    st.title("Application sécurisée")
-    
-    # Si l'authentification échoue, arrêter l'exécution
-    if not check_password():
+    elif username or password:
         st.error("Nom d'utilisateur ou mot de passe incorrect.")
-        return  # L'authentification échoue et arrête la page d'authentification
+    return False
 
-    # Si l'authentification réussit, afficher l'application principale
-    st.write("Bienvenue dans l'application principale !")
+# Fonction principale
+def main():
+    st.title("Application Sécurisée")
+    
+    correct_username, correct_password = load_config()
+
+    # Vérification de l'authentification
+    if not check_password(correct_username, correct_password):
+        st.stop()  # Arrêter l'exécution si l'authentification échoue
+
+    # Si l'utilisateur est authentifié, afficher l'application principale
+    st.write("Bienvenue dans l'application!")
 
 if __name__ == "__main__":
     main()
