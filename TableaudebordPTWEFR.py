@@ -8,6 +8,9 @@ import streamlit_authenticator as stauth
 
 st.set_page_config(page_title="Tableau", layout="wide")
 
+import streamlit as st
+import toml
+
 # Fonction pour charger les informations d'authentification
 def load_config():
     config = toml.load('.streamlit/config.toml')
@@ -17,10 +20,9 @@ def load_config():
 def check_password(correct_username, correct_password):
     if 'authenticated' not in st.session_state:
         st.session_state.authenticated = False
-
     if st.session_state.authenticated:
         return True  # L'utilisateur est déjà authentifié, ne rien demander
-
+    
     username = st.text_input("Nom d'utilisateur")
     password = st.text_input("Mot de passe", type="password")
     
@@ -29,20 +31,23 @@ def check_password(correct_username, correct_password):
         return True  # Authentification réussie
     elif username or password:
         st.error("Nom d'utilisateur ou mot de passe incorrect.")
-    
-    return False
+        return False
 
 # Fonction principale
 def main():
-    # N'afficher le titre que si l'utilisateur n'est pas encore authentifié
     if 'authenticated' not in st.session_state or not st.session_state.authenticated:
         st.title("Application Sécurisée")
+        correct_username, correct_password = load_config()
     
-    correct_username, correct_password = load_config()
-
     # Vérification de l'authentification
     if not check_password(correct_username, correct_password):
         st.stop()  # Arrêter l'exécution si l'authentification échoue
+
+    # Si authentifié, chargez l'autre code (ex. fichier Python dans .page)
+    else:
+        # Code protégé après l'authentification
+        st.write("Accès autorisé à la page principale et à d'autres fichiers.")
+        # Ajoutez ici la logique pour inclure votre autre fichier Python ou module protégé
 
 if __name__ == "__main__":
     main()
