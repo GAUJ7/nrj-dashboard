@@ -12,7 +12,7 @@ if not check_password(correct_username, correct_password):
     st.warning("Vous devez vous connecter pour accéder à cette page.")
     st.stop()
 
-st.set_page_config(page_title="Tableau", layout="wide")
+#st.set_page_config(page_title="Tableau", layout="wide")
 
 def load_config():
     config = toml.load(".streamlit/config.toml")
