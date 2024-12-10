@@ -80,6 +80,9 @@ energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)', 'E
 # Choisir la période de filtrage
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois','Semaine','Jour', ))
 
+if site_selection == 'Total':
+    df2['Site'] = 'Total'
+
 # Calcul des sommes de Gaz et Electricité selon la période choisie
 df_gaz = df2.groupby([period_choice, 'Site'])['Gaz (kWh)'].sum().reset_index()
 df_electricite = df2.groupby([period_choice, 'Site'])['Electricité (kWh)'].sum().reset_index()
@@ -92,9 +95,6 @@ df_merged_gaz_elec = pd.merge(df_gaz, df_electricite, on=[period_choice, 'Site']
 
 # Fusionner le résultat avec df_pe
 df_merged = pd.merge(df_merged_gaz_elec, df_pe, on=[period_choice, 'Site'], suffixes=('_gaz_elec', '_pe'))
-
-if site_selection == 'Total':
-    df_merged['Site'] = 'Total'
 
 
 # Appliquer la condition selon le choix d'énergie
@@ -127,7 +127,6 @@ elif site_selection == 'Total' :
         df_filtered = df_final
     else:
         # Sinon, filtrer df2 selon le site sélectionné
-        df2['Site'] = 'Total'
         df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()
 
 elif energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)' or energie_choice == 'Empreinte carbone (tCO2)':
