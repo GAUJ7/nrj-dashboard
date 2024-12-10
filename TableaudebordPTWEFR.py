@@ -110,7 +110,7 @@ else:
 if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
     energie_col = df_filtered
     aggregation_method = 'median'
-elif energie_choice == 'Gaz (kWh)' or energie_choice == 'Electricité (kWh)':
+elif energie_choice == 'Gaz (kWh)' or energie_choice == 'Electricité (kWh)' or energie_choice == 'Empreinte carbone (tCO2)' :
     energie_col = energie_choice
     aggregation_method = 'sum'
 else:
