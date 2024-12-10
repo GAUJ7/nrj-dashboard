@@ -200,7 +200,7 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
     site_data = df_grouped[df_grouped['Site'] == site]
     
     # Si un seul site est sélectionné, appliquer la couleur bleue
-    if site_selection != 'Global' and len(df_grouped['Site'].unique()) == 1:
+    if site_selection != 'Global' and 'Total'  and len(df_grouped['Site'].unique()) == 1:
         color = 'Lightblue'
     else:
         color = color_palette[idx % len(color_palette)]  # Assurer une couleur unique pour chaque site
