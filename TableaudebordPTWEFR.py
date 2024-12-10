@@ -6,21 +6,36 @@ import plotly.express as px  # Pour accéder à des palettes de couleurs
 import toml
 import streamlit_authenticator as stauth
 
-st.set_page_config(page_title="Tableau", layout="wide")
+#st.set_page_config(page_title="Tableau", layout="wide")
 
+def load_config():
+    config = toml.load('.streamlit/config.toml')
+    return config['auth']['username'], config['auth']['password']
 
-# Liste d'utilisateurs et de mots de passe
-users = ["utilisateur1", "utilisateur2"]
-passwords = ["motdepasse1", "motdepasse2"]
-authenticator = stauth.Authenticate(users, passwords)
+def check_password(correct_username, correct_password):
+    username = st.text_input("Nom d'utilisateur")
+    password = st.text_input("Mot de passe", type="password")
 
-# Demander à l'utilisateur de se connecter
-name, authentication_status = authenticator.login("Login", "main")
+    if username == correct_username and password == correct_password:
+        return True
+    elif username or password:
+        st.error("Nom d'utilisateur ou mot de passe incorrect.")
+    return False
 
-if authentication_status:
-    st.write(f"Bienvenue, {name}!")
-else:
-    st.error("Nom d'utilisateur ou mot de passe incorrect.")
+# Fonction principale
+def main():
+    st.title("Application Sécurisée")
+
+    correct_username, correct_password = load_config()
+
+    if not check_password(correct_username, correct_password):
+        st.stop()  # Arrêter l'exécution si l'authentification échoue
+
+    # Code de l'application après authentification réussie
+    st.write("Bienvenue dans l'application!")
+
+if __name__ == "__main__":
+    main()
 
 # Chargement des données
 df2 = pd.read_csv("20241209 Global_streamlit.csv", sep=";")
