@@ -6,6 +6,7 @@ import plotly.express as px  # Pour accéder à des palettes de couleurs
 import toml
 
 # Fonction pour charger les informations d'authentification
+# Fonction pour charger les informations d'authentification
 def load_config():
     config = toml.load('.streamlit/config.toml')
     return config['auth']['password']
@@ -23,8 +24,8 @@ def check_password(correct_password):
     if password == correct_password:
         st.session_state.authenticated = True
         return True  # Authentification réussie
-    elif username or password:
-        st.error("Nom d'utilisateur ou mot de passe incorrect.")
+    else:
+        st.error("Mot de passe incorrect.")
     
     return False
 
