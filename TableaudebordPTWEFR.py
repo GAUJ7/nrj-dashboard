@@ -84,8 +84,7 @@ if site_selection == 'Total':
     df2['Site'] = 'Total'
 
 # Appliquer la condition selon le choix d'énergie
-if energie_choice == "Empreinte carbone (tCO2)":
-    df2['Empreinte carbone (tCO2)'] = (df2['Gaz (kWh)'] / 1000 * 0.181) + (df2['Electricité (kWh)'] / 1000 * 0.0338)
+df2['Empreinte carbone (tCO2)'] = (df2['Gaz (kWh)'] / 1000 * 0.181) + (df2['Electricité (kWh)'] / 1000 * 0.0338)
 
 # Calcul des sommes de Gaz et Electricité selon la période choisie
 df_gaz = df2.groupby([period_choice, 'Site'])['Gaz (kWh)'].sum().reset_index()
