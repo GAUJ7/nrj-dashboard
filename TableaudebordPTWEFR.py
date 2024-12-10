@@ -11,20 +11,19 @@ st.set_page_config(page_title="Tableau", layout="wide")
 # Fonction pour charger les informations d'authentification
 def load_config():
     config = toml.load('.streamlit/config.toml')
-    return config['auth']['username'], config['auth']['password']
+    return config['auth']['password']
 
 # Fonction de vérification du mot de passe
-def check_password(correct_username, correct_password):
+def check_password(correct_password):
     if 'authenticated' not in st.session_state:
         st.session_state.authenticated = False
 
     if st.session_state.authenticated:
         return True  # L'utilisateur est déjà authentifié, ne rien demander
 
-    username = st.text_input("Nom d'utilisateur")
     password = st.text_input("Mot de passe", type="password")
     
-    if username == correct_username and password == correct_password:
+    if password == correct_password:
         st.session_state.authenticated = True
         return True  # Authentification réussie
     elif username or password:
