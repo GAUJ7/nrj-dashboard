@@ -7,34 +7,6 @@ import toml
 
 st.set_page_config(page_title="Tableau", layout="wide")
 
-def load_config():
-    config = toml.load(".streamlit/config.toml")
-    return config["auth"]["username"], config["auth"]["password"]
-
-def check_password(correct_username, correct_password):
-    username = st.text_input("Nom d'utilisateur", key="username")
-    password = st.text_input("Mot de passe", type="password", key="password")
-
-    if username == correct_username and password == correct_password:
-        return True
-    elif username or password:
-        st.error("Nom d'utilisateur ou mot de passe incorrect.")
-    return False
-
-def main():
-    st.title("Application sécurisée")
-    correct_username, correct_password = load_config()
-
-    # Vérifier l'authentification
-    if not check_password(correct_username, correct_password):
-        st.stop()  # Arrêter l'application si l'utilisateur n'est pas authentifié
-
-    # Si l'authentification est réussie, l'application continue sans demander de mot de passe
-    st.write("Bienvenue dans l'application sécurisée!")
-
-if __name__ == "__main__":
-    main()
-
 # Chargement des données
 df2 = pd.read_csv("20241209 Global_streamlit.csv", sep=";")
 
