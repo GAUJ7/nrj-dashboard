@@ -26,7 +26,7 @@ def check_password(correct_password):
     if password == correct_password:
         st.session_state.authenticated = True
         return True  # Authentification réussie
-    else:
+    elif password:
         st.error("Mot de passe incorrect.")
     
     return False
