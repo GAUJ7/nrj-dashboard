@@ -24,7 +24,7 @@ def check_password(correct_password):
     if password == correct_password:
         st.session_state.authenticated = True
         return True  # Authentification réussie
-    else:
+    elif password:
         st.error("Mot de passe incorrect.")
     
     return False
@@ -44,7 +44,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
+
 # Chargement des données
 df2 = pd.read_csv("20241209 Machine_streamlit.csv", sep=";")
 df2 = df2[df2['Machine'] != 'F4B,']
