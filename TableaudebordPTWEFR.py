@@ -7,34 +7,26 @@ import toml
 
 st.set_page_config(page_title="Tableau", layout="wide")
 
-# Fonction pour charger les données du fichier .toml
 def load_config():
-    config = toml.load(".streamlit/config.toml")  # Charge le fichier .toml
+    config = toml.load(".streamlit/config.toml")
     return config["auth"]["username"], config["auth"]["password"]
 
-# Fonction de vérification du mot de passe
 def check_password(correct_username, correct_password):
-    """Demande à l'utilisateur d'entrer le mot de passe et vérifie sa validité"""
     username = st.text_input("Nom d'utilisateur")
     password = st.text_input("Mot de passe", type="password")
-    
+
     if username == correct_username and password == correct_password:
         return True
     elif username or password:
         st.error("Nom d'utilisateur ou mot de passe incorrect.")
     return False
 
-# Fonction principale de l'application
 def main():
-    """Application sécurisée avec authentification via fichier .toml"""
     st.title("Application sécurisée")
-
-    # Charger les données de configuration
     correct_username, correct_password = load_config()
 
-    # Demander à l'utilisateur de se connecter
     if not check_password(correct_username, correct_password):
-        st.stop()  # Arrêter l'application si l'utilisateur n'est pas authentifié
+        st.stop()
 
 if __name__ == "__main__":
     main()
