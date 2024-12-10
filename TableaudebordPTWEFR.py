@@ -64,7 +64,7 @@ df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
 df2['Semaine_Formate'] = df2['Semaine'].apply(lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}")
 df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
 df2 = df2[df2['Année'].isin([2023, 2024])]
-
+df2['Empreinte carbone (tCO2)'] = (df2['Gaz (kWh)'] / 1000 * 0.181) + (df2['Electricité (kWh)'] / 1000 * 0.0338)
 # Charger l'image et afficher en haut à gauche
 image = "PT.jpg"  # Remplacez ce chemin par le chemin réel de votre image
 st.image(image)
@@ -93,11 +93,6 @@ df_merged_gaz_elec = pd.merge(df_gaz, df_electricite, on=[period_choice, 'Site']
 
 # Fusionner le résultat avec df_pe
 df_merged = pd.merge(df_merged_gaz_elec, df_pe, on=[period_choice, 'Site'], suffixes=('_gaz_elec', '_pe'))
-
-
-# Appliquer la condition selon le choix d'énergie
-if energie_choice == "Empreinte carbone (tCO2)":
-    df2['Empreinte carbone (tCO2)'] = (df2['Gaz (kWh)'] / 1000 * 0.181) + (df2['Electricité (kWh)'] / 1000 * 0.0338)
 
 # Appliquer la condition selon le choix d'énergie
 
