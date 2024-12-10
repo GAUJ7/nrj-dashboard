@@ -37,10 +37,10 @@ def main():
     if 'authenticated' not in st.session_state or not st.session_state.authenticated:
         st.title("Application Sécurisée")
     
-    correct_username, correct_password = load_config()
+    correct_password = load_config()
 
     # Vérification de l'authentification
-    if not check_password(correct_username, correct_password):
+    if not check_password(correct_password):
         st.stop()  # Arrêter l'exécution si l'authentification échoue
 
 
