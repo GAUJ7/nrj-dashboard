@@ -105,7 +105,7 @@ if site_selection == 'Total':
         df_merged['Gaz (kWh/kg)'] = df_merged['Gaz (kWh)'] / df_merged['PE (kg)']
         df_final = df_merged[[period_choice, 'Site', 'Gaz (kWh/kg)']]
     elif energie_choice == "Electricité (kWh/kg)":
-        df_final['Site'] = 'Total'
+        df_merged['Site'] = 'Total'
         df_merged['Electricité (kWh/kg)'] = df_merged['Electricité (kWh)'] / df_merged['PE (kg)']
         df_final = df_merged[[period_choice, 'Site', 'Electricité (kWh/kg)']]
 else:
