@@ -80,7 +80,6 @@ energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)', 'E
 # Choisir la période de filtrage
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois','Semaine','Jour', ))
 
-if site_selection == 'Total':
 
 # Calcul des sommes de Gaz et Electricité selon la période choisie
 df_gaz = df2.groupby([period_choice, 'Site'])['Gaz (kWh)'].sum().reset_index()
@@ -126,7 +125,7 @@ elif site_selection == 'Total' :
         df_filtered = df_final
     else:
         # Sinon, filtrer df2 selon le site sélectionné
-
+        df2['Site'] = 'Total'
         df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()
 
 elif energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)' or energie_choice == 'Empreinte carbone (tCO2)':
