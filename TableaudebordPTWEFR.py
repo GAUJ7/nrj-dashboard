@@ -119,10 +119,12 @@ elif site_selection == 'Total' :
 
     if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)' or energie_choice == 'Empreinte carbone (tCO2)':
         # Si l'énergie choisie est 'Gaz (kWh/kg)' ou 'Electricité (kWh/kg)', filtrer df_final selon le site sélectionné
-        df_filtered = df_final[[period_choice, energie_choice]]
+        df_final['Site'] = 'Total'
+        df_filtered = df_final
     else:
         # Sinon, filtrer df2 selon le site sélectionné
-        df_filtered = df2[[period_choice, energie_choice]]
+        df2['Site'] = 'Total'
+        df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()
 
 elif energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)' or energie_choice == 'Empreinte carbone (tCO2)':
     # Si l'énergie choisie est 'Gaz (kWh/kg)' ou 'Electricité (kWh/kg)', filtrer df_final selon le site sélectionné
