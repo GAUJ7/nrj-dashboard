@@ -3,6 +3,7 @@ import numpy as np
 import plotly.graph_objects as go
 import streamlit as st
 import plotly.express as px  # Pour accéder à des palettes de couleurs
+import toml
 
 # Fonction pour charger les informations d'authentification
 def load_config():
