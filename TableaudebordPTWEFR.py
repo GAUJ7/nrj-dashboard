@@ -119,9 +119,6 @@ if site_selection == 'Global' or 'Total':
     else:
         # Sinon, grouper df2 par période et site, et sommer selon l'énergie choisie
         df_filtered = df2.groupby([period_choice, 'Site'])[energie_choice].sum().reset_index()
-        
-elif site_selection == 'Total' :
-
     if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
         # Si l'énergie choisie est 'Gaz (kWh/kg)' ou 'Electricité (kWh/kg)', filtrer df_final selon le site sélectionné
         df_filtered = df_final
