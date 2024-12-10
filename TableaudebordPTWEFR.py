@@ -6,7 +6,7 @@ import plotly.express as px  # Pour accéder à des palettes de couleurs
 import toml
 import streamlit_authenticator as stauth
 
-
+st.set_page_config(page_title="Tableau", layout="wide")
 
 # Fonction pour charger les informations d'authentification
 def load_config():
@@ -39,8 +39,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-st.set_page_config(page_title="Tableau", layout="wide")
 
 # Chargement des données
 df2 = pd.read_csv("20241209 Global_streamlit.csv", sep=";")
