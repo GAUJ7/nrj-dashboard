@@ -36,10 +36,6 @@ def main():
     if not check_password(correct_username, correct_password):
         st.stop()  # Arrêter l'application si l'utilisateur n'est pas authentifié
 
-    # Application principale après authentification
-    st.write("Bienvenue dans l'application sécurisée !")
-    st.write("Voici le contenu protégé.")
-
 if __name__ == "__main__":
     main()
 
