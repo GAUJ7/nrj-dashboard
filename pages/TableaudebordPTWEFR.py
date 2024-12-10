@@ -4,15 +4,8 @@ import plotly.graph_objects as go
 import streamlit as st
 import plotly.express as px  # Pour accéder à des palettes de couleurs
 import toml
-from auth import check_password, load_config
 
-correct_username, correct_password = load_config()
-
-if not check_password(correct_username, correct_password):
-    st.warning("Vous devez vous connecter pour accéder à cette page.")
-    st.stop()
-
-#st.set_page_config(page_title="Tableau", layout="wide")
+st.set_page_config(page_title="Tableau", layout="wide")
 
 def load_config():
     config = toml.load(".streamlit/config.toml")
