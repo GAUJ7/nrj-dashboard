@@ -64,7 +64,7 @@ df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
 df2['Semaine_Formate'] = df2['Semaine'].apply(lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}")
 df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
 df2 = df2[df2['Année'].isin([2023, 2024])]
-
+df2['Empreinte carbone (tCO2)'] = (df2['Gaz (kWh)'] / 1000 * 0.181) + (df2['Electricité (kWh)'] / 1000 * 0.0338)
 # Charger l'image et afficher en haut à gauche
 image = "PT.jpg"  # Remplacez ce chemin par le chemin réel de votre image
 st.image(image)
@@ -155,7 +155,7 @@ else:
 if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)':
     energie_col = df_filtered
     aggregation_method = 'median'
-elif energie_choice == 'Gaz (kWh)' or energie_choice == 'Electricité (kWh)':
+elif energie_choice == 'Gaz (kWh)' or energie_choice == 'Electricité (kWh)' or energie_choice == 'Empreinte carbone (tCO2)' :
     energie_col = energie_choice
     aggregation_method = 'sum'
 else:
