@@ -99,12 +99,22 @@ if energie_choice == "Empreinte carbone (tCO2)":
     df_final = df_merged[[period_choice, 'Site', 'Empreinte carbone (tCO2)']]
 
 # Appliquer la condition selon le choix d'énergie
-if energie_choice == "Gaz (kWh/kg)":
-    df_merged['Gaz (kWh/kg)'] = df_merged['Gaz (kWh)'] / df_merged['PE (kg)']
-    df_final = df_merged[[period_choice, 'Site', 'Gaz (kWh/kg)']]
-elif energie_choice == "Electricité (kWh/kg)":
-    df_merged['Electricité (kWh/kg)'] = df_merged['Electricité (kWh)'] / df_merged['PE (kg)']
-    df_final = df_merged[[period_choice, 'Site', 'Electricité (kWh/kg)']]
+if site_selection == 'Total':
+    if energie_choice == "Gaz (kWh/kg)":
+        df_merged['Site'] = 'Total'
+        df_merged['Gaz (kWh/kg)'] = df_merged['Gaz (kWh)'] / df_merged['PE (kg)']
+        df_final = df_merged[[period_choice, 'Site', 'Gaz (kWh/kg)']]
+    elif energie_choice == "Electricité (kWh/kg)":
+        df_final['Site'] = 'Total'
+        df_merged['Electricité (kWh/kg)'] = df_merged['Electricité (kWh)'] / df_merged['PE (kg)']
+        df_final = df_merged[[period_choice, 'Site', 'Electricité (kWh/kg)']]
+else:
+    if energie_choice == "Gaz (kWh/kg)":
+        df_merged['Gaz (kWh/kg)'] = df_merged['Gaz (kWh)'] / df_merged['PE (kg)']
+        df_final = df_merged[[period_choice, 'Site', 'Gaz (kWh/kg)']]
+    elif energie_choice == "Electricité (kWh/kg)":
+        df_merged['Electricité (kWh/kg)'] = df_merged['Electricité (kWh)'] / df_merged['PE (kg)']
+        df_final = df_merged[[period_choice, 'Site', 'Electricité (kWh/kg)']]
 
 # Filtrage des données par site
 if site_selection == 'Global':
@@ -119,7 +129,6 @@ elif site_selection == 'Total' :
 
     if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)' or energie_choice == 'Empreinte carbone (tCO2)':
         # Si l'énergie choisie est 'Gaz (kWh/kg)' ou 'Electricité (kWh/kg)', filtrer df_final selon le site sélectionné
-        df_final['Site'] = 'Total'
         df_filtered = df_final
     else:
         # Sinon, filtrer df2 selon le site sélectionné
