@@ -8,7 +8,7 @@ st.set_page_config(page_title="Tableau", layout="wide")
 
 # Fonction pour charger les données du fichier .toml
 def load_config():
-    config = toml.load("config.toml")  # Charge le fichier .toml
+    config = toml.load(".streamlit/config.toml")  # Charge le fichier .toml
     return config["auth"]["username"], config["auth"]["password"]
 
 # Fonction de vérification du mot de passe
