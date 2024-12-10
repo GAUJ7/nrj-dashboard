@@ -4,28 +4,6 @@ import plotly.graph_objects as go
 import streamlit as st
 import plotly.express as px  # Pour accéder à des palettes de couleurs
 
-# Fonction de vérification de l'authentification
-def check_password():
-    """Retourne True si le mot de passe est correct, False sinon"""
-    password = st.text_input("Entrez le mot de passe", type="password")
-    if password == "Dashboard*PT":  # Remplacez par votre mot de passe
-        return True
-    elif password:
-        st.error("Mot de passe incorrect")
-        return False
-    return False
-
-# Ajout d'un système de sécurité via le mot de passe
-def main():
-    """Application principale"""
-    st.title("Application sécurisée")
-
-    if not check_password():
-        st.stop()  # Arrête l'exécution de l'application si le mot de passe est incorrect
-
-if __name__ == "__main__":
-    main()
-
 st.set_page_config(page_title="Tableau", layout="wide")
 
 # Chargement des données
