@@ -8,6 +8,8 @@ import toml
 import toml
 import streamlit as st
 
+st.set_page_config(page_title="Tableau", layout="wide")
+
 # Fonction pour charger les données du fichier .toml
 def load_config():
     config = toml.load(".streamlit/config.toml")
@@ -41,7 +43,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-st.set_page_config(page_title="Tableau", layout="wide")
+
 
 # Chargement des données
 df2 = pd.read_csv("20241209 Global_streamlit.csv", sep=";")
