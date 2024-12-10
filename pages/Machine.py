@@ -44,6 +44,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
 # Chargement des données
 df2 = pd.read_csv("20241209 Machine_streamlit.csv", sep=";")
 df2 = df2[df2['Machine'] != 'F4B,']
