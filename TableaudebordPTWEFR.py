@@ -5,6 +5,42 @@ import streamlit as st
 import plotly.express as px  # Pour accéder à des palettes de couleurs
 import toml
 
+import toml
+import streamlit as st
+
+# Fonction pour charger les données du fichier .toml
+def load_config():
+    config = toml.load(".streamlit/config.toml")
+    return config["auth"]["username"], config["auth"]["password"]
+
+# Fonction de vérification du mot de passe
+def check_password(correct_username, correct_password):
+    username = st.text_input("Nom d'utilisateur", key="username")
+    password = st.text_input("Mot de passe", type="password", key="password")
+    
+    if username == correct_username and password == correct_password:
+        return True
+    elif username or password:
+        st.error("Nom d'utilisateur ou mot de passe incorrect.")
+    return False
+
+# Fonction principale de l'application
+def main():
+    st.title("Application sécurisée")
+
+    correct_username, correct_password = load_config()
+
+    # Créer une page d'authentification
+    if not check_password(correct_username, correct_password):
+        return  # Si l'authentification échoue, la page d'authentification reste visible
+    
+    # Si l'authentification est réussie, l'application continue sans afficher la page d'authentification
+    st.write("Bienvenue dans l'application sécurisée!")
+
+# Lancer l'application
+if __name__ == "__main__":
+    main()
+
 st.set_page_config(page_title="Tableau", layout="wide")
 
 # Chargement des données
