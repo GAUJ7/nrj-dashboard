@@ -27,6 +27,3 @@ def main():
 
     # Afficher la page sécurisée après authentification
     st.write("Bienvenue sur la page sécurisée!")
-
-if __name__ == "__main__":
-    main()
