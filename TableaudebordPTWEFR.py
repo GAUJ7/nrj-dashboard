@@ -23,11 +23,6 @@ def main():
     if not check_password():
         st.stop()  # Arrête l'exécution de l'application si le mot de passe est incorrect
 
-    # Votre code d'application principal ici
-    st.write("Bienvenue dans l'application sécurisée !")
-    # Par exemple, vous pouvez ajouter plus de contenu
-    st.write("Voici les données sécurisées...")
-
 if __name__ == "__main__":
     main()
 
