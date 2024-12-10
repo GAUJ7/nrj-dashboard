@@ -98,7 +98,6 @@ df_merged = pd.merge(df_merged_gaz_elec, df_pe, on=[period_choice, 'Site'], suff
 # Appliquer la condition selon le choix d'énergie
 if energie_choice == "Empreinte carbone (tCO2)":
     df2['Empreinte carbone (tCO2)'] = (df2['Gaz (kWh)'] / 1000 * 0.181) + (df2['Electricité (kWh)'] / 1000 * 0.0338)
-    df2 = df2[[period_choice, 'Site', 'Empreinte carbone (tCO2)']]
 
 # Appliquer la condition selon le choix d'énergie
 
