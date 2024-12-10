@@ -44,9 +44,6 @@ def main():
     if not check_password(correct_username, correct_password):
         st.stop()  # Arrêter l'exécution si l'authentification échoue
 
-    # Si l'utilisateur est authentifié, afficher l'application principale
-    st.write("Bienvenue dans l'application!")
-
 if __name__ == "__main__":
     main()
 
