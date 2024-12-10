@@ -12,8 +12,8 @@ def load_config():
     return config["auth"]["username"], config["auth"]["password"]
 
 def check_password(correct_username, correct_password):
-    username = st.text_input("Nom d'utilisateur")
-    password = st.text_input("Mot de passe", type="password")
+    username = st.text_input("Nom d'utilisateur", key="username")
+    password = st.text_input("Mot de passe", type="password", key="password")
 
     if username == correct_username and password == correct_password:
         return True
@@ -25,8 +25,12 @@ def main():
     st.title("Application sécurisée")
     correct_username, correct_password = load_config()
 
+    # Vérifier l'authentification
     if not check_password(correct_username, correct_password):
-        st.stop()
+        st.stop()  # Arrêter l'application si l'utilisateur n'est pas authentifié
+
+    # Si l'authentification est réussie, l'application continue sans demander de mot de passe
+    st.write("Bienvenue dans l'application sécurisée!")
 
 if __name__ == "__main__":
     main()
