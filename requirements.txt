@@ -8,3 +8,4 @@ streamlit==1.40.1
 plotly
 openpyxl
 toml
+streamlit_authenticator
