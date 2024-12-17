@@ -222,6 +222,8 @@ if period_choice == 'Année':
         df_grouped = df_filtered
     elif aggregation_method == 'sum':
         df_grouped = df_filtered.groupby(['Année', 'Machine'])[energie_col].sum().reset_index()
+    else:
+        df_grouped = df_filtered
 elif period_choice == 'Mois':
     if aggregation_method == 'median':
         df_grouped = df_filtered
