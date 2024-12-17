@@ -195,6 +195,42 @@ else:
 # Créer une palette de couleurs distinctes
 color_palette = px.colors.qualitative.Light24  # Palette de couleurs pré-définie
 
+# Régression linéaire pour la prédiction Gaz (kWh/kg) basé sur PE (kg)
+if energie_choice == 'Prédiction Gaz (kwh/kg)':
+    # Appliquer la régression linéaire sur les données
+    reg_model = LinearRegression()
+    X = df_filtered['PE (kg)'].values.reshape(-1, 1)  # Variable indépendante (PE)
+    y = df_filtered['Gaz (kWh/kg)'].values  # Variable dépendante (Gaz)
+
+    # Entraîner le modèle
+    reg_model.fit(X, y)
+
+    # Calculer la droite de régression
+    y_pred = reg_model.predict(X)
+
+    # Créer un graphique avec la droite de régression et les points
+    fig = go.Figure()
+
+    # Ajouter les points
+    fig.add_trace(go.Scatter(x=df_filtered['PE (kg)'], y=df_filtered['Gaz (kWh/kg)'], mode='markers', name='Données', marker=dict(color='blue')))
+
+    # Ajouter la droite de régression
+    fig.add_trace(go.Scatter(x=df_filtered['PE (kg)'], y=y_pred, mode='lines', name='Régression Linéaire', line=dict(color='red')))
+
+    # Ajouter l'équation de la droite de régression
+    equation = f"y = {reg_model.coef_[0]:.4f}x + {reg_model.intercept_:.4f}"
+    fig.add_annotation(x=0.05, y=0.95, text=f"Équation : {equation}", showarrow=False, font=dict(size=14, color="black"), align="left", xref="paper", yref="paper")
+
+    # Mise en forme du graphique
+    fig.update_layout(title='Prédiction Gaz (kWh/kg) basé sur PE (kg)', xaxis_title='PE (kg)', yaxis_title='Gaz (kWh/kg)', height=500)
+
+    # Affichage du graphique dans Streamlit
+    st.plotly_chart(fig)
+else:
+    # Autres graphiques pour les autres indicateurs (Histogrammes)
+    # ... code pour afficher les autres histogrammes
+    pass
+
 # Création du graphique avec Plotly
 fig = go.Figure()
 
