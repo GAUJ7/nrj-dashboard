@@ -106,20 +106,11 @@ df_pe = df_pe.groupby([period_choice,'Machine', 'Site'])['PE (kg)'].sum().reset_
 #df_merged_gaz_elec = pd.merge(df_gaz, df_electricite, on=[period_choice, 'Site'], suffixes=('_gaz', '_elec'))
 
 # Fusionner le résultat avec df_pe
-df_merged = pd.merge(df_gaz, df_pe, on=[period_choice,'Machine', 'Site'], suffixes=('_gaz_elec', '_pe'))
-df_merged = df_merged[(df_merged['Machine'] == 'M2') | (df_merged['Machine'] == 'R2') | (df_merged['Machine'] == 'F4B') | (df_merged['Machine'] == 'Rock6')]
-df_merged['Gaz (kWh/kg)'] = df_merged['Gaz (kWh)'] / df_merged['PE (kg)']
-df_final = df_merged[[period_choice, 'Site','Machine', 'Gaz (kWh/kg)']]
-
-# Régression linéaire pour prédire Gaz (kWh/kg) en fonction de PE (kg)
-if energie_choice == 'Prédiction Gaz (kWh/kg)':
-    # Régression linéaire
-    model = LinearRegression()
-    model.fit(df_final[['PE (kg)']], df_final['Gaz (kWh/kg)'])
-    
-    # Prédictions
-    df_final['Predicted Gaz (kWh/kg)'] = model.predict(df_final[['PE (kg)']])
-
+if energie_choice == 'Gaz (kWh/kg)':
+    df_merged = pd.merge(df_gaz, df_pe, on=[period_choice,'Machine', 'Site'], suffixes=('_gaz_elec', '_pe'))
+    df_merged = df_merged[(df_merged['Machine'] == 'M2') | (df_merged['Machine'] == 'R2') | (df_merged['Machine'] == 'F4B') | (df_merged['Machine'] == 'Rock6')]
+    df_merged['Gaz (kWh/kg)'] = df_merged['Gaz (kWh)'] / df_merged['PE (kg)']
+    df_final = df_merged[[period_choice, 'Site','Machine', 'Gaz (kWh/kg)']]
 
 # Filtrage des données par site
 if site_selection == 'Global':
