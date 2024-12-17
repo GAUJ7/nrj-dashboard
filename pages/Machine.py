@@ -6,6 +6,8 @@ import plotly.express as px  # Pour accéder à des palettes de couleurs
 import toml
 from sklearn.linear_model import LinearRegression
 
+st.set_page_config(page_title="Tableau", layout="wide")
+
 # Fonction pour charger les informations d'authentification
 # Fonction pour charger les informations d'authentification
 def load_config():
