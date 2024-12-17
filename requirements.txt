@@ -9,3 +9,4 @@ plotly
 openpyxl
 toml
 streamlit_authenticator
+sklearn.linear_model
