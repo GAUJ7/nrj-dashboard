@@ -85,7 +85,7 @@ if site_selection != "Global":
 else:
     machine_selection = "Global"  # Ou aucune sélection de machine si le site est global
 
-# Choisir l'énergie à afficher
+# Choisir l'indicateur à afficher
 energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)','PE (kg)'])
 
 # Choisir la période de filtrage
