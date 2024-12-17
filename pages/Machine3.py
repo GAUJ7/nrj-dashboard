@@ -179,6 +179,40 @@ if energie_choice == 'Gaz (kWh/kg)' or energie_choice == 'Electricité (kWh/kg)'
 elif energie_choice == 'Gaz (kWh)' or energie_choice == 'Electricité (kWh)':
     energie_col = energie_choice
     aggregation_method = 'sum'
+elif energie_choice == 'Prédiction Gaz (kwh/kg)':
+    model = LinearRegression()
+    model.fit(df_filtered[['PE (kg)']], df_filtered['Gaz (kWh/kg)'])
+    
+    # Prédictions
+    df_filtered['Predicted Gaz (kWh/kg)'] = model.predict(df_filtered[['PE (kg)']])
+    
+    # Calcul de l'équation de la droite de régression
+    slope = model.coef_[0]
+    intercept = model.intercept_
+    equation = f"y = {slope:.2f}x + {intercept:.2f}"
+
+    # Graphique nuage de points avec droite de régression
+    fig = go.Figure()
+
+    # Nuage de points pour les données réelles
+    fig.add_trace(go.Scatter(x=df_filtered['PE (kg)'], y=df_filtered['Gaz (kWh/kg)'], mode='markers', name='Données réelles', marker=dict(color='blue')))
+    
+    # Droite de régression
+    fig.add_trace(go.Scatter(x=df_filtered['PE (kg)'], y=df_filtered['Predicted Gaz (kWh/kg)'], mode='lines', name='Droite de régression', line=dict(color='red')))
+
+    # Affichage de l'équation
+    fig.add_annotation(x=0.05, y=0.95, text=equation, showarrow=False, font=dict(size=14, color="black"), xref="paper", yref="paper")
+
+    # Mise à jour des axes et titres
+    fig.update_layout(
+        title="Prédiction Gaz (kWh/kg) en fonction de PE (kg)",
+        title_font=dict(size=24),
+        xaxis_title="PE (kg)",
+        yaxis_title="Gaz (kWh/kg)",
+        height=500,
+        width=800
+    )
+    st.plotly_chart(fig)
 else:
     energie_col = energie_choice
     aggregation_method = 'sum'
