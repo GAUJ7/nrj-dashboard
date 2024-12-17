@@ -52,7 +52,7 @@ if __name__ == "__main__":
 df2 = pd.read_csv("20241209 Machine_streamlit.csv", sep=";")
 df2 = df2[df2['Machine'] != 'F4B,']
 
-# Prétraitement des données
+# Traitement de la colonne 'Date' pour extraire les informations
 df2['Année'] = df2['Année'].astype(int)
 df2['Mois'] = df2['Mois'].astype(int)
 df2['Mois-Abrege'] = pd.to_datetime(df2['Mois'], format='%m').dt.strftime('%b')
@@ -62,12 +62,16 @@ df2['Semaine_Formate'] = df2['Semaine'].apply(lambda x: f"S{int(str(x)[-2:]):02d
 df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
 df2 = df2[df2['Année'].isin([2023, 2024])]
 
+# Chargement de l'image
+image = "PT.jpg"  # Remplacez ce chemin par le chemin réel de votre image
+st.image(image)
+
 # Filtrage des données dans Streamlit
 st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
 site_selection = st.sidebar.selectbox('Choisissez un site', ['Global'] + list(sites))
 
-# Filtrage des machines selon le site sélectionné
+# Filtrer les machines selon le site sélectionné
 if site_selection != "Global":
     machines_site = df2[df2['Site'] == site_selection]['Machine'].unique()
     machine_selection = st.sidebar.selectbox('Choisissez une Machine', ['Global'] + list(machines_site))
@@ -75,96 +79,96 @@ else:
     machine_selection = "Global"  # Ou aucune sélection de machine si le site est global
 
 # Choisir l'indicateur à afficher
-energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)', 'PE (kg)', 'Prédiction Gaz (kWh/kg)'])
+energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)', 'PE (kg)', 'Prédiction Gaz (kwh/kg)'])
 
 # Choisir la période de filtrage
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Semaine'))
 
-# Préparer les données pour la régression linéaire de la prédiction Gaz (kWh/kg)
+# Calcul des sommes de Gaz et Electricité selon la période choisie
 df_gaz = df2[df2['PE (kg)'] > 0]
 df_gaz = df_gaz.groupby([period_choice, 'Machine', 'Site'])['Gaz (kWh)'].sum().reset_index()
 
 df_pe = df2[df2['Gaz (kWh)'] > 0]
 df_pe = df_pe.groupby([period_choice, 'Machine', 'Site'])['PE (kg)'].sum().reset_index()
 
+# Fusionner les données
 df_merged = pd.merge(df_gaz, df_pe, on=[period_choice, 'Machine', 'Site'], suffixes=('_gaz', '_pe'))
 df_merged['Gaz (kWh/kg)'] = df_merged['Gaz (kWh)'] / df_merged['PE (kg)']
+df_final = df_merged[[period_choice, 'Site', 'Machine', 'Gaz (kWh/kg)']]
 
-# Filtrage selon site et machine
-df_filtered = df_merged if site_selection == 'Global' else df_merged[df_merged['Site'] == site_selection]
-df_filtered = df_filtered if machine_selection == 'Global' else df_filtered[df_filtered['Machine'] == machine_selection]
-
-# Régression linéaire pour prédire Gaz (kWh/kg) en fonction de PE (kg)
-if energie_choice == 'Prédiction Gaz (kWh/kg)':
-    # Régression linéaire
-    model = LinearRegression()
-    model.fit(df_filtered[['PE (kg)']], df_filtered['Gaz (kWh/kg)'])
-    
-    # Prédictions
-    df_filtered['Predicted Gaz (kWh/kg)'] = model.predict(df_filtered[['PE (kg)']])
-    
-    # Calcul de l'équation de la droite de régression
-    slope = model.coef_[0]
-    intercept = model.intercept_
-    equation = f"y = {slope:.2f}x + {intercept:.2f}"
-
-    # Graphique nuage de points avec droite de régression
-    fig = go.Figure()
-
-    # Nuage de points pour les données réelles
-    fig.add_trace(go.Scatter(x=df_filtered['PE (kg)'], y=df_filtered['Gaz (kWh/kg)'], mode='markers', name='Données réelles', marker=dict(color='blue')))
-    
-    # Droite de régression
-    fig.add_trace(go.Scatter(x=df_filtered['PE (kg)'], y=df_filtered['Predicted Gaz (kWh/kg)'], mode='lines', name='Droite de régression', line=dict(color='red')))
-
-    # Affichage de l'équation
-    fig.add_annotation(x=0.05, y=0.95, text=equation, showarrow=False, font=dict(size=14, color="black"), xref="paper", yref="paper")
-
-    # Mise à jour des axes et titres
-    fig.update_layout(
-        title="Prédiction Gaz (kWh/kg) en fonction de PE (kg)",
-        title_font=dict(size=24),
-        xaxis_title="PE (kg)",
-        yaxis_title="Gaz (kWh/kg)",
-        height=500,
-        width=800
-    )
-    st.plotly_chart(fig)
-
-# Créer l'histogramme pour les autres indicateurs
+# Filtrage des données
+if site_selection == 'Global':
+    if energie_choice == 'Gaz (kWh/kg)':
+        df_filtered = df_final
+    else:
+        df_filtered = df2.groupby([period_choice, 'Machine'])[energie_choice].sum().reset_index()
 else:
-    # Préparation du graphique pour les autres indicateurs
+    if machine_selection == 'Global':
+        if energie_choice == 'Gaz (kWh/kg)':
+            df_filtered = df_final[df_final['Site'] == site_selection]
+        else:
+            df_filtered = df2[df2['Site'] == site_selection]
+            df_filtered = df_filtered.groupby([period_choice, 'Machine'])[energie_choice].sum().reset_index()
+    else:
+        if energie_choice == 'Gaz (kWh/kg)':
+            df_filtered = df_final[(df_final['Site'] == site_selection) & (df_final['Machine'] == machine_selection)]
+        else:
+            df_filtered = df2[(df2['Site'] == site_selection) & (df2['Machine'] == machine_selection)]
+
+# Filtrage par période
+if period_choice == 'Année':
+    start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()), index=1)
+    end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()), index=1)
+    df_filtered = df_filtered[(df_filtered['Année'] >= start_year) & (df_filtered['Année'] <= end_year)]
+elif period_choice == 'Mois':
+    start_year_month = st.sidebar.selectbox("Sélectionner le mois de début", sorted(df2['Mois_Formate'].unique()), index=12)
+    end_year_month = st.sidebar.selectbox("Sélectionner le mois de fin", sorted(df2['Mois_Formate'].unique()), index=20)
+    start_year_month_raw = int(start_year_month.replace('-', ''))
+    end_year_month_raw = int(end_year_month.replace('-', ''))
+    df_filtered = df_filtered[(df_filtered['Mois'] >= start_year_month_raw) & (df_filtered['Mois'] <= end_year_month_raw)]
+elif period_choice == 'Semaine':
+    start_week = st.sidebar.selectbox("Sélectionner la semaine de début", sorted(df2['Semaine_Formate'].unique(), key=lambda x: (int(x.split()[1]), int(x.split()[0][1:]))), index=52)
+    end_week = st.sidebar.selectbox("Sélectionner la semaine de fin", sorted(df2['Semaine_Formate'].unique(), key=lambda x: (int(x.split()[1]), int(x.split()[0][1:]))), index=87)
+    start_week_raw = int(start_week.split()[1]) * 100 + int(start_week.split()[0][1:])
+    end_week_raw = int(end_week.split()[1]) * 100 + int(end_week.split()[0][1:])
+    df_filtered = df_filtered[(df_filtered['Semaine'] >= start_week_raw) & (df_filtered['Semaine'] <= end_week_raw)]
+
+# Régression linéaire pour la prédiction Gaz (kWh/kg) basé sur PE (kg)
+if energie_choice == 'Prédiction Gaz (kwh/kg)':
+    # Appliquer la régression linéaire sur les données
+    reg_model = LinearRegression()
+    X = df_filtered['PE (kg)'].values.reshape(-1, 1)  # Variable indépendante (PE)
+    y = df_filtered['Gaz (kWh/kg)'].values  # Variable dépendante (Gaz)
+
+    # Entraîner le modèle
+    reg_model.fit(X, y)
+
+    # Calculer la droite de régression
+    y_pred = reg_model.predict(X)
+
+    # Créer un graphique avec la droite de régression et les points
     fig = go.Figure()
 
-    for idx, machine_selection in enumerate(df_filtered['Machine'].unique()):
-        machine_data = df_filtered[df_filtered['Machine'] == machine_selection]
-        color = px.colors.qualitative.Light24[idx % len(px.colors.qualitative.Light24)]
+    # Ajouter les points
+    fig.add_trace(go.Scatter(x=df_filtered['PE (kg)'], y=df_filtered['Gaz (kWh/kg)'], mode='markers', name='Données', marker=dict(color='blue')))
 
-        if period_choice == 'Année':
-            fig.add_trace(go.Bar(x=machine_data['Année'], y=machine_data[energie_choice], name=machine_selection, marker=dict(color=color)))
-        elif period_choice == 'Mois':
-            machine_data['Mois'] = pd.to_datetime(machine_data['Mois'], format='%Y%m').dt.strftime('%B %Y')
-            fig.add_trace(go.Bar(x=machine_data['Mois'], y=machine_data[energie_choice], name=machine_selection, marker=dict(color=color)))
-        elif period_choice == 'Semaine':
-            machine_data['Semaine'] = machine_data['Semaine'].apply(lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}")
-            fig.add_trace(go.Bar(x=machine_data['Semaine'], y=machine_data[energie_choice], name=machine_selection, marker=dict(color=color)))
+    # Ajouter la droite de régression
+    fig.add_trace(go.Scatter(x=df_filtered['PE (kg)'], y=y_pred, mode='lines', name='Régression Linéaire', line=dict(color='red')))
 
-    # Mise à jour des axes et titres
-    fig.update_layout(
-        barmode='group',
-        title=f'Consommation d\'énergie pour {site_selection}',
-        title_font=dict(size=24),
-        xaxis_title_font=dict(size=18),
-        xaxis=dict(color='white', type='category', tickfont=dict(size=16)),
-        yaxis_title=f'Consommation ({energie_choice})',
-        yaxis_title_font=dict(size=18),
-        yaxis=dict(color='white', tickfont=dict(size=16), showgrid=True, gridcolor='white', zerolinecolor='white'),
-        legend_title="Site",
-        height=500,
-        width=2000
-    )
+    # Ajouter l'équation de la droite de régression
+    equation = f"y = {reg_model.coef_[0]:.4f}x + {reg_model.intercept_:.4f}"
+    fig.add_annotation(x=0.05, y=0.95, text=f"Équation : {equation}", showarrow=False, font=dict(size=14, color="black"), align="left", xref="paper", yref="paper")
+
+    # Mise en forme du graphique
+    fig.update_layout(title='Prédiction Gaz (kWh/kg) basé sur PE (kg)', xaxis_title='PE (kg)', yaxis_title='Gaz (kWh/kg)', height=500)
+
+    # Affichage du graphique dans Streamlit
     st.plotly_chart(fig)
+else:
+    # Autres graphiques pour les autres indicateurs (Histogrammes)
+    # ... code pour afficher les autres histogrammes
+    pass
 
-# Réinitialiser l'index et ne pas l'afficher
-df_grouped_reset = df_filtered.reset_index(drop=True)
-st.write(df_grouped_reset)
+# Affichage des données filtrées sans l'index
+df_filtered_reset = df_filtered.reset_index(drop=True)
+st.write(df_filtered_reset)
