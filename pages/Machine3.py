@@ -115,10 +115,10 @@ df_final = df_merged[[period_choice, 'Site','Machine', 'Gaz (kWh/kg)']]
 if energie_choice == 'Prédiction Gaz (kWh/kg)':
     # Régression linéaire
     model = LinearRegression()
-    model.fit(df_filtered[['PE (kg)']], df_filtered['Gaz (kWh/kg)'])
+    model.fit(df_final[['PE (kg)']], df_final['Gaz (kWh/kg)'])
     
     # Prédictions
-    df_filtered['Predicted Gaz (kWh/kg)'] = model.predict(df_filtered[['PE (kg)']])
+    df_final['Predicted Gaz (kWh/kg)'] = model.predict(df_final[['PE (kg)']])
 
 
 # Filtrage des données par site
