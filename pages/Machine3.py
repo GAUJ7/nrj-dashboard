@@ -120,7 +120,7 @@ elif energie_choice == 'Prédiction Gaz (kwh/kg)':
 
 # Filtrage des données par site
 if site_selection == 'Global':
-    if energie_choice == 'Gaz (kWh/kg)':
+    if energie_choice == 'Gaz (kWh/kg)' | 'Prédiction Gaz (kwh/kg)':
         df_filtered = df_final
     else:
         # Si le site est 'Global', on groupe df2 par période et machine et on somme selon l'énergie choisie
