@@ -78,15 +78,15 @@ st.sidebar.title("Filtrage des données")
 sites = df2['Site'].unique()
 site_selection = st.sidebar.selectbox('Choisissez un site', ['Global'] + list(sites))
 
-# Choisir l'indicateur à afficher
-energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)','PE (kg)', 'Prédiction Gaz (kwh/kg)'])
-
 # Filtrage des machines selon le site sélectionné
 if site_selection != "Global":
     machines_site = df2[df2['Site'] == site_selection]['Machine'].unique()
     machine_selection = st.sidebar.selectbox('Choisissez une Machine', ['Global'] + list(machines_site))
 else:
     machine_selection = "Global"  # Ou aucune sélection de machine si le site est global
+
+# Choisir l'indicateur à afficher
+energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)','PE (kg)', 'Prédiction Gaz (kwh/kg)'])
 
 # Choisir la période de filtrage
 period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Semaine'))
