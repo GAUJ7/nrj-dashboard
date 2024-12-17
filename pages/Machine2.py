@@ -98,9 +98,10 @@ df_filtered = df_filtered if machine_selection == 'Global' else df_filtered[df_f
 if energie_choice == 'Prédiction Gaz (kWh/kg)':
     # Régression linéaire
     model = LinearRegression()
+    model.fit(df_filtered[['PE (kg)']], df_filtered['Gaz (kWh/kg)'])
     
     # Prédictions
-    df_filtered['Predicted Gaz (kWh/kg)'] = model.fit(df_filtered[['PE (kg)']], df_filtered['Gaz (kWh/kg)'])
+    df_filtered['Predicted Gaz (kWh/kg)'] = model.predict(df_filtered[['PE (kg)']])
     
     # Calcul de l'équation de la droite de régression
     slope = model.coef_[0]
