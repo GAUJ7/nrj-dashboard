@@ -132,6 +132,8 @@ else:
     if machine_selection == 'Global':
         if energie_choice == 'Gaz (kWh/kg)':
             df_filtered = df_final[df_final['Site'] == site_selection]
+        elif energie_choice == 'Prédiction Gaz (kwh/kg)':
+            df_filtered = df_final[df_final['Site'] == site_selection]
         else:
             df_filtered = df2[df2['Site'] == site_selection]
             df_filtered = df_filtered.groupby([period_choice, 'Machine'])[energie_choice].sum().reset_index()
