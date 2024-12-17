@@ -1,11 +1,6 @@
-import pandas as pd
-import numpy as np
-import plotly.graph_objects as go
-import streamlit as st
-import plotly.express as px
-from sklearn.linear_model import LinearRegression
-import toml
+st.set_page_config(page_title="Tableau", layout="wide")
 
+# Fonction pour charger les informations d'authentification
 # Fonction pour charger les informations d'authentification
 def load_config():
     config = toml.load('.streamlit/config.toml')
@@ -15,25 +10,32 @@ def load_config():
 def check_password(correct_password):
     if 'authenticated' not in st.session_state:
         st.session_state.authenticated = False
+
     if st.session_state.authenticated:
         return True  # L'utilisateur est déjà authentifié, ne rien demander
-    password = st.text_input("Mot de passe", type="password")        
+
+    password = st.text_input("Mot de passe", type="password")
+    
     if password == correct_password:
         st.session_state.authenticated = True
         return True  # Authentification réussie
     elif password:
         st.error("Mot de passe incorrect.")
-        return False
+    
+    return False
 
-# Fonction principal
+# Fonction principale
 def main():
     # N'afficher le titre que si l'utilisateur n'est pas encore authentifié
     if 'authenticated' not in st.session_state or not st.session_state.authenticated:
         st.title("Application Sécurisée")
-        correct_password = load_config()
+    
+    correct_password = load_config()
+
     # Vérification de l'authentification
     if not check_password(correct_password):
         st.stop()  # Arrêter l'exécution si l'authentification échoue
+
 
 if __name__ == "__main__":
     main()
