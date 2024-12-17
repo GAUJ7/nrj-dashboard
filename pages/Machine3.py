@@ -82,14 +82,26 @@ site_selection = st.sidebar.selectbox('Choisissez un site', ['Global'] + list(si
 energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)','PE (kg)', 'Prédiction Gaz (kwh/kg)'])
 
 # Filtrer les machines selon le site sélectionné
-if site_selection != "Global":
-    machines_site = df2[df2['Site'] == site_selection]['Machine'].unique()
-    machine_selection = st.sidebar.selectbox('Choisissez une Machine', ['Global'] + list(machines_site))
+if energie_choice == 'Prédiction Gaz (kwh/kg)':
+    if site_selection != "Global":
+        # Filtrer les machines pour le site sélectionné
+        machines_site = df2[df2['Site'] == site_selection]['Machine'].unique()
+        # Sélectionner une machine parmi les options spécifiées
+        machine_selection = st.sidebar.selectbox('Choisissez une Machine', ['Rock6', 'SRM5000'])
+    else:
+        # Ne pas afficher 'Global' dans ce cas
+        machine_selection = None
 else:
-    machine_selection = "Global"  # Ou aucune sélection de machine si le site est global
+    # Choisir la période de filtrage
+    period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Semaine'))
+    if site_selection != "Global":
+        machines_site = df2[df2['Site'] == site_selection]['Machine'].unique()
+        machine_selection = st.sidebar.selectbox('Choisissez une Machine', ['Global'] + list(machines_site))
+    else:
+        machine_selection = "Global"  # Ou aucune sélection de machine si le site est global
 
-# Choisir la période de filtrage
-period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Semaine'))
+    # Choisir la période de filtrage
+    period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Semaine'))
 
 # Calcul des sommes de Gaz et Electricité selon la période choisie
 df_gaz = df2[df2['PE (kg)'] > 0]
