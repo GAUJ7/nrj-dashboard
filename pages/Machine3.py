@@ -122,6 +122,8 @@ elif energie_choice == 'Prédiction Gaz (kwh/kg)':
 if site_selection == 'Global':
     if energie_choice == 'Gaz (kWh/kg)':
         df_filtered = df_final
+    elif energie_choice == 'Prédiction Gaz (kwh/kg)':
+        df_filtered = df_final
     else:
         # Si le site est 'Global', on groupe df2 par période et machine et on somme selon l'énergie choisie
         df_filtered = df2.groupby([period_choice, 'Machine'])[energie_choice].sum().reset_index()
