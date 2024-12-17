@@ -112,6 +112,12 @@ if energie_choice == 'Gaz (kWh/kg)':
     df_merged['Gaz (kWh/kg)'] = df_merged['Gaz (kWh)'] / df_merged['PE (kg)']
     df_final = df_merged[[period_choice, 'Site','Machine', 'Gaz (kWh/kg)']]
 
+elif energie_choice == 'Prédiction Gaz (kwh/kg)':
+    df_merged = pd.merge(df_gaz, df_pe, on=[period_choice,'Machine', 'Site'], suffixes=('_gaz_elec', '_pe'))
+    df_merged = df_merged[(df_merged['Machine'] == 'Rock6')]
+    df_merged['Gaz (kWh/kg)'] = df_merged['Gaz (kWh)'] / df_merged['PE (kg)']
+    df_final = df_merged[[period_choice, 'Site','Machine', 'Gaz (kWh/kg)','PE (kg)']]
+
 # Filtrage des données par site
 if site_selection == 'Global':
     if energie_choice == 'Gaz (kWh/kg)':
