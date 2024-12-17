@@ -82,15 +82,10 @@ site_selection = st.sidebar.selectbox('Choisissez un site', ['Global'] + list(si
 energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)','PE (kg)', 'Prédiction Gaz (kwh/kg)'])
 
 # Filtrer les machines selon le site sélectionné
+# Vérifier la condition pour 'Prédiction Gaz (kwh/kg)'
 if energie_choice == 'Prédiction Gaz (kwh/kg)':
-    if site_selection != "Global":
-        # Filtrer les machines pour le site sélectionné
-        machines_site = df2[df2['Site'] == site_selection]['Machine'].unique()
-        # Sélectionner une machine parmi les options spécifiées
-        machine_selection = st.sidebar.selectbox('Choisissez une Machine', ['Rock6', 'SRM5000'])
-    else:
-        # Ne pas afficher 'Global' dans ce cas
-        machine_selection = None
+    # Sélectionner une machine parmi les options spécifiées sans afficher le site
+    machine_selection = st.sidebar.selectbox('Choisissez une Machine', ['Rock6', 'SRM5000'])
 else:
     # Choisir la période de filtrage
     period_choice = st.sidebar.radio("Sélectionner la période", ('Année', 'Mois', 'Semaine'))
