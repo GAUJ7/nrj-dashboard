@@ -61,9 +61,7 @@ df2['Jour'] = pd.to_datetime(df2['Jour'], errors='coerce', dayfirst=True)
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Mois'] = df2['Année'] * 100 + df2['Mois']
 df2['Semaine'] = df2['Année'] * 100 + df2['Date'].dt.isocalendar().week
-df2['Semaine_Formate'] = df2['Semaine'].apply(
-    lambda x: f"S{int(str(x).split('.')[0][-2:]):02d} {str(x)[:4]}" if pd.notnull(x) and isinstance(x, (int, float)) else 'NaN'
-)
+df2['Semaine_Formate'] = df2['Semaine'].apply(lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}")
 df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
 df2 = df2[df2['Année'].isin([2023, 2024])]
 df2['Empreinte carbone (tCO2)'] = (df2['Gaz (kWh)'] / 1000 * 0.181) + (df2['Electricité (kWh)'] / 1000 * 0.0338)
