@@ -48,15 +48,15 @@ if __name__ == "__main__":
     main()
 
 # Chargement des données
-df2 = pd.read_csv("20241209 Global_streamlit.csv", sep=";")
+df2 = pd.read_csv("20250107 Global_streamlit.csv", sep=";")
 
 # Assurer que la colonne 'Date' est bien au format datetime
-df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
+#df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
 
 # Extraire l'année, le mois et le jour
-df2['Année'] = df2['Date'].dt.year
-df2['Mois'] = df2['Date'].dt.month
-df2['Jour'] = df2['Date'].dt.date
+#df2['Année'] = df2['Date'].dt.year
+#df2['Mois'] = df2['Date'].dt.month
+#df2['Jour'] = df2['Date'].dt.date
 df2['Jour'] = pd.to_datetime(df2['Jour'], errors='coerce', dayfirst=True)
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
 df2['Mois'] = df2['Année'] * 100 + df2['Mois']
