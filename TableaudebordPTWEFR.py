@@ -57,7 +57,7 @@ df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
 #df2['Année'] = df2['Date'].dt.year
 #df2['Mois'] = df2['Date'].dt.month
 #df2['Jour'] = df2['Date'].dt.date
-df2['Electricité (kWh)'] = df2['Electricité (kWh)'].fillna(0)
+df2['Gaz (kWh)'] = df2['Gaz (kWh)'].fillna(0)
 df2['Electricité (kWh)'] = df2['Electricité (kWh)'].fillna(0)
 df2['Jour'] = pd.to_datetime(df2['Jour'], errors='coerce', dayfirst=True)
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
