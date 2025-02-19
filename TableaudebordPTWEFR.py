@@ -255,25 +255,28 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
         ))
 
     elif period_choice == 'Trimestre':
-        # Mise en forme des trimestres pour affichage sous "QX YYYY"
-        site_data['Trimestre'] = site_data['Trimestre'].apply(
-            lambda x: f"Q{str(x)[-1]} {str(x)[:4]}"
+        # Création du format Q1 2024, Q2 2024, ...
+        site_data['Trimestre_Formate'] = site_data['Trimestre'].apply(
+            lambda x: f"Q{(int(str(x)[-1]))} {str(x)[:4]}"
         )
-        # Trier les données par trimestre (ordre chronologique)
-        site_data['Trimestre'] = pd.to_datetime(
-            site_data['Trimestre'].apply(lambda x: f"{x[-4:]}-{(int(x[1]) - 1) * 3 + 1}-01"),
+
+        # Associer chaque trimestre à une date de référence pour le tri (ex: Q1 -> 15 février de l'année)
+        site_data['Trimestre_Sort'] = pd.to_datetime(
+            site_data['Trimestre'].apply(lambda x: f"{str(x)[:4]}-{(int(str(x)[-1]) - 1) * 3 + 2}-15"),
             format='%Y-%m-%d'
         )
-        site_data = site_data.sort_values(by='Trimestre')
+
+        # Trier les données par trimestre (ordre chronologique)
+        site_data = site_data.sort_values(by='Trimestre_Sort')
 
         # Ajout des traces pour le graphique
         fig.add_trace(go.Bar(
-            x=site_data['Trimestre'].dt.strftime('Q%q %Y'),  # Reformater en "QX YYYY"
+            x=site_data['Trimestre_Formate'],  # Affichage sous "Q1 2024"
             y=site_data[energie_choice],
             name=site,
             marker=dict(color=color)
         ))
-        
+
     elif period_choice == 'Semaine':
         site_data['Semaine'] = site_data['Semaine'].apply(
             lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}" if period_choice == 'Semaine' else x
