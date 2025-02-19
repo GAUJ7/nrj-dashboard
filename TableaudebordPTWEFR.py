@@ -139,6 +139,13 @@ if period_choice == 'Année':
     start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()),index=0)
     end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()),index=1)
     df_filtered = df_filtered[(df_filtered['Année'] >= start_year) & (df_filtered['Année'] <= end_year)]
+elif period_choice == 'Trimestre' :
+    start_year_quarter = st.sidebar.selectbox("Sélectionner le mois de début", sorted(df2['Trimestre'].unique()),index=12)
+    end_year_quater = st.sidebar.selectbox("Sélectionner le mois de fin", sorted(df2['Trimestre'].unique()),index=20)
+    # Convertir la valeur sélectionnée en format d'origine (YYYYMM)
+    start_year_month_raw = int(start_year_month.replace('-', ''))
+    end_year_month_raw = int(end_year_month.replace('-', ''))
+    df_filtered = df_filtered[(df_filtered['Trimestre'] >= start_year_month_raw) & (df_filtered['Trimestre'] <= end_year_month_raw)]
 elif period_choice == 'Mois':
     # Choisir l'année et le mois de début et de fin
     start_year_month = st.sidebar.selectbox("Sélectionner le mois de début", sorted(df2['Mois_Formate'].unique()),index=12)
