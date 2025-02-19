@@ -137,8 +137,8 @@ else:
  
 # Filtrage selon la période choisie
 if period_choice == 'Année':
-    start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()),index=4)
-    end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()),index=7)
+    start_year = st.sidebar.selectbox("Année de début", sorted(df2['Année'].unique()),index=0)
+    end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()),index=1)
     df_filtered = df_filtered[(df_filtered['Année'] >= start_year) & (df_filtered['Année'] <= end_year)]
 elif period_choice == 'Trimestre' :
     start_year_quarter = st.sidebar.selectbox(
