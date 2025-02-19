@@ -53,8 +53,6 @@ df2 = pd.read_csv("20250107 Global_streamlit.csv", sep=";")
 # Assurer que la colonne 'Date' est bien au format datetime
 df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=False)
 
-df2 = df2.copy()
-
 # Extraire l'année, le mois et le journb
 #df2['Année'] = df2['Date'].dt.year
 #df2['Mois'] = df2['Date'].dt.month
