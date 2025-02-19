@@ -60,6 +60,7 @@ df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=False)
 
 df2['Jour'] = pd.to_datetime(df2['Jour'], errors='coerce', dayfirst=False)
 df2['Mois-Abrege'] = df2['Date'].dt.strftime('%b')  # Mois abrégés (ex: Jan, Feb, Mar, etc.)
+df2['Trimestre'] = df2['Année'] * 10 + ((df2['Mois'] - 1) // 3 + 1)
 df2['Mois'] = df2['Année'] * 100 + df2['Mois']
 df2['Semaine'] = df2['Année'] * 100 + df2['Semaine']
 df2['Semaine_Formate'] = df2['Semaine'].apply(lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}")
