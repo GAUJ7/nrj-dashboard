@@ -330,10 +330,11 @@ if period_choice in df_grouped.columns:
         lambda x: f"{pd.to_datetime(str(x), format='%Y%m').strftime('%B %Y')}" if period_choice == 'Mois' else
                   f"{x:,.0f}".replace(',', '') if period_choice == 'Année' else
                   f"S{int(str(x)[-2:]):02d} {str(x)[:4]}" if period_choice == 'Semaine' else
-                  f"{str(x)[:10]}" if period_choice == 'Jour' else x
-                  
+                  f"{str(x)[:10]}" if period_choice == 'Jour' else
+                  f"Q{str(x)[-1]} {str(x)[:4]}" if period_choice == 'Trimestre' else x
+                
 
-)
+    )
 if energie_choice in df_grouped.columns:
     df_grouped[energie_choice] = df_grouped[energie_choice].apply(
         lambda x: "" if (x <= 0 or pd.isna(x) or x == float('inf') or x == float('-inf'))
