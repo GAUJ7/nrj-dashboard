@@ -64,7 +64,7 @@ df2['Trimestre'] = df2['Année'] * 10 + ((df2['Mois'] - 1) // 3 + 1)
 df2['Mois'] = df2['Année'] * 100 + df2['Mois']
 df2['Semaine'] = df2['Année'] * 100 + df2['Semaine']
 df2['Semaine_Formate'] = df2['Semaine'].apply(lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}")
-df2['Trimestre_Formate'] = df2['Trimestre'].astype(str).str[:4] + '-' + df2['Trimestre'].astype(str).str[4:]
+df2['Trimestre_Formate'] = df2['Trimestre'].astype(str).str[:4] + '-Q' + df2['Trimestre'].astype(str).str[4:]
 df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
 df2 = df2[df2['Année'].isin([2023, 2024])]
 df2['Empreinte carbone (tCO2)'] = ((df2['Gaz (kWh)'].fillna(0)) / 1000 * 0.181) + ((df2['Electricité (kWh)'].fillna(0)) / 1000 * 0.0338)
@@ -141,11 +141,19 @@ if period_choice == 'Année':
     end_year = st.sidebar.selectbox("Année de fin", sorted(df2['Année'].unique()),index=1)
     df_filtered = df_filtered[(df_filtered['Année'] >= start_year) & (df_filtered['Année'] <= end_year)]
 elif period_choice == 'Trimestre' :
-    start_year_quarter = st.sidebar.selectbox("Sélectionner le mois de début", sorted(df2['Trimestre_Formate'].unique()),index=4)
-    end_year_quater = st.sidebar.selectbox("Sélectionner le mois de fin", sorted(df2['Trimestre_Formate'].unique()),index=12)
+    start_year_quarter = st.sidebar.selectbox(
+    "Sélectionner le trimestre de début",
+    sorted(df2['Trimestre_Formate'].unique(), key=lambda x: (int(x[:4]), int(x[-1]))), 
+    index=0
+    )
+    end_year_quater = st.sidebar.selectbox(
+    "Sélectionner le trimestre de début",
+    sorted(df2['Trimestre_Formate'].unique(), key=lambda x: (int(x[:4]), int(x[-1]))), 
+    index=3
+    )
     # Convertir la valeur sélectionnée en format d'origine (YYYYMM)
-    start_year_month_raw = int(start_year_month.replace('-', ''))
-    end_year_month_raw = int(end_year_month.replace('-', ''))
+    start_year_month_raw = int(start_year_month.replace('-Q', ''))
+    end_year_month_raw = int(end_year_month.replace('-Q', ''))
     df_filtered = df_filtered[(df_filtered['Trimestre'] >= start_year_month_raw) & (df_filtered['Trimestre'] <= end_year_month_raw)]
 elif period_choice == 'Mois':
     # Choisir l'année et le mois de début et de fin
