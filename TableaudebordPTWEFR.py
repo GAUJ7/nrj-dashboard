@@ -152,8 +152,8 @@ elif period_choice == 'Trimestre' :
     index=3
     )
     # Convertir la valeur sélectionnée en format d'origine (YYYYMM)
-    start_year_month_raw = int(start_year_month.replace('-Q', ''))
-    end_year_month_raw = int(end_year_month.replace('-Q', ''))
+    start_year_month_raw = int(start_year_quarter.replace('-Q', ''))
+    end_year_month_raw = int(end_year_quater.replace('-Q', ''))
     df_filtered = df_filtered[(df_filtered['Trimestre'] >= start_year_month_raw) & (df_filtered['Trimestre'] <= end_year_month_raw)]
 elif period_choice == 'Mois':
     # Choisir l'année et le mois de début et de fin
