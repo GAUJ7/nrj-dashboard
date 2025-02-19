@@ -238,9 +238,9 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             marker=dict(color=color)
         ))
     elif period_choice == 'Trimestre':
-        # Mise en forme du trimestre pour afficher trimestre et année (ex : 20241 -> T1 2024)
+     # Mise en forme du trimestre pour afficher "QX YYYY" (ex: 20241 -> Q1 2024)
         site_data['Trimestre'] = site_data['Trimestre'].apply(
-            lambda x: f"T{str(x)[-1]} {str(x)[:4]}" if period_choice == 'Trimestre' else x
+            lambda x: f"Q{str(x)[-1]} {str(x)[:4]}" if period_choice == 'Trimestre' else x
         )
 
         # Convertir en format datetime pour le tri (utilisation du premier mois du trimestre)
@@ -254,12 +254,11 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
 
         # Ajout des traces pour le graphique
         fig.add_trace(go.Bar(
-            x=site_data['Trimestre'].dt.strftime('T%q %Y'),  # Reformater le trimestre pour l'affichage
+            x=site_data['Trimestre'].dt.strftime('Q%q %Y'),  # Reformater en "QX YYYY"
             y=site_data[energie_choice],
             name=site,
             marker=dict(color=color)
         ))
-
     elif period_choice == 'Mois':
         # Mise en forme de la semaine pour afficher mois et année (ex : 202301 -> Janvier 2023)
         site_data['Mois'] = site_data['Mois'].apply(
