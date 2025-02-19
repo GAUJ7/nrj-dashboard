@@ -144,12 +144,12 @@ elif period_choice == 'Trimestre' :
     start_year_quarter = st.sidebar.selectbox(
     "Sélectionner le trimestre de début",
     sorted(df2['Trimestre_Formate'].unique(), key=lambda x: (int(x[:4]), int(x[-1]))), 
-    index=0
+    index=4
     )
     end_year_quater = st.sidebar.selectbox(
     "Sélectionner le trimestre de début",
     sorted(df2['Trimestre_Formate'].unique(), key=lambda x: (int(x[:4]), int(x[-1]))), 
-    index=3
+    index=7
     )
     # Convertir la valeur sélectionnée en format d'origine (YYYYMM)
     start_year_month_raw = int(start_year_quarter.replace('-Q', ''))
