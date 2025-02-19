@@ -230,6 +230,29 @@ for idx, site in enumerate(df_grouped['Site'].unique()):
             name=site,
             marker=dict(color=color)
         ))
+    elif period_choice == 'Trimestre':
+        # Mise en forme du trimestre pour afficher trimestre et année (ex : 20241 -> T1 2024)
+        site_data['Trimestre'] = site_data['Trimestre'].apply(
+            lambda x: f"T{str(x)[-1]} {str(x)[:4]}" if period_choice == 'Trimestre' else x
+        )
+
+        # Convertir en format datetime pour le tri (utilisation du premier mois du trimestre)
+        site_data['Trimestre'] = pd.to_datetime(
+            site_data['Trimestre'].apply(lambda x: f"{x[-4:]}-{(int(x[1]) - 1) * 3 + 1}-01"),
+            format='%Y-%m-%d'
+        )
+
+        # Trier les données par trimestre (ordre chronologique)
+        site_data = site_data.sort_values(by='Trimestre')
+
+        # Ajout des traces pour le graphique
+        fig.add_trace(go.Bar(
+            x=site_data['Trimestre'].dt.strftime('T%q %Y'),  # Reformater le trimestre pour l'affichage
+            y=site_data[energie_choice],
+            name=site,
+            marker=dict(color=color)
+        ))
+
     elif period_choice == 'Mois':
         # Mise en forme de la semaine pour afficher mois et année (ex : 202301 -> Janvier 2023)
         site_data['Mois'] = site_data['Mois'].apply(
