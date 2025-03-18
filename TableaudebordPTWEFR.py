@@ -81,7 +81,7 @@ site_selection = st.sidebar.selectbox('Choisissez un site', ['Global'] + list(si
 energie_choice = st.sidebar.radio("Choisissez l'indicateur", ['Gaz (kWh/kg)', 'Electricité (kWh/kg)','Empreinte carbone (tCO2)', 'Gaz (kWh)', 'Electricité (kWh)', 'PE (kg)'])
 
 # Choisir la période de filtrage
-period_choice = st.sidebar.radio("Sélectionner la période", ('Année','Trimestre', 'Mois','Semaine'))
+period_choice = st.sidebar.radio("Sélectionner la période", ('Année','Trimestre', 'Mois','Semaine')) #j'ai enlevé le filtre journalier
 
 if site_selection == 'Total' :
     df2['Site'] = 'Total'
