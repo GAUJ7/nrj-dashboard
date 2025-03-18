@@ -66,7 +66,7 @@ df2['Semaine'] = df2['Année'] * 100 + df2['Semaine']
 df2['Semaine_Formate'] = df2['Semaine'].apply(lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}")
 df2['Trimestre_Formate'] = df2['Trimestre'].astype(str).str[:4] + '-Q' + df2['Trimestre'].astype(str).str[4:]
 df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
-df2 = df2[df2['Année'].isin([2023, 2024])]
+df2 = df2[df2['Année'].isin([2023, 2025])]
 df2['Empreinte carbone (tCO2)'] = ((df2['Gaz (kWh)'].fillna(0)) / 1000 * 0.181) + ((df2['Electricité (kWh)'].fillna(0)) / 1000 * 0.0338)
 # Charger l'image et afficher en haut à gauche
 image = "PT.jpg"  # Remplacez ce chemin par le chemin réel de votre image
