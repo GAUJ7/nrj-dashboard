@@ -49,7 +49,7 @@ if __name__ == "__main__":
     main()
 
 # Chargement des données
-df2 = pd.read_csv("20250103 Machine_streamlit.csv", sep=";")
+df2 = pd.read_csv("data/20260101 Machine_streamlit.csv", sep=";")
 df2 = df2[df2['Machine'] != 'F4B,']
 # Assurer que la colonne 'Date' est bien au format datetime
 #df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=True)
