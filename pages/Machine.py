@@ -67,7 +67,7 @@ df2['Mois'] = df2['Année'] * 100 + df2['Mois']
 df2['Semaine'] = df2['Année'] * 100 + df2['Semaine']
 df2['Semaine_Formate'] = df2['Semaine'].apply(lambda x: f"S{int(str(x)[-2:]):02d} {str(x)[:4]}")
 df2['Mois_Formate'] = df2['Mois'].astype(str).str[:4] + '-' + df2['Mois'].astype(str).str[4:]
-df2 = df2[df2['Année'].isin([2023, 2024,2025])]
+df2 = df2[df2['Année'].isin([2023, 2024,2020])]
 
 # Charger l'image et afficher en haut à gauche
 image = "PT.jpg"  # Remplacez ce chemin par le chemin réel de votre image
