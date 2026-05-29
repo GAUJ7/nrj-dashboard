@@ -48,7 +48,7 @@ if __name__ == "__main__":
     main()
 
 # Chargement des données
-df2 = pd.read_csv("data/20260101 Global_streamlit2.csv", sep=";")
+df2 = pd.read_csv("data/20260529 Global_streamlit2.csv", sep=";")
 
 # Assurer que la colonne 'Date' est bien au format datetime
 df2['Date'] = pd.to_datetime(df2['Date'], errors='coerce', dayfirst=False)
